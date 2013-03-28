@@ -1,26 +1,9 @@
-module BeerDB
-  module Models
 
-  
-class Country < ActiveRecord::Base
-  self.table_name = 'countries'
+module WorldDb::Models
 
-  def self.create_from_ary!( countries )
-    countries.each do |values|
-      
-      ## key & title required
-      attr = {
-        :key   => values[0],
-        :title => values[1],
-        :tag   => values[2]
-      }
-      
-      Country.create!( attr )
-    end # each country
-  end
-
+class Country
+    has_many :beers,     :class_name => 'BeerDb::Models::Beer',    :foreign_key => 'country_id'
+    has_many :breweries, :class_name => 'BeerDb::Models::Brewery', :foreign_key => 'country_id'
 end # class Country
 
-
- end # module Models
-end # module BeerDB
+end # module WorldDb::Models

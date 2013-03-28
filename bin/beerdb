@@ -4,4 +4,4 @@ require 'beerdb'
 
 ## todo: set x flag for file
 
-BeerDB.main
+BeerDb.main

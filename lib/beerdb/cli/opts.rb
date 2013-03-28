@@ -1,4 +1,4 @@
-module BeerDB
+module BeerDb
 
 class Opts
 
@@ -53,4 +53,4 @@ class Opts
 
 end # class Opts
 
-end # module BeerDB
+end # module BeerDb

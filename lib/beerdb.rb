@@ -12,23 +12,30 @@ require 'optparse'
 require 'fileutils'
 require 'erb'
 
-# rubygems
+# 3rd party gems / libs
 
 require 'active_record'   ## todo: add sqlite3? etc.
+
+require 'logutils'
+require 'textutils'
+require 'worlddb'
 
 
 # our own code
 
+require 'beerdb/version'
+
+require 'beerdb/models/forward'
 require 'beerdb/models/country'
+require 'beerdb/models/city'
 require 'beerdb/models/beer'
 require 'beerdb/models/brewery'
-require 'beerdb/models/prop'
 require 'beerdb/schema'       # NB: requires beerdb/models (include BeerDB::Models)
-require 'beerdb/version'
 require 'beerdb/cli/opts'
 require 'beerdb/cli/runner'
 
-module BeerDB
+
+module BeerDb
 
   def self.banner
     "beerdb #{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
@@ -41,8 +48,13 @@ module BeerDB
   def self.main
     Runner.new.run(ARGV)
   end
-  
-end  # module BeerDB
+
+  def self.create
+    CreateDb.new.up
+    BeerDb::Models::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
+  end
+
+end  # module BeerDb
 
 
-BeerDB.main if __FILE__ == $0
+BeerDb.main if __FILE__ == $0

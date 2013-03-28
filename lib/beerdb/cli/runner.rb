@@ -1,19 +1,16 @@
 
-module BeerDB
+module BeerDb
 
 class Runner
 
-
-  include BeerDB::Models
+  include LogUtils::Logging
+  include BeerDb::Models
 
   def initialize
-    @logger = Logger.new(STDOUT)
-    @logger.level = Logger::INFO
-
     @opts    = Opts.new
   end
 
-  attr_reader :logger, :opts
+  attr_reader :opts
 
 
   def run( args )
@@ -37,8 +34,7 @@ class Runner
       end
 
       cmd.on( "--verbose", "Show debug trace" )  do
-        logger.datetime_format = "%H:%H:%S"
-        logger.level = Logger::DEBUG
+        # logger.level = Logger::DEBUG
         
         ActiveRecord::Base.logger = Logger.new(STDOUT)
       end
@@ -67,7 +63,7 @@ EOS
 
     opt.parse!( args )
   
-    puts BeerDB.banner
+    puts BeerDb.banner
 
     puts "working directory: #{Dir.pwd}"
  
@@ -80,9 +76,12 @@ EOS
     pp db_config
 
     ActiveRecord::Base.establish_connection( db_config )
-    
+
+
     if opts.create?
-      CreateDB.up
+      LogDb.create
+      WorldDb.create
+      BeerDb.create
     end
     
     if opts.delete?
@@ -110,6 +109,7 @@ EOS
     puts "  #{Beer.count} beers"
     puts "  #{Brewery.count} breweries"
     puts "  #{Country.count} countries"
+    puts "  #{City.count} cities"
   end
 
   def dump_props
@@ -121,4 +121,4 @@ EOS
   end
   
 end # class Runner
-end # module BeerDB
+end # module BeerDb

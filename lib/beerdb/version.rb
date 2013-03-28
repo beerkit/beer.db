@@ -1,4 +1,4 @@
 
-module BeerDB
-  VERSION = '0.0.1'
+module BeerDb
+  VERSION = '0.1.0'
 end
