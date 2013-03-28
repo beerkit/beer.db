@@ -17,6 +17,12 @@ tmp
 _yardoc
 doc/
 
+############
+# ignore beer.db and build used for testing
+
+beer.db
+build/
+
 ######
 # ignore komodo project file
 

@@ -21,6 +21,10 @@ require 'textutils'
 require 'worlddb'
 
 
+### fix: add to cli only - why? why not?
+require 'logutils/db'   # add LogDb utils too
+
+
 # our own code
 
 require 'beerdb/version'

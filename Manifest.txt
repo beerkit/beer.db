@@ -1,6 +1,6 @@
-History.markdown
+History.md
 Manifest.txt
-README.markdown
+README.md
 Rakefile
 bin/beerdb
 lib/beerdb.rb
@@ -8,7 +8,8 @@ lib/beerdb/cli/opts.rb
 lib/beerdb/cli/runner.rb
 lib/beerdb/models/beer.rb
 lib/beerdb/models/brewery.rb
+lib/beerdb/models/city.rb
 lib/beerdb/models/country.rb
-lib/beerdb/models/prop.rb
+lib/beerdb/models/forward.rb
 lib/beerdb/schema.rb
 lib/beerdb/version.rb

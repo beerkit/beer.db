@@ -11,9 +11,6 @@ module BeerDb::Models
   City      = WorldDb::Models::City
   Prop      = WorldDb::Models::Prop
 
-  ## nb: for now only team and league use worlddb tables
-  #   e.g. with belongs_to assoc (country,region)
-
   class Beer < ActiveRecord::Base ; end
   class Brewery < ActiveRecord::Base ; end
 
@@ -22,10 +19,7 @@ end
 
 module WorldDb::Models
 
-  # add alias? why? why not? # is there a better way?
-  #  - just include SportDB::Models  - why? why not?
-  #  - just include once in loader??
   Beer    = BeerDb::Models::Beer
-  Brewery = BeerDb::Models::League
+  Brewery = BeerDb::Models::Brewery
 
 end
