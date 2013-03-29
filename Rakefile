@@ -25,6 +25,9 @@ Hoe.spec 'beerdb' do
                                #         - commander
                                #         - logutils
                                #         - textutils
+                               
+  ## 3rd party
+    ['commander', '~> 4.1.3']   # remove? -- already included as dep in worlddb                               
   ]
 
  self.licenses = ['Public Domain']
@@ -75,21 +78,20 @@ namespace :beerdb do
     WorldDb.create
     BeerDb.create
   end
-  
+
   task :importworld => :env do
     WorldDb.read_setup( 'setups/sport.db.admin', '../world.db', skip_tags: true )  # populate world tables
-    # WorldDb.stats
+    WorldDb.tables
   end
 
   task :importbeer => :env do
-    # SportDb.read_setup( 'setups/all', '../football.db' )
-    # SportDb.stats
+    BeerDb.read_setup( 'setups/all', '../beer.db' )
+    BeerDb.tables
   end
 
   task :deletebeer => :env do
-    ## SportDb.delete!
+    BeerDb.delete!
   end
-
 
 
   desc 'beerdb - build from scratch'

@@ -2,45 +2,26 @@ module BeerDb
 
 class Opts
 
-  def create=(boolean)
-    @create = boolean
-  end
 
-  def create?
-    return false if @create.nil?   # default create flag is false
-    @create == true
-  end
-  
+  def merge_commander_options!( options = {} )
+    @db_path   = options[:dbpath]  if options[:dbpath].present?
+    @db_name   = options[:dbname]  if options[:dbname].present?
 
-  def delete=(boolean)
-    @delete = boolean
-  end
-
-  def delete?
-    return false if @delete.nil?   # default create flag is false
-    @delete == true
+    @data_path = options[:include] if options[:include].present?
+    
+    @world_data_path = options[:worldinclude] if options[:worldinclude].present? 
   end
 
 
-  # use loader? (that is, built-in seed data)
-  def load=(boolean)
-    @load = boolean
+
+  def db_path
+    @db_path || '.'
   end
 
-  def load?
-    return false if @load.nil?   # default create flag is false
-    @load == true
+  def db_name
+    @db_name || 'beer.db'
   end
 
-
-  def output_path=(value)
-    @output_path = value
-  end
-  
-  def output_path
-    @output_path || '.'
-  end
-  
 
   def data_path=(value)
     @data_path = value
@@ -50,6 +31,9 @@ class Opts
     @data_path || '.'
   end
 
+  def world_data_path
+    @world_data_path   # NB: option has no default; return nil
+  end
 
 end # class Opts
 

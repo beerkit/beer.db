@@ -21,10 +21,6 @@ require 'textutils'
 require 'worlddb'
 
 
-### fix: add to cli only - why? why not?
-require 'logutils/db'   # add LogDb utils too
-
-
 # our own code
 
 require 'beerdb/version'
@@ -34,9 +30,10 @@ require 'beerdb/models/country'
 require 'beerdb/models/city'
 require 'beerdb/models/beer'
 require 'beerdb/models/brewery'
-require 'beerdb/schema'       # NB: requires beerdb/models (include BeerDB::Models)
-require 'beerdb/cli/opts'
-require 'beerdb/cli/runner'
+require 'beerdb/schema'
+require 'beerdb/reader'
+require 'beerdb/deleter'
+require 'beerdb/stats'
 
 
 module BeerDb
@@ -50,7 +47,8 @@ module BeerDb
   end
 
   def self.main
-    Runner.new.run(ARGV)
+    require 'beerdb/cli/main'
+    # Runner.new.run(ARGV) old code
   end
 
   def self.create
@@ -58,7 +56,44 @@ module BeerDb
     BeerDb::Models::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
   end
 
+
+  def self.read( ary, include_path )
+    reader = Reader.new( include_path )
+    ary.each do |name|
+      reader.load( name )
+    end
+  end
+
+  def self.read_setup( setup, include_path, opts={} )
+    reader = Reader.new( include_path, opts )
+    reader.load_setup( setup )
+  end
+
+  def self.read_all( include_path, opts={} )  # load all builtins (using plain text reader); helper for convenience
+    read_setup( 'setups/all', include_path, opts )
+  end # method read_all
+
+
+  # delete ALL records (use with care!)
+  def self.delete!
+    puts '*** deleting beer table records/data...'
+    Deleter.new.run
+  end # method delete!
+
+  def self.tables
+    Stats.new.tables
+  end
+
+  def self.props
+    Stats.new.props
+  end
+
 end  # module BeerDb
 
 
-BeerDb.main if __FILE__ == $0
+if __FILE__ == $0
+  BeerDb.main
+else
+  # say hello
+  puts BeerDb.banner
+end
