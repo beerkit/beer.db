@@ -133,7 +133,7 @@ private
         more_tag_keys = attribs[:tags].split('|')
         attribs.delete(:tags)
 
-        ## unify; replace _w/ space; remove leading n trailing whitespace
+        ## unify; replace _ w/ space; remove leading n trailing whitespace
         more_tag_keys = more_tag_keys.map do |key|
           key = key.gsub( '_', ' ' )
           key = key.strip
@@ -182,7 +182,7 @@ private
 
           tag_keys = value.split('|')
   
-          ## unify; replace _w/ space; remove leading n trailing whitespace
+          ## unify; replace _ w/ space; remove leading n trailing whitespace
           tag_keys = tag_keys.map do |key|
             key = key.gsub( '_', ' ' )
             key = key.strip
@@ -209,7 +209,6 @@ private
 
       rec.update_attributes!( attribs )
 
-=begin
       ##################
       ## add taggings 
 
@@ -229,8 +228,7 @@ private
             rec.tags << tag
           end
       end
-=end
-        
+
     end # each_line
             
   end # method load_breweries_worker
@@ -253,7 +251,7 @@ private
         more_tag_keys = attribs[:tags].split('|')
         attribs.delete(:tags)
 
-        ## unify; replace _w/ space; remove leading n trailing whitespace
+        ## unify; replace _ w/ space; remove leading n trailing whitespace
         more_tag_keys = more_tag_keys.map do |key|
           key = key.gsub( '_', ' ' )
           key = key.strip
@@ -324,7 +322,7 @@ private
 
           tag_keys = value.split('|')
   
-          ## unify; replace _w/ space; remove leading n trailing whitespace
+          ## unify; replace _ w/ space; remove leading n trailing whitespace
           tag_keys = tag_keys.map do |key|
             key = key.gsub( '_', ' ' )
             key = key.strip
@@ -352,7 +350,6 @@ private
 
       rec.update_attributes!( attribs )
 
-=begin
       ##################
       ## add taggings 
 
@@ -372,8 +369,7 @@ private
             rec.tags << tag
           end
       end
-=end
-        
+
     end # each_line
             
   end # method load_beers_worker
