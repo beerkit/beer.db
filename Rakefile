@@ -67,7 +67,7 @@ namespace :beerdb do
     require 'beerdb'
     require 'logutils/db'
 
-    LogUtils::Logger.root.level = :info
+    LogUtils::Logger.root.level = :debug
 
     pp DB_CONFIG
     ActiveRecord::Base.establish_connection( DB_CONFIG )
@@ -85,7 +85,7 @@ namespace :beerdb do
   end
 
   task :importbeer => :env do
-    BeerDb.read_setup( 'setups/all', '../beer.db' )
+    BeerDb.read_setup( 'setups/at', '../beer.db' )
     BeerDb.tables
   end
 
