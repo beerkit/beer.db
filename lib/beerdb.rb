@@ -27,6 +27,7 @@ require 'beerdb/version'
 
 require 'beerdb/models/forward'
 require 'beerdb/models/country'
+require 'beerdb/models/region'
 require 'beerdb/models/city'
 require 'beerdb/models/beer'
 require 'beerdb/models/brewery'
