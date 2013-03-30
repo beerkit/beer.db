@@ -122,6 +122,9 @@ private
 
     reader.each_line do |attribs, values|
   
+  
+      ### todo/fix: move this code to model (lets us reuse it)
+  
       value_tag_keys    = []
       
       ### check for "default" tags - that is, if present attribs[:tags] remove from hash
@@ -239,6 +242,8 @@ private
     ##
 
     reader.each_line do |attribs, values|
+
+      ### todo/fix: move this code to model (lets us reuse it)
   
       value_tag_keys    = []
       

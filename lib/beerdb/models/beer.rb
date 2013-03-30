@@ -8,6 +8,9 @@ class Beer < ActiveRecord::Base
 
   belongs_to :brewery, :class_name => 'BeerDb::Models::Brewery',  :foreign_key => 'brewery_id'
 
+  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
+  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
+
 end # class Beer
 
 

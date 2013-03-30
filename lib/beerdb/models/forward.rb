@@ -9,6 +9,10 @@ module BeerDb::Models
   Country   = WorldDb::Models::Country
   Region    = WorldDb::Models::Region
   City      = WorldDb::Models::City
+
+  Tag       = WorldDb::Models::Tag
+  Tagging   = WorldDb::Models::Tagging
+
   Prop      = WorldDb::Models::Prop
 
   class Beer < ActiveRecord::Base ; end

@@ -10,6 +10,9 @@ class Brewery < ActiveRecord::Base
 
   has_many   :beers,   :class_name => 'BeerDb::Models::Beer',     :foreign_key => 'brewery_id'
 
+  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
+  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
+
 end # class Brewery
 
 
