@@ -17,5 +17,12 @@ lib/beerdb/models/region.rb
 lib/beerdb/models/tag.rb
 lib/beerdb/reader.rb
 lib/beerdb/schema.rb
+lib/beerdb/server.rb
+lib/beerdb/server/public/style.css
+lib/beerdb/server/views/_debug.erb
+lib/beerdb/server/views/_version.erb
+lib/beerdb/server/views/debug.erb
+lib/beerdb/server/views/index.erb
+lib/beerdb/server/views/layout.erb
 lib/beerdb/stats.rb
 lib/beerdb/version.rb
