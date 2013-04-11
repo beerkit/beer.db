@@ -12,6 +12,9 @@ create_table :beers do |t|
   t.string  :title, :null => false
   t.string  :synonyms  # comma separated list of synonyms
 
+  t.string  :web    # optional url link (e.g. )
+  t.integer :since  # optional year (e.g. 1896)
+
   t.boolean  :bottle,  :null => false, :default => false # Flaschenbier
   t.boolean  :draft,   :null => false, :default => false # Fassbier
   ## todo: check seasonal is it proper english?
@@ -60,7 +63,9 @@ create_table :breweries do |t|
   t.string  :title, :null => false
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :address
-  t.integer :founded  # year founded/established
+  t.integer :founded  # year founded/established    - todo/fix: rename to since? 
+
+  t.string  :web   # optional web page (e.g. www.ottakringer.at)
 
   t.references :country,   :null => false
   t.references :region   # optional

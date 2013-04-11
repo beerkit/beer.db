@@ -68,11 +68,26 @@ class Server < Sinatra::Base
 
     brewery = {}
     if beer.brewery.present?
-      brewery = { key: beer.brewery.key, title: beer.brewery.title }
+      brewery = { key: beer.brewery.key,
+                  title: beer.brewery.title,
+                  href: "/brewery/#{beer.brewery.key}" }
     end
 
-    data = { beer: { key: beer.key, title: beer.title, abv: beer.abv, srm: beer.color, og: beer.plato },
-             brewery: brewery }
+    tags = []
+    if beer.tags.present?
+      beer.tags.each { |tag| tags << tag.key }
+    end
+
+    country = {
+      key:   beer.country.key,
+      title: beer.country.title
+    }
+
+    data = { beer: { key: beer.key, title: beer.title, synonyms: beer.synonyms,
+                     abv: beer.abv, srm: beer.color, og: beer.plato,
+                     tags: tags,
+                     brewery: brewery,
+                     country: country }}
 
     json_or_jsonp( data )
   end
@@ -83,10 +98,25 @@ class Server < Sinatra::Base
 
     beers = []
     brewery.beers.each do |b|
-      beers << { key: b.key, title: b.title  }
+      beers << { key: b.key, title: b.title, href: "/beer/#{b.key}" }
     end
 
-    data = { brewery: { key: brewery.key, title: brewery.title }, beers: beers }
+    tags = []
+    if brewery.tags.present?
+      brewery.tags.each { |tag| tags << tag.key }
+    end
+
+    country = {
+      key:   brewery.country.key,
+      title: brewery.country.title
+    }
+
+    data = { brewery: { key: brewery.key, title: brewery.title, synonyms: brewery.synonyms,
+                        since: brewery.founded,
+                        address: brewery.address,
+                        tags: tags,
+                        beers: beers,
+                        country: country }}
 
     json_or_jsonp( data )
   end

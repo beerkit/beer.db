@@ -157,6 +157,31 @@ command :load do |c|
 end # command load
 
 
+## fix/todo: add server alias (serve/server)
+
+command :serve do |c|
+  ## todo: how to specify many fixutes <>... ??? in syntax
+  c.syntax = 'beerdb serve [options]'
+  c.description = 'Start web service (HTTP JSON API)'
+
+  c.action do |args, options|
+
+    LogUtils::Logger.root.level = :warn    if options.quiet.present?
+    LogUtils::Logger.root.level = :debug   if options.verbose.present?
+
+    myopts.merge_commander_options!( options.__hash__ )
+    connect_to_db( myopts )
+
+    # NB: server (HTTP service) not included in standard default require
+    require 'beerdb/server'
+
+    BeerDb::Server.run!
+    
+    puts 'Done.'
+  end
+end # command load
+
+
 command :stats do |c|
   c.syntax = 'beerdb stats [options]'
   c.description = 'Show stats'
