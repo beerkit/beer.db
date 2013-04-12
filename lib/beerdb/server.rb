@@ -3,7 +3,7 @@
 #
 #  e.g. config.ru:
 #   require './boot'
-#   run LogDb::Server
+#   run BeerDb::Server
 
 
 # 3rd party libs/gems
@@ -69,8 +69,7 @@ class Server < Sinatra::Base
     brewery = {}
     if beer.brewery.present?
       brewery = { key: beer.brewery.key,
-                  title: beer.brewery.title,
-                  href: "/brewery/#{beer.brewery.key}" }
+                  title: beer.brewery.title }
     end
 
     tags = []
@@ -84,7 +83,7 @@ class Server < Sinatra::Base
     }
 
     data = { beer: { key: beer.key, title: beer.title, synonyms: beer.synonyms,
-                     abv: beer.abv, srm: beer.color, og: beer.plato,
+                     abv: beer.abv, srm: beer.srm, og: beer.og,
                      tags: tags,
                      brewery: brewery,
                      country: country }}
@@ -98,7 +97,7 @@ class Server < Sinatra::Base
 
     beers = []
     brewery.beers.each do |b|
-      beers << { key: b.key, title: b.title, href: "/beer/#{b.key}" }
+      beers << { key: b.key, title: b.title }
     end
 
     tags = []
@@ -112,7 +111,7 @@ class Server < Sinatra::Base
     }
 
     data = { brewery: { key: brewery.key, title: brewery.title, synonyms: brewery.synonyms,
-                        since: brewery.founded,
+                        since: brewery.since,
                         address: brewery.address,
                         tags: tags,
                         beers: beers,

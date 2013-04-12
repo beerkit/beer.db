@@ -173,7 +173,7 @@ private
             attribs[ :region_id ] = value_city.region.id
           end
         elsif value =~ /^[0-9]{4}$/   # founded/established year e.g. 1776
-          attribs[ :founded ] = value.to_i
+          attribs[ :since ] = value.to_i
         elsif value =~ /\/{2}/  # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
           attribs[ :address ] = value
         elsif (values.size==(index+1)) && value =~ /^[a-z0-9\|_ ]+$/   # tags must be last entry
@@ -303,15 +303,15 @@ private
           elsif value_brewery.region.present?
             attribs[ :region_id ] = value_brewery.region.id
           end
-          
+
         elsif value =~ /^<?\s*(\d+(?:\.\d+)?)\s*%$/  ## abv (alcohol by volumee)
           ## nb: allow leading < e.g. <0.5%
           value_abv_str = $1.dup   # convert to decimal? how? use float?
           attribs[ :abv ] = value_abv_str
         elsif value =~ /^(\d+(?:\.\d+)?)°$/  ## plato (stammwuerze/gravity?) e.g. 11.2°
           ## nb: no whitespace allowed between ° and number e.g. 11.2°
-          value_plato_str = $1.dup   # convert to decimal? how? use float?
-          attribs[ :plato ] = value_plato_str
+          value_og_str = $1.dup   # convert to decimal? how? use float?
+          attribs[ :og ] = value_og_str
         elsif value =~ /^(\d+(?:\.\d+)?)\s*kcal(?:\/100ml)?$/  ## kcal
            ## nb: allow 44.4 kcal/100ml or 44.4 kcal or 44.4kcal
           value_kcal_str = $1.dup   # convert to decimal? how? use float?

@@ -27,8 +27,14 @@ create_table :beers do |t|
 
   ## check: why decimal and not float? 
   t.decimal    :abv    # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
-  t.decimal    :plato  # stammwuerze / gravity in plato scale (e.g. °P) e.g. 12.6°   - todo: use a different field name e.g. just p or gravity?
-  t.integer    :color  # beer color in Standard Reference Method (SRM)
+  t.decimal    :og
+  t.integer    :srm
+
+  ### fix/todo: add bitterness field
+
+  # renamed - old field names
+  ## t.decimal    :plato  # stammwuerze / gravity in plato scale (e.g. °P) e.g. 12.6°   - todo: use a different field name e.g. just p or gravity?
+  ## t.integer    :color  # beer color in Standard Reference Method (SRM)
 
 # see en.wikipedia.org/wiki/Plato_scale#Colour
 
@@ -63,7 +69,9 @@ create_table :breweries do |t|
   t.string  :title, :null => false
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :address
-  t.integer :founded  # year founded/established    - todo/fix: rename to since? 
+  t.string  :since
+  ## renamed to founded to since
+  ## t.integer :founded  # year founded/established    - todo/fix: rename to since? 
 
   t.string  :web   # optional web page (e.g. www.ottakringer.at)
 

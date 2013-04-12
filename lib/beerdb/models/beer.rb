@@ -11,8 +11,26 @@ class Beer < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
 
+
+  ### support old names (read-only) for now  (remove later)
+
+  def color
+    srm
+  end
+
+  def plato
+    og
+  end
+
+  def color=(value)
+    self.srm = value
+  end
+
+  def plato=(value)
+    self.og = value
+  end
+
 end # class Beer
 
 
 end # module BeerDb::Models
-

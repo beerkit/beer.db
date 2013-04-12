@@ -13,8 +13,18 @@ class Brewery < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
 
+  ### support old names (read-only) for now  (remove later)
+
+  def founded
+    since
+  end
+
+  def founded=(value)
+    self.since = value
+  end
+
+
 end # class Brewery
 
 
 end # module BeerDb::Models
-
