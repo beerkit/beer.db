@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module BeerDb::Models
 
 class Brewery < ActiveRecord::Base
