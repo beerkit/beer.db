@@ -13,6 +13,7 @@ class Beer < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
 
+  validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
   ### support old names (read-only) for now  (remove later)
 
@@ -34,6 +35,10 @@ class Beer < ActiveRecord::Base
 
 
   def self.create_or_update_from_values( new_attributes, values )
+    
+    ## fix: add/configure logger for ActiveRecord!!!
+    logger = LogKernel::Logger.root
+    
     value_tag_keys    = []
       
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
