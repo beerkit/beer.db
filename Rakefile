@@ -11,7 +11,7 @@ Hoe.spec 'beerdb' do
   self.urls    = ['https://github.com/geraldb/beer.db.ruby']
   
   self.author  = 'Gerald Bauer'
-  self.email   = 'tobedone@googlegroups.com'
+  self.email   = 'beerdb@googlegroups.com'
     
   # switch extension to .markdown for gihub formatting
   self.readme_file  = 'README.md'

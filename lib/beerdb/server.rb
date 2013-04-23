@@ -110,9 +110,13 @@ class Server < Sinatra::Base
       title: brewery.country.title
     }
 
-    data = { brewery: { key: brewery.key, title: brewery.title, synonyms: brewery.synonyms,
+    data = { brewery: { key: brewery.key,
+                        title: brewery.title,
+                        synonyms: brewery.synonyms,
                         since: brewery.since,
                         address: brewery.address,
+                        web: brewery.web,
+                        prod: brewery.prod,  # (estimated) annual production in hl e.g. 2_000 hl
                         tags: tags,
                         beers: beers,
                         country: country }}

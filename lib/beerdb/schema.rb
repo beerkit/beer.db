@@ -27,8 +27,8 @@ create_table :beers do |t|
 
   ## check: why decimal and not float? 
   t.decimal    :abv    # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
-  t.decimal    :og
-  t.integer    :srm
+  t.decimal    :og     # malt extract (original gravity) in plato
+  t.integer    :srm    # color in srm
 
   ### fix/todo: add bitterness field
 
@@ -69,9 +69,14 @@ create_table :breweries do |t|
   t.string  :title, :null => false
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :address
-  t.string  :since
+  t.integer :since
   ## renamed to founded to since
   ## t.integer :founded  # year founded/established    - todo/fix: rename to since? 
+  t.integer :closed  # optional;  year brewery closed
+
+## todo: add optional parent brewery (owned_by)
+
+  t.integer :prod  # (estimated) annual production in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
 
   t.string  :web   # optional web page (e.g. www.ottakringer.at)
 
