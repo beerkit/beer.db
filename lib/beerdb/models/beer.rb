@@ -134,7 +134,7 @@ class Beer < ActiveRecord::Base
         value_tag_keys += tag_keys
       else
         # issue warning: unknown type for value
-        logger.warn "unknown type for value >#{value}<"
+        logger.warn "unknown type for value >#{value}< - key #{new_attributes[:key]}"
       end
     end # each value
 

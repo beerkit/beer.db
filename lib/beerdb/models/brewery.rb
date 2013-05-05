@@ -36,6 +36,7 @@ class Brewery < ActiveRecord::Base
     logger = LogKernel::Logger.root
 
     value_tag_keys    = []
+    value_brands      = ''
 
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
 
@@ -84,13 +85,18 @@ class Brewery < ActiveRecord::Base
         end
       elsif value =~ /^[0-9]{4}$/   # founded/established year e.g. 1776
         new_attributes[ :since ] = value.to_i
-      elsif value =~ /^(?:([0-9][0-9_]*[0-9]|[0-9])\s?hl)$/  # e.g. 20_0000 hl or 50hl etc.
-        new_attributes[ :prod ] << $1.gsub(/_/, '').to_i
+      elsif value =~ /^(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)$/  # e.g. 20_000 hl or 50hl etc.
+        value_prod = $1.gsub( /[ _]/, '' ).to_i
+        new_attributes[ :prod ] = value_prod
       elsif value =~ /^www\.|\.com$/   # check for url/internet address e.g. www.ottakringer.at
         # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
         new_attributes[ :web ] = value
       elsif value =~ /\/{2}/  # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
         new_attributes[ :address ] = value
+      elsif value =~ /^brands:/   # brands:
+        value_brands = value[7..-1]  ## cut off brands: prefix
+        value_brands = value_brands.strip  # remove leading and trailing spaces
+        # NB: brands get processed after record gets created (see below)
       elsif (values.size==(index+1)) && value =~ /^[a-z0-9\|_ ]+$/   # tags must be last entry
 
         logger.debug "   found tags: >>#{value}<<"
@@ -107,7 +113,7 @@ class Brewery < ActiveRecord::Base
         value_tag_keys += tag_keys
       else
         # issue warning: unknown type for value
-        logger.warn "unknown type for value >#{value}<"
+        logger.warn "unknown type for value >#{value}< - key #{new_attributes[:key]}"
       end
     end # each value
 
@@ -124,6 +130,14 @@ class Brewery < ActiveRecord::Base
     logger.debug new_attributes.to_json
 
     rec.update_attributes!( new_attributes )
+
+    ###################
+    # auto-add brands if presents
+
+    if value_brands.present?
+      logger.debug " auto-adding brands >#{value_brands}<"
+      # fix: to be done!
+    end
 
     ##################
     ## add taggings

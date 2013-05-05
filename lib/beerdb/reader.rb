@@ -115,8 +115,8 @@ class Reader
     reader.each do |key, value|
       brewery = Brewery.find_by_key!( key )
       
-      if value =~ /(?:([0-9][0-9_]*[0-9]|[0-9])\s*hl)/  # e.g. 20_0000 hl or 50hl etc.
-        prod =  $1.gsub(/_/, '').to_i
+      if value =~ /(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)/  # e.g. 20_0000 hl or 50hl etc.
+        prod =  $1.gsub(/[ _]/, '').to_i
         logger.debug "  adding #{key} => >#{prod}<"
         brewery.prod = prod
         brewery.save!
