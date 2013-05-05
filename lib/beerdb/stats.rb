@@ -8,6 +8,7 @@ module BeerDb
     def tables
       puts "Stats:"
       puts " #{'%5d' % Beer.count} beers"
+      puts " #{'%5d' % Brand.count} brands"
       puts " #{'%5d' % Brewery.count} breweries"
     end
     

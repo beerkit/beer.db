@@ -9,6 +9,7 @@ lib/beerdb/cli/opts.rb
 lib/beerdb/console.rb
 lib/beerdb/deleter.rb
 lib/beerdb/models/beer.rb
+lib/beerdb/models/brand.rb
 lib/beerdb/models/brewery.rb
 lib/beerdb/models/city.rb
 lib/beerdb/models/country.rb

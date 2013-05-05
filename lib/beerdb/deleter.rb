@@ -10,6 +10,7 @@ module BeerDb
       # for now delete all tables
 
       Beer.delete_all
+      Brand.delete_all
       Brewery.delete_all
     end
     

@@ -16,6 +16,7 @@ module BeerDb::Models
   Prop      = WorldDb::Models::Prop
 
   class Beer < ActiveRecord::Base ; end
+  class Brand < ActiveRecord::Base ; end
   class Brewery < ActiveRecord::Base ; end
 
 end
@@ -24,6 +25,7 @@ end
 module WorldDb::Models
 
   Beer    = BeerDb::Models::Beer
+  Brand   = BeerDb::Models::Brand
   Brewery = BeerDb::Models::Brewery
 
 end

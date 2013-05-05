@@ -55,6 +55,15 @@ create_table :beers do |t|
 # 40+  | Imperial Stout                                | #030403 | 79
 
   t.references :brewery   # optional (for now)
+  t.references :brand     # optional (for now)
+
+
+  ## todo: add categories e.g. (A/B/C, 1/2/3, main/major/minor ??)
+  # - A-grade /1st class/ tier1 / main beer brand/bestseller/flagship ?
+  # - B-grade /2nd class/ tier2 / regular, major,   - todo: find better names?
+  # - C-grade /3nd class/ tier3/ / speciality, minor ?
+
+  t.integer :grade   # 1/2/3  (A/B/C)
 
   t.references :country,  :null => false
   t.references :region   # optional
@@ -63,6 +72,32 @@ create_table :beers do |t|
   t.timestamps
 end
 
+
+create_table :brands do |t|   # beer families (sharing same name e.g. brand)
+  t.string  :key,   :null => false   # import/export key
+  t.string  :title, :null => false
+  t.string  :synonyms  # comma separated list of synonyms
+  t.string  :web   # optional web page (e.g. www.ottakringer.at)
+  t.string  :wiki  # optional wiki(pedia page)
+  t.integer :since
+
+  ## scope of brand (global/intern'l/national/regional/local) ??
+  t.boolean :global,     :null => false, :default => false 
+  t.boolean :internl,    :null => false, :default => false
+  t.boolean :national,   :null => false, :default => false
+  t.boolean :regional,   :null => false, :default => false
+  t.boolean :local,      :null => false, :default => false
+
+  t.integer :grade   # 1/2/3/4/5  (global/intern'l/national/regional/local)
+
+  t.references :brewery   # optional (for now)
+
+  t.references :country,   :null => false
+  t.references :region   # optional
+  t.references :city     # optional
+
+  t.timestamps
+end
 
 create_table :breweries do |t|
   t.string  :key,   :null => false   # import/export key
@@ -76,9 +111,40 @@ create_table :breweries do |t|
 
 ## todo: add optional parent brewery (owned_by)
 
-  t.integer :prod  # (estimated) annual production in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
+  t.integer :prod  # (estimated) annual production/capacity in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
+
+  # grade - classified using annual production (capacity) in hl
+  # <     1_000 hl  => 11
+  # <     3_000 hl  => 10
+  # <     5_000 hl  => 9
+  # <    10_000 hl  => 8
+  # <    50_000 hl  => 7
+  # <   100_000 hl  => 6
+  # <   200_000 hl  => 5
+  # <   500_000 hl  => 4
+  # < 1_000_000 hl  => 3
+  # < 2_000_000 hl  => 2
+  # > 2_000_000 hl  => 1
+
+  t.integer :grade   # 1/2/3/4/5/6/7/8/9/10/11
+
 
   t.string  :web   # optional web page (e.g. www.ottakringer.at)
+  t.string  :wiki  # optional wiki(pedia page)
+
+  t.boolean :indie    # independent brewery (flag)
+
+  # for convenience (easy queries) use flags for top beer multinationals (-- later use just tags? more flexible)
+  t.boolean :abinbev     # owned by AB InBev / Anheuser-Busch InBev (and Grupo Modelo)
+  t.boolean :sabmiller   # owned by SAB Miller (in US cooperates w/ Molson Coors using MillerCoors venture)
+  t.boolean :heineken    # owned by Heineken
+  t.boolean :carlsberg   # owned by Carlsberg
+  t.boolean :molsoncoors  # owned by Molson Coors
+  t.boolean :diageo       # owned by Diageo (e.g. Guiness, Kilkenny,...)
+
+
+  # todo: add t.references :parent  # for parent brewery
+  # (or better use has many parents w/ percentage of ownership; might not be 100%)
 
   t.references :country,   :null => false
   t.references :region   # optional

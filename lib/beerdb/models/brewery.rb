@@ -11,6 +11,7 @@ class Brewery < ActiveRecord::Base
   belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
 
   has_many   :beers,   :class_name => 'BeerDb::Models::Beer',     :foreign_key => 'brewery_id'
+  has_many   :brands,  :class_name => 'BeerDb::Models::Brands',   :foreign_key => 'brand_id'
 
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
