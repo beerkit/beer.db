@@ -29,7 +29,6 @@ class Brewery < ActiveRecord::Base
   end
 
 
-
   def self.create_or_update_from_values( new_attributes, values )
 
     ## fix: add/configure logger for ActiveRecord!!!
@@ -92,7 +91,7 @@ class Brewery < ActiveRecord::Base
         # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
         new_attributes[ :web ] = value
       elsif value =~ /\/{2}/  # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
-        new_attributes[ :address ] = value
+        new_attributes[ :address ] = normalize_address( value )
       elsif value =~ /^brands:/   # brands:
         value_brands = value[7..-1]  ## cut off brands: prefix
         value_brands = value_brands.strip  # remove leading and trailing spaces
@@ -204,6 +203,27 @@ class Brewery < ActiveRecord::Base
 
   ### todo/fix:
   # reuse method - put into helper in textutils or somewhere else ??
+
+  def self.normalize_address( old_address_line )
+    # for now only checks german 5-digit zip code
+    #
+    #  e.g.  Alte Plauener Straße 24 // 95028 Hof  becomes
+    #        95028 Hof // Alte Plauener Straße 24 
+    
+    new_address_line = old_address_line   # default - do nothing - just path through
+    
+    lines = old_address_line.split( '//' )
+
+    if lines.size == 2   # two lines / check for switching lines
+      line1 = lines[0].strip
+      line2 = lines[1].strip
+      if line2 =~ /^[0-9]{5}\s/
+        new_address_line = "#{line2} // #{line1}"   # swap - let line w/ 5-digit zip code go first
+      end
+    end
+  
+    new_address_line
+  end
 
   def self.title_to_key( title )
 
