@@ -205,7 +205,7 @@ class Brewery < ActiveRecord::Base
   ### todo/fix:
   # reuse method - put into helper in textutils or somewhere else ??
 
-  def title_to_key( title )
+  def self.title_to_key( title )
 
       ## NB: downcase does NOT work for accented chars (thus, include in alternatives)
       key = title.downcase
