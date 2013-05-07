@@ -63,8 +63,20 @@ class Server < Sinatra::Base
     erb :debug
   end
 
+  ## todo: add support for beer of the day, of the week, of the month, of the year?
+  ##  /beer/day|d  | /beer/month|m  | beer/year|y ??
+  ##
+  ## add table daily_beer, weekly_beer, etc. ??
+
   get '/beer/:key' do |key|
-    beer = Beer.find_by_key!( key )
+
+    if ['r', 'rnd', 'rand', 'random'].include?( key )
+      # special key for random beer
+      beer_id = rand( Beer.count )+1   # nb: assumes record ids sequence from 1-n
+      beer = Beer.find( beer_id )
+    else
+      beer = Beer.find_by_key!( key )
+    end
 
     brewery = {}
     if beer.brewery.present?
@@ -82,18 +94,26 @@ class Server < Sinatra::Base
       title: beer.country.title
     }
 
-    data = { beer: { key: beer.key, title: beer.title, synonyms: beer.synonyms,
+    data = { key: beer.key, title: beer.title, synonyms: beer.synonyms,
                      abv: beer.abv, srm: beer.srm, og: beer.og,
                      tags: tags,
                      brewery: brewery,
-                     country: country }}
+                     country: country }
 
     json_or_jsonp( data )
   end
 
 
   get '/brewery/:key' do |key|
-    brewery = Brewery.find_by_key!( key )
+
+    if ['r', 'rnd', 'rand', 'random'].include?( key )
+      # special key for random brewery
+      brewery_id = rand( Brewery.count )+1   # nb: assumes record ids sequence from 1-n
+      brewery = Brewery.find( brewery_id )
+    else
+      brewery = Brewery.find_by_key!( key )
+    end
+
 
     beers = []
     brewery.beers.each do |b|
@@ -110,16 +130,16 @@ class Server < Sinatra::Base
       title: brewery.country.title
     }
 
-    data = { brewery: { key: brewery.key,
-                        title: brewery.title,
-                        synonyms: brewery.synonyms,
-                        since: brewery.since,
-                        address: brewery.address,
-                        web: brewery.web,
-                        prod: brewery.prod,  # (estimated) annual production in hl e.g. 2_000 hl
-                        tags: tags,
-                        beers: beers,
-                        country: country }}
+    data = {  key: brewery.key,
+              title: brewery.title,
+              synonyms: brewery.synonyms,
+              since: brewery.since,
+              address: brewery.address,
+              web: brewery.web,
+              prod: brewery.prod,  # (estimated) annual production in hl e.g. 2_000 hl
+              tags: tags,
+              beers: beers,
+              country: country }
 
     json_or_jsonp( data )
   end
