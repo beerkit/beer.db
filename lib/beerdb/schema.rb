@@ -29,6 +29,7 @@ create_table :beers do |t|
   t.decimal    :abv    # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
   t.decimal    :og     # malt extract (original gravity) in plato
   t.integer    :srm    # color in srm
+  t.integer    :ibu    # bitterness in ibu
 
   ### fix/todo: add bitterness field
 

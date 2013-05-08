@@ -16,51 +16,17 @@ class Reader
   end
 
 
-  def load_setup( setup )
-    ary = load_fixture_setup( setup )
-
-    ary.each do |name|
-      load( name )
-    end
-  end # method load_setup
-
-
-  ## fix/todo: rename ??
-  def load_fixture_setup( name )
-    
-   ## todo/fix: cleanup quick and dirty code
-    
+  def load_setup( name )
     path = "#{include_path}/#{name}.yml"
 
     logger.info "parsing data '#{name}' (#{path})..."
 
-    text = File.read_utf8( path )
-    
-    hash = YAML.load( text )
-    
-    ### build up array for fixtures from hash
-    
-    ary = []
-    
-    hash.each do |key_wild, value_wild|
-      key   = key_wild.to_s.strip
-      
-      logger.debug "yaml key:#{key_wild.class.name} >>#{key}<<, value:#{value_wild.class.name} >>#{value_wild}<<"
-    
-      if value_wild.kind_of?( String ) # assume single fixture name
-        ary << value_wild
-      elsif value_wild.kind_of?( Array ) # assume array of fixture names as strings
-        ary = ary + value_wild
-      else
-        logger.error "unknow fixture type in setup (yaml key:#{key_wild.class.name} >>#{key}<<, value:#{value_wild.class.name} >>#{value_wild}<<); skipping"
-      end
+    reader = FixtureReader.new( path )
+
+    reader.each do |fixture_name|
+      load( fixture_name )
     end
-    
-    logger.debug "fixture setup:"
-    logger.debug ary.to_json
-    
-    ary
-  end # load_fixture_setup
+  end # method load_setup
 
 
   def load( name )

@@ -16,21 +16,31 @@ class Beer < ActiveRecord::Base
 
   validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
+
+  def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
+    rnd_offset = rand( Beer.count )   ## NB: call "global" std lib rand
+    Beer.offset( rnd_offset ).limit( 1 )
+  end
+
   ### support old names (read-only) for now  (remove later)
 
   def color
+    puts "*** depreceated fn api - use srm"
     srm
   end
 
   def plato
+    puts "*** depreceated fn api - use og"
     og
   end
 
   def color=(value)
+    puts "*** depreceated fn api - use srm="
     self.srm = value
   end
 
   def plato=(value)
+    puts "*** depreceated fn api - use og="
     self.og = value
   end
 

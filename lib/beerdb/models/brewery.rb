@@ -18,6 +18,13 @@ class Brewery < ActiveRecord::Base
 
   validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
+
+  def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
+    rnd_offset = rand( Brewery.count )   ## NB: call "global" std lib rand
+    Brewery.offset( rnd_offset ).limit( 1 )
+  end
+
+
   ### support old names (read-only) for now  (remove later)
 
   def founded
@@ -201,8 +208,11 @@ class Brewery < ActiveRecord::Base
 
   end # method create_or_update_from_values
 
+
   ### todo/fix:
   # reuse method - put into helper in textutils or somewhere else ??
+
+  ### todo/fix - move to textutils !!!!!  AddressHelper
 
   def self.normalize_address( old_address_line )
     # for now only checks german 5-digit zip code
@@ -224,6 +234,18 @@ class Brewery < ActiveRecord::Base
   
     new_address_line
   end
+
+  ### todo/fix: move to textutils!!!
+  ## add options for
+  ##  - remove translations e.g. []
+  ##  - remove subtitles   e.g. ()
+  ##  - remove tags/extras e.g. {}
+
+  ##
+  ## fix: make  strip_translations into fn
+  ##      make  strip_subtitles into fn  # better name for () strip_
+  ##      make  strip_desc / tags  (find better name  strip_extras, strip_meta? strip_desc? strip_curly?)
+
 
   def self.title_to_key( title )
 

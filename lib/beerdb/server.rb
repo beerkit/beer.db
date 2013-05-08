@@ -72,8 +72,7 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random beer
-      beer_id = rand( Beer.count )+1   # nb: assumes record ids sequence from 1-n
-      beer = Beer.find( beer_id )
+      beer = Beer.rnd
     else
       beer = Beer.find_by_key!( key )
     end
@@ -108,8 +107,7 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random brewery
-      brewery_id = rand( Brewery.count )+1   # nb: assumes record ids sequence from 1-n
-      brewery = Brewery.find( brewery_id )
+      brewery = Brewery.rnd
     else
       brewery = Brewery.find_by_key!( key )
     end
