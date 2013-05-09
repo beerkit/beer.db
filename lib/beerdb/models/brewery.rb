@@ -107,7 +107,7 @@ class Brewery < ActiveRecord::Base
         value_brands = value[7..-1]  ## cut off brands: prefix
         value_brands = value_brands.strip  # remove leading and trailing spaces
         # NB: brands get processed after record gets created (see below)
-      elsif (values.size==(index+1)) && is_taglist?( value )) # tags must be last entry
+      elsif (values.size==(index+1)) && is_taglist?( value ) # tags must be last entry
 
         logger.debug "   found tags: >>#{value}<<"
 
