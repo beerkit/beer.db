@@ -4,6 +4,10 @@ module BeerDb::Models
 
 class Brewery < ActiveRecord::Base
 
+  # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
+  #   self.create_or_update_from_values
+  extend TextUtils::ValueHelper  # e.g. is_year?, is_region?, is_address?, is_taglist? etc.
+
   self.table_name = 'breweries'
 
   belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
@@ -71,7 +75,7 @@ class Brewery < ActiveRecord::Base
         value_region_key = value[7..-1]  ## cut off region: prefix
         value_region = Region.find_by_key_and_country_id!( value_region_key, new_attributes[:country_id] )
         new_attributes[ :region_id ] = value_region.id
-      elsif value =~ /^[A-Z]{1,2}$/  ## assume region code e.g. TX or N
+      elsif is_region?( value )  ## assume region code e.g. TX or N
         value_region = Region.find_by_key_and_country_id!( value.downcase, new_attributes[:country_id] )
         new_attributes[ :region_id ] = value_region.id
       elsif value =~ /^city:/   ## city:
@@ -89,21 +93,21 @@ class Brewery < ActiveRecord::Base
         if value_city.present? && value_city.region.present?
           new_attributes[ :region_id ] = value_city.region.id
         end
-      elsif value =~ /^[0-9]{4}$/   # founded/established year e.g. 1776
+      elsif is_year?( value )  # founded/established year e.g. 1776
         new_attributes[ :since ] = value.to_i
       elsif value =~ /^(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)$/  # e.g. 20_000 hl or 50hl etc.
         value_prod = $1.gsub( /[ _]/, '' ).to_i
         new_attributes[ :prod ] = value_prod
-      elsif value =~ /^www\.|\.com$/   # check for url/internet address e.g. www.ottakringer.at
+      elsif is_website?( value )   # check for url/internet address e.g. www.ottakringer.at
         # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
         new_attributes[ :web ] = value
-      elsif value =~ /\/{2}/  # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
-        new_attributes[ :address ] = normalize_address( value )
+      elsif is_address?( value ) # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
+        new_attributes[ :address ] = TextUtils.normalize_address( value )
       elsif value =~ /^brands:/   # brands:
         value_brands = value[7..-1]  ## cut off brands: prefix
         value_brands = value_brands.strip  # remove leading and trailing spaces
         # NB: brands get processed after record gets created (see below)
-      elsif (values.size==(index+1)) && value =~ /^[a-z0-9\|_ ]+$/   # tags must be last entry
+      elsif (values.size==(index+1)) && is_taglist?( value )) # tags must be last entry
 
         logger.debug "   found tags: >>#{value}<<"
 
@@ -144,23 +148,23 @@ class Brewery < ActiveRecord::Base
       logger.debug " auto-adding brands >#{value_brands}<"
 
       # remove optional english translation in square brackets ([]) e.g. Wien [Vienna]
-      value_brands = value_brands.gsub( /\[.+\]/, '' )
+      value_brands = TextUtils.strip_translations( value_brands )
 
       # remove optional longer title part in () e.g. Las Palmas (de Gran Canaria), Palma (de Mallorca)
-      value_brands = value_brands.gsub( /\(.+\)/, '' )
-      
+      value_brands = TextUtils.strip_subtitles( value_brands )
+
       # remove optional longer title part in {} e.g. Ottakringer {Bio} or {Alkoholfrei}
-      value_brands = value_brands.gsub( /\{.+\}/, '' )
-      
+      value_brands = TextUtils.strip_tags( value_brands )
+
       value_brand_titles = value_brands.split( ',' )
-      
+
       # pass 1) remove leading n trailing spaces
       value_brand_titles = value_brand_titles.map { |value| value.strip }
-      
+
       value_brand_titles.each do |brand_title|
         
         # autogenerate key from title
-        brand_key = title_to_key( brand_title )
+        brand_key = TextUtils.title_to_key( brand_title )
 
         brand = Brand.find_by_key( brand_key )
 
@@ -208,128 +212,6 @@ class Brewery < ActiveRecord::Base
 
   end # method create_or_update_from_values
 
-
-  ### todo/fix:
-  # reuse method - put into helper in textutils or somewhere else ??
-
-  ### todo/fix - move to textutils !!!!!  AddressHelper
-
-  def self.normalize_address( old_address_line )
-    # for now only checks german 5-digit zip code
-    #
-    #  e.g.  Alte Plauener Straße 24 // 95028 Hof  becomes
-    #        95028 Hof // Alte Plauener Straße 24 
-    
-    new_address_line = old_address_line   # default - do nothing - just path through
-    
-    lines = old_address_line.split( '//' )
-
-    if lines.size == 2   # two lines / check for switching lines
-      line1 = lines[0].strip
-      line2 = lines[1].strip
-      if line2 =~ /^[0-9]{5}\s/
-        new_address_line = "#{line2} // #{line1}"   # swap - let line w/ 5-digit zip code go first
-      end
-    end
-  
-    new_address_line
-  end
-
-  ### todo/fix: move to textutils!!!
-  ## add options for
-  ##  - remove translations e.g. []
-  ##  - remove subtitles   e.g. ()
-  ##  - remove tags/extras e.g. {}
-
-  ##
-  ## fix: make  strip_translations into fn
-  ##      make  strip_subtitles into fn  # better name for () strip_
-  ##      make  strip_desc / tags  (find better name  strip_extras, strip_meta? strip_desc? strip_curly?)
-
-
-  def self.title_to_key( title )
-
-      ## NB: downcase does NOT work for accented chars (thus, include in alternatives)
-      key = title.downcase
-
-      ## remove all whitespace and punctuation
-      key = key.gsub( /[ \t_\-\.()\[\]'"\/]/, '' )
-
-      ## remove special chars (e.g. %°&)
-      key = key.gsub( /[%&°]/, '' )
-
-      ##  turn accented char into ascii look alike if possible
-      ##
-      ## todo: add some more
-      ## see http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references  for more
-      
-      ## todo: add unicode codepoint name
-      
-      alternatives = [
-        ['ß', 'ss'],
-        ['æ', 'ae'],
-        ['ä', 'ae'],
-        ['ā', 'a' ],  # e.g. Liepājas
-        ['á', 'a' ],  # e.g. Bogotá, Králové
-        ['ã', 'a' ],  # e.g  São Paulo
-        ['ă', 'a' ],  # e.g. Chișinău
-        ['â', 'a' ],  # e.g  Goiânia
-        ['å', 'a' ],  # e.g. Vålerenga
-        ['ą', 'a' ],  # e.g. Śląsk
-        ['ç', 'c' ],  # e.g. São Gonçalo, Iguaçu, Neftçi
-        ['ć', 'c' ],  # e.g. Budućnost
-        ['č', 'c' ],  # e.g. Tradiční, Výčepní
-        ['é', 'e' ],  # e.g. Vélez, Králové
-        ['è', 'e' ],  # e.g. Rivières
-        ['ê', 'e' ],  # e.g. Grêmio
-        ['ě', 'e' ],  # e.g. Budějovice
-        ['ĕ', 'e' ],  # e.g. Svĕtlý
-        ['ė', 'e' ],  # e.g. Vėtra
-        ['ë', 'e' ],  # e.g. Skënderbeu
-        ['ğ', 'g' ],  # e.g. Qarabağ
-        ['ì', 'i' ],  # e.g. Potosì
-        ['í', 'i' ],  # e.g. Ústí
-        ['ł', 'l' ],  # e.g. Wisła, Wrocław
-        ['ñ', 'n' ],  # e.g. Porteño
-        ['ň', 'n' ],  # e.g. Plzeň, Třeboň
-        ['ö', 'oe'],
-        ['ő', 'o' ],  # e.g. Győri
-        ['ó', 'o' ],  # e.g. Colón, Łódź, Kraków
-        ['õ', 'o' ],  # e.g. Nõmme
-        ['ø', 'o' ],  # e.g. Fuglafjørdur, København
-        ['ř', 'r' ],  # e.g. Třeboň
-        ['ș', 's' ],  # e.g. Chișinău, București
-        ['ş', 's' ],  # e.g. Beşiktaş
-        ['š', 's' ],  # e.g. Košice
-        ['ť', 't' ],  # e.g. Měšťan
-        ['ü', 'ue'],
-        ['ú', 'u' ],  # e.g. Fútbol
-        ['ū', 'u' ],  # e.g. Sūduva
-        ['ů', 'u' ],  # e.g. Sládkův
-        ['ı', 'u' ],  # e.g. Bakı   # use u?? (Baku) why-why not?
-        ['ý', 'y' ],  # e.g. Nefitrovaný
-        ['ź', 'z' ],  # e.g. Łódź
-        ['ž', 'z' ],  # e.g. Domžale, Petržalka
-
-        ['Č', 'c' ],  # e.g. České
-        ['İ', 'i' ],  # e.g. İnter
-        ['Í', 'i' ],  # e.g. ÍBV
-        ['Ł', 'l' ],  # e.g. Łódź
-        ['Ö', 'oe' ], # e.g. Örebro
-        ['Ř', 'r' ],  # e.g. Řezák
-        ['Ś', 's' ],  # e.g. Śląsk
-        ['Š', 's' ],  # e.g. MŠK
-        ['Ş', 's' ],  # e.g. Şüvälan
-        ['Ú', 'u' ],  # e.g. Ústí, Újpest
-        ['Ž', 'z' ]   # e.g. Žilina
-      ]
-      
-      alternatives.each do |alt|
-        key = key.gsub( alt[0], alt[1] )
-      end
-
-      key
-  end # method title_to_key
 
 end # class Brewery
 

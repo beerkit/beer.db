@@ -4,6 +4,10 @@ module BeerDb::Models
 
 class Beer < ActiveRecord::Base
 
+  # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
+  #   self.create_or_update_from_values
+  extend TextUtils::ValueHelper  # e.g. is_year?, is_region?, is_address?, is_taglist? etc.
+
   belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
   belongs_to :region,  :class_name => 'WorldDb::Models::Region',  :foreign_key => 'region_id'
   belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
@@ -79,7 +83,7 @@ class Beer < ActiveRecord::Base
         value_region_key = value[7..-1]  ## cut off region: prefix
         value_region = Region.find_by_key_and_country_id!( value_region_key, new_attributes[:country_id] )
         new_attributes[ :region_id ] = value_region.id
-      elsif value =~ /^[A-Z]{1,2}$/  ## assume region code e.g. TX or N
+      elsif is_region?( value )  ## assume region code e.g. TX or N
         value_region = Region.find_by_key_and_country_id!( value.downcase, new_attributes[:country_id] )
         new_attributes[ :region_id ] = value_region.id
       elsif value =~ /^city:/   ## city:
@@ -111,9 +115,9 @@ class Beer < ActiveRecord::Base
           new_attributes[ :region_id ] = value_brewery.region.id
         end
 
-      elsif value =~ /^[0-9]{4}$/   # founded/established year e.g. 1776
+      elsif is_year?( value )  # founded/established year e.g. 1776
         new_attributes[ :since ] = value.to_i
-      elsif value =~ /^www\.|\.com$/   # check for url/internet address e.g. www.ottakringer.at
+      elsif is_website?( value )   # check for url/internet address e.g. www.ottakringer.at
         # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
         new_attributes[ :web ] = value
       elsif value =~ /^<?\s*(\d+(?:\.\d+)?)\s*%$/  ## abv (alcohol by volumee)
@@ -128,7 +132,7 @@ class Beer < ActiveRecord::Base
          ## nb: allow 44.4 kcal/100ml or 44.4 kcal or 44.4kcal
         value_kcal_str = $1.dup   # convert to decimal? how? use float?
         new_attributes[ :kcal ] = value_kcal_str
-      elsif (values.size==(index+1)) && value =~ /^[a-z0-9\|_ ]+$/   # tags must be last entry
+      elsif (values.size==(index+1)) && is_taglist?( value )  # tags must be last entry
 
         logger.debug "   found tags: >>#{value}<<"
 
