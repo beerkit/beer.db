@@ -30,10 +30,10 @@ class TestValues < MiniTest::Unit::TestCase
       'bio'
     ]
     
-    beer2 = Beer.create_or_update_from_values( new_attributes, values )
-    ## fix:  Beer.create_or_update_from_values  returs new or update beer obj
-    beer = Beer.find_by_key!( new_attributes[:key] )
-    ## assert( beer2.id == beer.id )
+    beer = Beer.create_or_update_from_values( new_attributes, values )
+    
+    beer2 = Beer.find_by_key!( new_attributes[:key] )
+    assert( beer.id == beer2.id )
 
     assert( beer.title         == new_attributes[:title] )
     assert( beer.country_id    == AT.id )
@@ -62,10 +62,10 @@ class TestValues < MiniTest::Unit::TestCase
       'brands: Ottakringer'
     ]
     
-    by2 = Brewery.create_or_update_from_values( new_attributes, values )
-    ## fix:  Brewery.create_or_update_from_values  returs new or update brewery obj
-    by = Brewery.find_by_key!( new_attributes[:key] )
-    ## assert( by2.id == by.id )
+    by = Brewery.create_or_update_from_values( new_attributes, values )
+
+    by2 = Brewery.find_by_key!( new_attributes[:key] )
+    assert( by.id == by2.id )
 
     assert( by.title         == new_attributes[:title] )
     assert( by.country_id    == AT.id )

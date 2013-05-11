@@ -210,6 +210,8 @@ class Brewery < ActiveRecord::Base
       end
     end
 
+    rec # NB: return created or updated obj
+
   end # method create_or_update_from_values
 
 

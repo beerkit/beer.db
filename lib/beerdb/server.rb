@@ -72,7 +72,7 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random beer
-      beer = Beer.rnd
+      beer = Beer.rnd.first
     else
       beer = Beer.find_by_key!( key )
     end
@@ -107,7 +107,7 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random brewery
-      brewery = Brewery.rnd
+      brewery = Brewery.rnd.first
     else
       brewery = Brewery.find_by_key!( key )
     end

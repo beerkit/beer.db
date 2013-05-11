@@ -3,20 +3,6 @@
 
 <h2>Examples</h2>
 
-<h3>Get random beer <code>/beer/rand</code></h3>
-
-<table>
- <tr>
-  <td>
-    <code>
-     <a href='<%= url("/beer/rand") %>'>
-        /beer/<span class='params'>rand</span>
-     </a>
-    </code>
-  </td>
- </tr>
-</table>
-
 <h3>Get beer by key <code>/beer/<span class='params'>:key</span></code></h3>
 
 <table>
@@ -82,20 +68,20 @@
 
 </table>
 
-
-<h3>Get random brewery <code>/brewery/rand</code></h3>
+<h3>Get random beer <code>/beer/<span class='params'>rand</span></code></h3>
 
 <table>
  <tr>
   <td>
     <code>
-     <a href='<%= url("/brewery/rand") %>'>
-        /brewery/<span class='params'>rand</span>
+     <a href='<%= url("/beer/rand") %>'>
+        /beer/<span class='params'>rand</span>
      </a>
     </code>
   </td>
  </tr>
 </table>
+
 
 <h3>Get brewery by key <code>/brewery/<span class='params'>:key</span></code></h3>
 
@@ -113,7 +99,7 @@
  <tr>
   <td>
     <code>
-     <a href='<%= url("/brewery/fullers") %>'>
+     <a href='<%= url("/brewery/fuller") %>'>
         /brewery/<span class='params'>fullers</span>
      </a>
     </code>
@@ -150,6 +136,20 @@
   </td>
  </tr>
 
+</table>
+
+<h3>Get random brewery <code>/brewery/<span class='params'>rand</span></code></h3>
+
+<table>
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/rand") %>'>
+        /brewery/<span class='params'>rand</span>
+     </a>
+    </code>
+  </td>
+ </tr>
 </table>
 
 
