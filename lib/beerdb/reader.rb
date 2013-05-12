@@ -32,18 +32,33 @@ class Reader
   def load( name )
 
     if name =~ /\/([a-z]{2})\/beers/
-      ## auto-add required country code (from folder structure)
-      load_beers( $1, name )
+      # classic style: e.g. /at/beers
+      # auto-add required country code (from folder structure)
+      load_beers_for_country( $1, name )
+    elsif name =~ /\/([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/beers/
+      # new style: e.g.  /at-austria/w-wien/beers
+      # auto-add required country n region code (from folder structure)
+      load_beers_for_country_n_region( $1, $2, name )
+    elsif name =~ /\/([a-z]{2})-[^\/]+\/beers/
+      # new style: e.g. /at-austria/beers
+      # auto-add required country code (from folder structure)
+      load_beers_for_country( $1, name )
     elsif name =~ /\.hl$/   # e.g. breweries.hl   # NB: must end w/ .hl
        load_brewery_prod( name )
     elsif name =~ /\/([a-z]{2})\.wikipedia/   # e.g. de.wikipedia
        # auto-add required lang e.g. de or en etc.
        load_brewery_wiki( $1, name )
-    elsif name =~ /\/([a-z]{2})\/breweries_([a-z]{1,2})(?:_|$)/  # NB: region key must end name or be followed by underscore (_)
-      ## auto-add required country code (from folder structure) plus region
+    elsif name =~ /\/([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/breweries/
+      # new style: e.g.  /at-austria/w-wien/breweries
+      # auto-add required country n region code (from folder structure)
       load_breweries_for_country_n_region( $1, $2, name )
+    elsif name =~ /\/([a-z]{2})-[^\/]+\/breweries/
+      # new style: e.g.  /at-austria/breweries
+      # auto-add required country (from folder structure)
+      load_breweries_for_country( $1, name )
     elsif name =~ /\/([a-z]{2})\/breweries/
-      ## auto-add required country code (from folder structure)
+      # classic style: e.g. /at/breweries
+      # auto-add required country code (from folder structure)
       load_breweries_for_country( $1, name )
     else
       logger.error "unknown beer.db fixture type >#{name}<"
@@ -94,12 +109,30 @@ class Reader
     Prop.create_from_fixture!( name, path )
   end
 
-  def load_beers( country_key, name, more_values={} )
+  def load_beers_for_country_n_region( country_key, region_key, name, more_values={} )
+    country = Country.find_by_key!( country_key )
+    logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
+
+    # NB: region lookup requires country id (region key only unique for country)
+    region  = Region.find_by_key_and_country_id!( region_key, country.id )
+    logger.debug "Region #{region.key} >#{region.title}<"
+
+    more_values[ :country_id ] = country.id
+    more_values[ :region_id  ] = region.id
+
+    load_beers_worker( name, more_values )
+  end
+
+  def load_beers_for_country( country_key, name, more_values={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
     more_values[ :country_id ] = country.id
 
+    load_beers_worker( name, more_values )
+  end
+
+  def load_beers( name, more_values={} )
     path = "#{include_path}/#{name}.txt"
 
     logger.info "parsing data '#{name}' (#{path})..."
@@ -128,7 +161,6 @@ class Reader
     load_breweries_worker( name, more_values )
   end
 
-
   def load_breweries_for_country( country_key, name, more_values={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
@@ -137,7 +169,6 @@ class Reader
 
     load_breweries_worker( name, more_values )
   end
-
 
   def load_breweries_worker( name, more_values={} )
     path = "#{include_path}/#{name}.txt"
