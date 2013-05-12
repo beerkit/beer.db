@@ -132,7 +132,7 @@ class Reader
     load_beers_worker( name, more_values )
   end
 
-  def load_beers( name, more_values={} )
+  def load_beers_worker( name, more_values={} )
     path = "#{include_path}/#{name}.txt"
 
     logger.info "parsing data '#{name}' (#{path})..."
