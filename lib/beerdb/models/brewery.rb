@@ -220,7 +220,7 @@ class Brewery < ActiveRecord::Base
           rec.city_id = city.id
           rec.save!
         else
-          logger.warn "auto-add city (#{country_key}) for #{new_attributes[:key]} >>#{new_attributes[:address]}<< failed; no city title found"
+          logger.warn "auto-add city for #{new_attributes[:key]} (#{country_key}) >>#{new_attributes[:address]}<< failed; no city title found"
         end
       end
     end
