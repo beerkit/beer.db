@@ -47,6 +47,8 @@ class Brewery < ActiveRecord::Base
 
   def self.find_city_for_country( country_key, address )
 
+    return nil if address.blank?    # do NOT process nil or empty address lines; sorry
+
     lines = address.split( '//' )
 
     if country_key == 'at' || country_key == 'de'
@@ -54,9 +56,12 @@ class Brewery < ActiveRecord::Base
       line1 = lines[0]
       line1 = line1.gsub( /\b[0-9]+\b/, '' )   # use word boundries (why? why not?)
       line1 = line1.strip
+      
+      return nil if line1.blank?   # nothing left sorry; better return nil
+      
       line1   # assume its the city
     else
-      nil   # unsupported country/address schema for now
+      nil   # unsupported country/address schema for now; sorry
     end
   end
 
@@ -174,6 +179,8 @@ class Brewery < ActiveRecord::Base
 
       if country_key == 'at' || country_key == 'de'
 
+        ## todo: how to handle nil/empty address lines?
+
         ## todo: use find_city_in_adr_for_country ?? too long ?? use adr or addr
         city_title = find_city_for_country( country_key, new_attributes[:address] )
         
@@ -197,6 +204,8 @@ class Brewery < ActiveRecord::Base
 
           if city.present?
             logger.info "update City #{city.id}-#{city.key}:"
+            # todo: check - any point in updating city? for now no new attributes
+            #   update only for title - title will change?
           else
             logger.info "create City:"
             city = City.new
@@ -206,12 +215,12 @@ class Brewery < ActiveRecord::Base
           logger.info city_attributes.to_json
 
           city.update_attributes!( city_attributes )
-          
+
           ## now at last add city_id to brewery!
           rec.city_id = city.id
           rec.save!
         else
-          logger.warn "auto-add city (#{country_key}) >>#{new_attributes[:address]}<< failed; no city title found"
+          logger.warn "auto-add city (#{country_key}) for #{new_attributes[:key]} >>#{new_attributes[:address]}<< failed; no city title found"
         end
       end
     end
