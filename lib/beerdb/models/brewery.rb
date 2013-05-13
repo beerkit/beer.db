@@ -40,6 +40,27 @@ class Brewery < ActiveRecord::Base
   end
 
 
+
+  ## todo/fix:
+  #    move to textutils - use AddressHelper ??
+  #  todo: add _in_adr or _in_addr to name
+
+  def self.find_city_for_country( country_key, address )
+
+    lines = address.split( '//' )
+
+    if country_key == 'at' || country_key == 'de'
+      # first line strip numbers (assuming zip code) and whitespace
+      line1 = lines[0]
+      line1 = line1.gsub( /\b[0-9]+\b/, '' )   # use word boundries (why? why not?)
+      line1 = line1.strip
+      line1   # assume its the city
+    else
+      nil   # unsupported country/address schema for now
+    end
+  end
+
+
   def self.create_or_update_from_values( new_attributes, values )
 
     ## fix: add/configure logger for ActiveRecord!!!
@@ -140,6 +161,61 @@ class Brewery < ActiveRecord::Base
     logger.debug new_attributes.to_json
 
     rec.update_attributes!( new_attributes )
+
+
+    ##############################
+    # auto-add city if not present and country n region present
+    
+    if new_attributes[:city_id].blank? &&
+       new_attributes[:country_id].present? &&
+       new_attributes[:region_id].present?
+       
+      country_key = rec.country.key
+
+      if county_key == 'at' || country_key == 'de'
+
+        ## todo: use find_city_in_adr_for_country ?? too long ?? use adr or addr
+        city_title = find_city_for_country( country_key, new_attributes[:address] )
+        
+        if city_title.present?
+          
+          # remove optional english translation in square brackets ([]) e.g. Wien [Vienna]
+          city_title = TextUtils.strip_translations( city_title )
+          # remove optional longer title part in {} e.g. Ottakringer {Bio} or {Alkoholfrei}
+          city_title = TextUtils.strip_tags( city_title )
+          
+          city_key = TextUtils.title_to_key( city_title )
+
+          city = City.find_by_key( city_key )
+
+          city_attributes = {
+            title:      city_title,
+            country_id: rec.country_id,
+            region_id:  rec.region_id
+            ### fix/todo: add new autoadd flag too?
+          }
+
+          if city.present?
+            logger.info "update City #{city.id}-#{city.key}:"
+          else
+            logger.info "create City:"
+            city = City.new
+            city_attributes[ :key ] = city_key   # NB: new record; include/update key
+          end
+
+          logger.info city_attributes.to_json
+
+          city.update_attributes!( city_attributes )
+          
+          ## now at last add city_id to brewery!
+          rec.city_id = city.id
+          rec.save!
+        else
+          logger.warn "auto-add city (#{country_key}) >>#{new_attributes[:address]}<< failed; no city title found"
+        end
+      end
+    end
+
 
     ###################
     # auto-add brands if presents
