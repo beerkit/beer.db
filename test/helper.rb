@@ -25,6 +25,7 @@ require 'beerdb'
 require 'logutils/db'   # NB: explict require required for LogDb (not automatic) 
 
 Country = WorldDb::Models::Country
+Region  = WorldDb::Models::Region
 
 ## todo: get all models aliases (e.g. from console script)
 
@@ -60,10 +61,19 @@ end
 def fillup_in_memory_db
   ## add some counties
 
-  Country.create!( key: 'at', title: 'Austria', code: 'AUT', pop: 8000000, area: 80000 )
+  at = Country.create!( key: 'at', title: 'Austria', code: 'AUT', pop: 0, area: 0 )
+  Region.create!( key: 'w', title: 'Wien', country_id: at.id )
+  
+  de = Country.create!( key: 'de', title: 'Germany', code: 'DEU', pop: 0, area: 0 )
+  Region.create!( key: 'by', title: 'Bayern', country_id: de.id )
+  
 end
 
 setup_in_memory_db()
 fillup_in_memory_db()
 
-AT =  Country.find_by_key!( 'at' )
+AT   =  Country.find_by_key!( 'at' )
+W    =  Region.find_by_key!( 'w' )
+
+DE   =  Country.find_by_key!( 'de' )
+BY   =  Region.find_by_key!( 'by' )

@@ -172,7 +172,7 @@ class Brewery < ActiveRecord::Base
        
       country_key = rec.country.key
 
-      if county_key == 'at' || country_key == 'de'
+      if country_key == 'at' || country_key == 'de'
 
         ## todo: use find_city_in_adr_for_country ?? too long ?? use adr or addr
         city_title = find_city_for_country( country_key, new_attributes[:address] )
