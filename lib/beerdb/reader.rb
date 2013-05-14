@@ -47,7 +47,7 @@ class Reader
        load_brewery_prod( name )
     elsif name =~ /\/([a-z]{2})\.wikipedia/   # e.g. de.wikipedia
        # auto-add required lang e.g. de or en etc.
-       load_brewery_wiki( $1, name )
+       load_brewery_wikipedia( $1, name )
     elsif name =~ /\/([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/breweries/
       # new style: e.g.  /at-austria/w-wien/breweries
       # auto-add required country n region code (from folder structure)
@@ -66,7 +66,7 @@ class Reader
     end
   end
 
-  def load_brewery_wiki( lang_key, name )
+  def load_brewery_wikipedia( lang_key, name )
     path = "#{include_path}/#{name}.yml"
 
     logger.info "parsing data '#{name}' (#{path})..."
@@ -76,9 +76,9 @@ class Reader
     reader.each do |key, value|
       brewery = Brewery.find_by_key!( key )
       
-      wiki = "#{lang_key}.wikipedia.org/wiki/#{value.strip}"
-      logger.debug "  adding #{key} => >#{wiki}<"
-      brewery.wiki = wiki
+      wikipedia = "#{lang_key}.wikipedia.org/wiki/#{value.strip}"
+      logger.debug "  adding #{key} => >#{wikipedia}<"
+      brewery.wikipedia = wikipedia
       brewery.save!
     end
 
@@ -119,6 +119,8 @@ class Reader
 
     more_values[ :country_id ] = country.id
     more_values[ :region_id  ] = region.id
+    
+    more_values[ :txt ] = name  # store source ref
 
     load_beers_worker( name, more_values )
   end
@@ -128,6 +130,8 @@ class Reader
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
     more_values[ :country_id ] = country.id
+
+    more_values[ :txt ] = name  # store source ref
 
     load_beers_worker( name, more_values )
   end
@@ -158,6 +162,8 @@ class Reader
     more_values[ :country_id ] = country.id
     more_values[ :region_id  ] = region.id
 
+    more_values[ :txt ] = name  # store source ref
+
     load_breweries_worker( name, more_values )
   end
 
@@ -166,6 +172,8 @@ class Reader
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
     more_values[ :country_id ] = country.id
+
+    more_values[ :txt ] = name  # store source ref
 
     load_breweries_worker( name, more_values )
   end

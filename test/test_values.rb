@@ -73,6 +73,7 @@ class TestValues < MiniTest::Unit::TestCase
     assert( by.since         == 1838 )
     assert( by.web           == 'www.ottakringer.at' )
     assert( by.address       == '1160 Wien // Ottakringer Platz 1' )
+    assert( by.grade         == 4 )
 
     # check auto-created brand
 
@@ -82,6 +83,67 @@ class TestValues < MiniTest::Unit::TestCase
     assert( br.brewery_id    == by.id )
     assert( br.brewery.title == by.title )
     assert( br.country_id    == by.country_id )
+  end
+
+
+  def test_load_brewery_values_w_grade
+
+    # ottakringer, Ottakringer Brauerei, 1838, www.ottakringer.at, WI, city:wien, 1160 Wien // Ottakringer Platz 1
+    #   brands: Ottakringer
+
+    new_attributes = {
+      key: 'ottakringer',
+      title: 'Ottakringer Brauerei **',
+      synonyms: '',
+      country_id: AT.id
+    }
+
+    values = [
+      '1838',
+      'www.ottakringer.at',
+      '1160 Wien // Ottakringer Platz 1',
+      'brands: Ottakringer'
+    ]
+    
+    by = Brewery.create_or_update_from_values( new_attributes, values )
+
+    by2 = Brewery.find_by_key!( new_attributes[:key] )
+    assert( by.id == by2.id )
+
+    assert( by.title         == 'Ottakringer Brauerei' )
+    assert( by.grade         == 2 )
+  end
+
+  def test_load_brewery_values_w_grade_in_synonyms
+
+    ## fix!!!!!!!!: use different brewery! use one w/ synonyms
+    ###
+    
+    # ottakringer, Ottakringer Brauerei, 1838, www.ottakringer.at, WI, city:wien, 1160 Wien // Ottakringer Platz 1
+    #   brands: Ottakringer
+
+    new_attributes = {
+      key: 'ottakringer',
+      title: 'Ottakringer Brauerei',
+      synonyms: 'Otta **',
+      country_id: AT.id
+    }
+
+    values = [
+      '1838',
+      'www.ottakringer.at',
+      '1160 Wien // Ottakringer Platz 1',
+      'brands: Ottakringer'
+    ]
+    
+    by = Brewery.create_or_update_from_values( new_attributes, values )
+
+    by2 = Brewery.find_by_key!( new_attributes[:key] )
+    assert( by.id == by2.id )
+
+    assert( by.title         == 'Ottakringer Brauerei' )
+    assert( by.synonyms      == 'Otta' )
+    assert( by.grade         == 2 )
   end
 
 

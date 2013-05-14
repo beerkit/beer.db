@@ -66,6 +66,57 @@ class Brewery < ActiveRecord::Base
   end
 
 
+  def self.find_grade( text )  # NB: returns ary [grade,text] / two values
+    grade = 4  # defaults to grade 4  e.g  *** => 1, ** => 2, * => 3, -/- => 4
+
+    text = text.sub( /\s+(\*{1,3})\s*$/ ) do |_|  # NB: stars must end field/value
+      if $1 == '***'
+        grade = 1
+      elsif $1 == '**'
+        grade = 2
+      elsif $1 == '*'
+        grade = 3
+      else
+        # unknown grade; not possible, is'it?
+      end
+      ''  # remove * from title if found
+    end
+
+    [grade,text]
+  end
+
+  ## todo/fix: move to helper for reuse in textutils!!! (use for beer model too)
+
+  def self.find_grade_in_titles!( new_attributes )
+
+    # NB: will add a new attributes grade to hash e.g. new_attributes[:grade] = grade
+
+    if new_attributes[:title].present?
+      grade, title = find_grade( new_attributes[:title] )
+      
+      if grade == 1 || grade == 2 || grade == 3  # grade found/present; use stripped title
+        new_attributes[:title] = title
+        new_attributes[:grade] = grade
+        return grade
+      end
+    end  
+      
+    if new_attributes[:synonyms].present?
+      grade, synonyms = find_grade( new_attributes[:synonyms] )
+      
+      if grade == 1 || grade == 2 || grade == 3  # grade found/present; use stripped title
+        new_attributes[:synonyms] = synonyms
+        new_attributes[:grade] = grade
+        return grade
+      end
+    end  
+      
+    grade = 4  # defaults to grade 4  e.g  *** => 1, ** => 2, * => 3, -/- => 4
+    new_attributes[:grade] = grade
+    grade
+  end
+
+
   def self.create_or_update_from_values( new_attributes, values )
 
     ## fix: add/configure logger for ActiveRecord!!!
@@ -73,6 +124,9 @@ class Brewery < ActiveRecord::Base
 
     value_tag_keys    = []
     value_brands      = ''
+
+    ## check for grades (e.g. ***/**/*) in titles (will add new_attributes[:grade] to hash)
+    find_grade_in_titles!( new_attributes )
 
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
 
@@ -203,11 +257,11 @@ class Brewery < ActiveRecord::Base
           }
 
           if city.present?
-            logger.info "update City #{city.id}-#{city.key}:"
+            logger.debug "update City #{city.id}-#{city.key}:"
             # todo: check - any point in updating city? for now no new attributes
             #   update only for title - title will change?
           else
-            logger.info "create City:"
+            logger.debug "create City:"
             city = City.new
             city_attributes[ :key ] = city_key   # NB: new record; include/update key
           end

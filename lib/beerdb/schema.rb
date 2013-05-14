@@ -15,10 +15,11 @@ create_table :beers do |t|
   t.string  :web    # optional url link (e.g. )
   t.integer :since  # optional year (e.g. 1896)
 
-  t.boolean  :bottle,  :null => false, :default => false # Flaschenbier
-  t.boolean  :draft,   :null => false, :default => false # Fassbier
+  # t.boolean  :bottle,  :null => false, :default => false # Flaschenbier
+  # t.boolean  :draft,   :null => false, :default => false # Fassbier
   ## todo: check seasonal is it proper english?
   t.boolean  :seasonal, :null => false, :default => false # all year or just eg. Festbier/Oktoberfest Special
+  t.boolean  :limited, :null => false, :default => false   # one year or season only
   ## todo: add microbrew/brewpub flag?
   #### t.boolean  :brewpub, :null => false, :default => false
   
@@ -64,7 +65,12 @@ create_table :beers do |t|
   # - B-grade /2nd class/ tier2 / regular, major,   - todo: find better names?
   # - C-grade /3nd class/ tier3/ / speciality, minor ?
 
-  t.integer :grade   # 1/2/3  (A/B/C)
+  # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
+  t.integer :grade, :null => false, :default => 4
+
+  t.string  :txt            # source ref
+  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+
 
   t.references :country,  :null => false
   t.references :region   # optional
@@ -89,7 +95,15 @@ create_table :brands do |t|   # beer families (sharing same name e.g. brand)
   t.boolean :regional,   :null => false, :default => false
   t.boolean :local,      :null => false, :default => false
 
-  t.integer :grade   # 1/2/3/4/5  (global/intern'l/national/regional/local)
+  # t.integer :brand_grade   # 1/2/3/4/5  (global/intern'l/national/regional/local)
+
+  # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
+  t.integer :grade, :null => false, :default => 4
+  #   -- todo: add plus 1 for brewery w/ *** ??
+
+  t.string  :txt            # source ref
+  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+
 
   t.references :brewery   # optional (for now)
 
@@ -113,6 +127,7 @@ create_table :breweries do |t|
 ## todo: add optional parent brewery (owned_by)
 
   t.integer :prod  # (estimated) annual production/capacity in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
+  t.integer :prod_grade   # 1/2/3/4/5/6/7/8/9/10/11
 
   # grade - classified using annual production (capacity) in hl
   # <     1_000 hl  => 11
@@ -127,11 +142,16 @@ create_table :breweries do |t|
   # < 2_000_000 hl  => 2
   # > 2_000_000 hl  => 1
 
-  t.integer :grade   # 1/2/3/4/5/6/7/8/9/10/11
+
+  # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
+  t.integer :grade, :null => false, :default => 4
 
 
-  t.string  :web   # optional web page (e.g. www.ottakringer.at)
-  t.string  :wiki  # optional wiki(pedia page)
+  t.string  :txt            # source ref
+  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+
+  t.string  :web        # optional web page (e.g. www.ottakringer.at)
+  t.string  :wikipedia  # optional wiki(pedia page)
 
   t.boolean :indie    # independent brewery (flag)
 
