@@ -55,7 +55,11 @@ class Beer < ActiveRecord::Base
     logger = LogKernel::Logger.root
     
     value_tag_keys    = []
-      
+     
+    ## check for grades (e.g. ***/**/*) in titles (will add new_attributes[:grade] to hash)
+    ## if grade missing; set default to 4; lets us update overwrite 1,2,3 values on update
+    new_attributes[ :grade ] ||= 4
+           
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
       
     if new_attributes[:tags].present?
