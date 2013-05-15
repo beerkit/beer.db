@@ -4,10 +4,12 @@ module BeerDb::Models
 
 class Brewery < ActiveRecord::Base
 
+  extend TextUtils::TagHelper  # will add self.find_tags, self.find_tags_in_hash!, etc.
+
   # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
   #   self.create_or_update_from_values
-  extend TextUtils::ValueHelper  # e.g. is_year?, is_region?, is_address?, is_taglist? etc.
-  extend TextUtils::AddressHelper  # e.g normalize_address, find_city_for_country, etc.
+  extend TextUtils::ValueHelper  # e.g. self.is_year?, self.is_region?, is_address?, is_taglist? etc.
+  extend TextUtils::AddressHelper  # e.g self.normalize_address, self.find_city_for_country, etc.
 
   self.table_name = 'breweries'
 
@@ -41,8 +43,24 @@ class Brewery < ActiveRecord::Base
   end
 
 
+  def self.create_from_values!( values, more_attribs={} )
+    ## fix: rename to create_or_update_from_values
+
+    ## key & title & country required
+    attribs = {
+      key:   values[0],
+      title: values[1]
+    }
+
+    attribs = attribs.merge( more_attribs )
+      
+    ## check for optional values
+    Brewery.create_or_update_from_values( attribs, values[2..-1] )
+  end
+
 
   def self.create_or_update_from_values( new_attributes, values )
+    ## fix: rename to create_or_update_from_attr/attribs/ or similar
 
     ## fix: add/configure logger for ActiveRecord!!!
     logger = LogKernel::Logger.root
@@ -55,21 +73,7 @@ class Brewery < ActiveRecord::Base
     new_attributes[ :grade ] ||= 4
 
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
-
-    if new_attributes[:tags].present?
-      more_tag_keys = new_attributes[:tags].split('|')
-      new_attributes.delete(:tags)
-
-      ## unify; replace _ w/ space; remove leading n trailing whitespace
-      more_tag_keys = more_tag_keys.map do |key|
-        key = key.gsub( '_', ' ' )
-        key = key.strip
-        key
-      end
-
-      value_tag_keys += more_tag_keys
-    end
-
+    value_tag_keys += find_tags_in_hash!( new_attributes )
 
     ## check for optional values
     values.each_with_index do |value,index|
