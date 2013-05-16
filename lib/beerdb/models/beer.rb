@@ -49,6 +49,11 @@ class Beer < ActiveRecord::Base
     puts "*** depreceated fn api - use og="
     self.og = value
   end
+  
+  def as_json_v2( opts={} )
+    # NB: do NOT overwrite "default" / builtin as_json, thus, lets use as_json_v2
+    BeerSerializer.new( self ).as_json
+  end
 
 
   def self.create_or_update_from_values( values, more_attribs={} )

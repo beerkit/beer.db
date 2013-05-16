@@ -42,6 +42,12 @@ class Brewery < ActiveRecord::Base
     self.since = value
   end
 
+  def as_json_v2( opts={} )
+    # NB: do NOT overwrite "default" / builtin as_json, thus, lets use as_json_v2
+    BrewerySerializer.new( self ).as_json
+  end
+
+
 
   def self.create_or_update_from_values( values, more_attribs={} )
     attribs, more_values = find_key_n_title( values )

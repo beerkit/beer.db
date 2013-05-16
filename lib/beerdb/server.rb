@@ -72,12 +72,13 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random beer
+      # NB: use .first (otherwise will get ActiveRelation not Model)
       beer = Beer.rnd.first
     else
       beer = Beer.find_by_key!( key )
     end
 
-    json_or_jsonp( BeerSerializer.new( beer ).as_json )
+    json_or_jsonp( beer.as_json_v2 )
   end
 
 
@@ -85,12 +86,13 @@ class Server < Sinatra::Base
 
     if ['r', 'rnd', 'rand', 'random'].include?( key )
       # special key for random brewery
+      # NB: use .first (otherwise will get ActiveRelation not Model)
       brewery = Brewery.rnd.first
     else
       brewery = Brewery.find_by_key!( key )
     end
 
-    json_or_jsonp( BrewerySerializer.new( brewery ).as_json )
+    json_or_jsonp( brewery.as_json_v2 )
   end
 
 
