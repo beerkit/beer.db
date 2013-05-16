@@ -43,24 +43,16 @@ class Brewery < ActiveRecord::Base
   end
 
 
-  def self.create_from_values!( values, more_attribs={} )
-    ## fix: rename to create_or_update_from_values
-
-    ## key & title & country required
-    attribs = {
-      key:   values[0],
-      title: values[1]
-    }
-
+  def self.create_or_update_from_values( values, more_attribs={} )
+    attribs, more_values = find_key_n_title( values )
     attribs = attribs.merge( more_attribs )
-      
-    ## check for optional values
-    Brewery.create_or_update_from_values( attribs, values[2..-1] )
+
+    # check for optional values
+    Brewery.create_or_update_from_attribs( attribs, more_values )
   end
 
 
-  def self.create_or_update_from_values( new_attributes, values )
-    ## fix: rename to create_or_update_from_attr/attribs/ or similar
+  def self.create_or_update_from_attribs( new_attributes, values )
 
     ## fix: add/configure logger for ActiveRecord!!!
     logger = LogKernel::Logger.root
@@ -225,37 +217,22 @@ class Brewery < ActiveRecord::Base
       # remove optional longer title part in {} e.g. Ottakringer {Bio} or {Alkoholfrei}
       value_brands = TextUtils.strip_tags( value_brands )
 
-      value_brand_titles = value_brands.split( ',' )
+      brand_titles = value_brands.split( ',' )
 
       # pass 1) remove leading n trailing spaces
-      value_brand_titles = value_brand_titles.map { |value| value.strip }
+      brand_titles = brand_titles.map { |value| value.strip }
 
-      value_brand_titles.each do |brand_title|
-        
-        # autogenerate key from title
-        brand_key = TextUtils.title_to_key( brand_title )
+      brand_titles.each do |brand_title|
 
-        brand = Brand.find_by_key( brand_key )
-
-        brand_attributes = {
-          title:      brand_title,
+        brand_values = [brand_title]  # NB: values MUST be an ary
+        brand_attribs = {
           brewery_id: rec.id,
           country_id: rec.country_id,
           region_id:  rec.region_id,
           city_id:    rec.city_id
         }
 
-        if brand.present?
-          logger.debug "update Brand #{brand.id}-#{brand.key}:"
-        else
-          logger.debug "create Brand:"
-          brand = Brand.new
-          brand_attributes[ :key ] = brand_key   # NB: new record; include/update key
-        end
-      
-        logger.debug brand_attributes.to_json
-
-        brand.update_attributes!( brand_attributes )
+        Brand.create_or_update_from_values( brand_values, brand_attribs )
       end
     end
 

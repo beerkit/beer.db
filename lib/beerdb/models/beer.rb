@@ -51,55 +51,48 @@ class Beer < ActiveRecord::Base
   end
 
 
-  def self.create_from_values!( values, more_attribs={} )
-    ## fix: rename to create_or_update_from_values
+  def self.create_or_update_from_values( values, more_attribs={} )
 
-    ## key & title & country required
-    attribs = {
-      key:   values[0],
-      title: values[1]
-    }
-
+    attribs, more_values = find_key_n_title( values )
     attribs = attribs.merge( more_attribs )
       
-    ## check for optional values
-    Beer.create_or_update_from_values( attribs, values[2..-1] )
+    # check for optional values
+    Beer.create_or_update_from_attribs( attribs, more_values )
   end
 
 
-  def self.create_or_update_from_values( new_attributes, values )
-    ## fix: rename to create_or_update_from_attr/attribs/ or similar
-    
-    ## fix: add/configure logger for ActiveRecord!!!
+  def self.create_or_update_from_attribs( attribs, values )
+
+    # fix: add/configure logger for ActiveRecord!!!
     logger = LogKernel::Logger.root
     
     value_tag_keys    = []
      
-    ## check for grades (e.g. ***/**/*) in titles (will add new_attributes[:grade] to hash)
+    ## check for grades (e.g. ***/**/*) in titles (will add attribs[:grade] to hash)
     ## if grade missing; set default to 4; lets us update overwrite 1,2,3 values on update
-    new_attributes[ :grade ] ||= 4
+    attribs[ :grade ] ||= 4
            
-    ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
-    value_tag_keys += find_tags_in_hash!( new_attributes )
+    ### check for "default" tags - that is, if present attribs[:tags] remove from hash
+    value_tag_keys += find_tags_in_hash!( attribs )
 
     ## check for optional values
     values.each_with_index do |value,index|
       if value =~ /^country:/   ## country:
         value_country_key = value[8..-1]  ## cut off country: prefix
         value_country = Country.find_by_key!( value_country_key )
-        new_attributes[ :country_id ] = value_country.id
+        attribs[ :country_id ] = value_country.id
       elsif value =~ /^region:/   ## region:
         value_region_key = value[7..-1]  ## cut off region: prefix
-        value_region = Region.find_by_key_and_country_id!( value_region_key, new_attributes[:country_id] )
-        new_attributes[ :region_id ] = value_region.id
+        value_region = Region.find_by_key_and_country_id!( value_region_key, attribs[:country_id] )
+        attribs[ :region_id ] = value_region.id
       elsif is_region?( value )  ## assume region code e.g. TX or N
-        value_region = Region.find_by_key_and_country_id!( value.downcase, new_attributes[:country_id] )
-        new_attributes[ :region_id ] = value_region.id
+        value_region = Region.find_by_key_and_country_id!( value.downcase, attribs[:country_id] )
+        attribs[ :region_id ] = value_region.id
       elsif value =~ /^city:/   ## city:
         value_city_key = value[5..-1]  ## cut off city: prefix
         value_city = City.find_by_key( value_city_key )
         if value_city.present?
-          new_attributes[ :city_id ] = value_city.id
+          attribs[ :city_id ] = value_city.id
         else
           ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
           logger.warn "city with key #{value_city_key} missing"
@@ -107,40 +100,40 @@ class Beer < ActiveRecord::Base
       elsif value =~ /^by:/   ## by:  -brewed by/brewery
         value_brewery_key = value[3..-1]  ## cut off by: prefix
         value_brewery = Brewery.find_by_key!( value_brewery_key )
-        new_attributes[ :brewery_id ] = value_brewery.id
+        attribs[ :brewery_id ] = value_brewery.id
 
         # for easy queries cache city and region ids
           
         # 1) check if brewery has city - if yes, use it for beer too
         if value_brewery.city.present?
-          new_attributes[ :city_id ] = value_brewery.city.id
+          attribs[ :city_id ] = value_brewery.city.id
         end
 
         # 2) check if brewery has city w/ region if yes, use it for beer to
         #   if not check for region for brewery
         if value_brewery.city.present? && value_brewery.city.region.present?
-          new_attributes[ :region_id ] = value_brewery.city.region.id
+          attribs[ :region_id ] = value_brewery.city.region.id
         elsif value_brewery.region.present?
-          new_attributes[ :region_id ] = value_brewery.region.id
+          attribs[ :region_id ] = value_brewery.region.id
         end
 
       elsif is_year?( value )  # founded/established year e.g. 1776
-        new_attributes[ :since ] = value.to_i
+        attribs[ :since ] = value.to_i
       elsif is_website?( value )   # check for url/internet address e.g. www.ottakringer.at
         # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
-        new_attributes[ :web ] = value
+        attribs[ :web ] = value
       elsif value =~ /^<?\s*(\d+(?:\.\d+)?)\s*%$/  ## abv (alcohol by volumee)
         ## nb: allow leading < e.g. <0.5%
         value_abv_str = $1.dup   # convert to decimal? how? use float?
-        new_attributes[ :abv ] = value_abv_str
+        attribs[ :abv ] = value_abv_str
       elsif value =~ /^(\d+(?:\.\d+)?)°$/  ## plato (stammwuerze/gravity?) e.g. 11.2°
         ## nb: no whitespace allowed between ° and number e.g. 11.2°
         value_og_str = $1.dup   # convert to decimal? how? use float?
-        new_attributes[ :og ] = value_og_str
+        attribs[ :og ] = value_og_str
       elsif value =~ /^(\d+(?:\.\d+)?)\s*kcal(?:\/100ml)?$/  ## kcal
          ## nb: allow 44.4 kcal/100ml or 44.4 kcal or 44.4kcal
         value_kcal_str = $1.dup   # convert to decimal? how? use float?
-        new_attributes[ :kcal ] = value_kcal_str
+        attribs[ :kcal ] = value_kcal_str
       elsif (values.size==(index+1)) && is_taglist?( value )  # tags must be last entry
 
         logger.debug "   found tags: >>#{value}<<"
@@ -157,12 +150,12 @@ class Beer < ActiveRecord::Base
         value_tag_keys += tag_keys
       else
         # issue warning: unknown type for value
-        logger.warn "unknown type for value >#{value}< - key #{new_attributes[:key]}"
+        logger.warn "unknown type for value >#{value}< - key #{attribs[:key]}"
       end
     end # each value
 
-    #  rec = Beer.find_by_key_and_country_id( new_attributes[ :key ], new_attributes[ :country_id] )
-    rec = Beer.find_by_key( new_attributes[ :key ] )
+    #  rec = Beer.find_by_key_and_country_id( attribs[ :key ], attribs[ :country_id] )
+    rec = Beer.find_by_key( attribs[ :key ] )
 
     if rec.present?
       logger.debug "update Beer #{rec.id}-#{rec.key}:"
@@ -171,9 +164,9 @@ class Beer < ActiveRecord::Base
       rec = Beer.new
     end
       
-    logger.debug new_attributes.to_json
+    logger.debug attribs.to_json
 
-    rec.update_attributes!( new_attributes )
+    rec.update_attributes!( attribs )
 
     ##################
     # add taggings 
