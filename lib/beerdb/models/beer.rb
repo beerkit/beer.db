@@ -100,7 +100,7 @@ class Beer < ActiveRecord::Base
           attribs[ :city_id ] = value_city.id
         else
           ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
-          logger.warn "city with key #{value_city_key} missing"
+          logger.warn "city with key #{value_city_key} missing for beer #{attribs[:key]}"
         end
       elsif value =~ /^by:/   ## by:  -brewed by/brewery
         value_brewery_key = value[3..-1]  ## cut off by: prefix
@@ -140,19 +140,8 @@ class Beer < ActiveRecord::Base
         value_kcal_str = $1.dup   # convert to decimal? how? use float?
         attribs[ :kcal ] = value_kcal_str
       elsif (values.size==(index+1)) && is_taglist?( value )  # tags must be last entry
-
         logger.debug "   found tags: >>#{value}<<"
-
-        tag_keys = value.split('|')
-  
-        ## unify; replace _ w/ space; remove leading n trailing whitespace
-        tag_keys = tag_keys.map do |key|
-          key = key.gsub( '_', ' ' )
-          key = key.strip
-          key
-        end
-          
-        value_tag_keys += tag_keys
+        value_tag_keys += find_tags( value )
       else
         # issue warning: unknown type for value
         logger.warn "unknown type for value >#{value}< - key #{attribs[:key]}"

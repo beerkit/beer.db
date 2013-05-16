@@ -93,7 +93,7 @@ class Brewery < ActiveRecord::Base
           new_attributes[ :city_id ] = value_city.id
         else
           ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
-          logger.warn "city with key #{value_city_key} missing"
+          logger.warn "city with key #{value_city_key} missing - for brewery #{new_attributes[:key]}"
         end
 
         ## for easy queries: cache region_id (from city)
@@ -116,19 +116,8 @@ class Brewery < ActiveRecord::Base
         value_brands = value_brands.strip  # remove leading and trailing spaces
         # NB: brands get processed after record gets created (see below)
       elsif (values.size==(index+1)) && is_taglist?( value ) # tags must be last entry
-
         logger.debug "   found tags: >>#{value}<<"
-
-        tag_keys = value.split('|')
-  
-        ## unify; replace _ w/ space; remove leading n trailing whitespace
-        tag_keys = tag_keys.map do |key|
-          key = key.gsub( '_', ' ' )
-          key = key.strip
-          key
-        end
-          
-        value_tag_keys += tag_keys
+        value_tag_keys += find_tags( value )
       else
         # issue warning: unknown type for value
         logger.warn "unknown type for value >#{value}< - key #{new_attributes[:key]}"
@@ -168,35 +157,15 @@ class Brewery < ActiveRecord::Base
         
         if city_title.present?
           
-          # remove optional english translation in square brackets ([]) e.g. Wien [Vienna]
-          city_title = TextUtils.strip_translations( city_title )
-          # remove optional longer title part in {} e.g. Ottakringer {Bio} or {Alkoholfrei}
-          city_title = TextUtils.strip_tags( city_title )
-          
-          city_key = TextUtils.title_to_key( city_title )
-
-          city = City.find_by_key( city_key )
-
+          city_values = [city_title]
           city_attributes = {
-            title:      city_title,
             country_id: rec.country_id,
             region_id:  rec.region_id
-            ### fix/todo: add new autoadd flag too?
           }
+          city = City.create_or_update_from_values( city_values, city_attributes )
 
-          if city.present?
-            logger.debug "update City #{city.id}-#{city.key}:"
-            # todo: check - any point in updating city? for now no new attributes
-            #   update only for title - title will change?
-          else
-            logger.debug "create City:"
-            city = City.new
-            city_attributes[ :key ] = city_key   # NB: new record; include/update key
-          end
-
-          logger.debug city_attributes.to_json
-
-          city.update_attributes!( city_attributes )
+          ### fix/todo: set new autoadd flag too?
+          ##  e.g. check if updated? e.g. timestamp created <> updated otherwise assume created?
 
           ## now at last add city_id to brewery!
           rec.city_id = city.id
@@ -214,14 +183,11 @@ class Brewery < ActiveRecord::Base
     if value_brands.present?
       logger.debug " auto-adding brands >#{value_brands}<"
 
-      # remove optional english translation in square brackets ([]) e.g. Wien [Vienna]
-      value_brands = TextUtils.strip_translations( value_brands )
-
+      ## todo/fix: use strip_inline_comments (e.g #() or (()) - why?? why not??)
+      #   - allows titles as usual (use new syntax for inline comments e.g. #() or (()) for example)
+      
       # remove optional longer title part in () e.g. Las Palmas (de Gran Canaria), Palma (de Mallorca)
       value_brands = TextUtils.strip_subtitles( value_brands )
-
-      # remove optional longer title part in {} e.g. Ottakringer {Bio} or {Alkoholfrei}
-      value_brands = TextUtils.strip_tags( value_brands )
 
       brand_titles = value_brands.split( ',' )
 
