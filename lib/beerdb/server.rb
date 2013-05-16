@@ -77,29 +77,7 @@ class Server < Sinatra::Base
       beer = Beer.find_by_key!( key )
     end
 
-    brewery = {}
-    if beer.brewery.present?
-      brewery = { key: beer.brewery.key,
-                  title: beer.brewery.title }
-    end
-
-    tags = []
-    if beer.tags.present?
-      beer.tags.each { |tag| tags << tag.key }
-    end
-
-    country = {
-      key:   beer.country.key,
-      title: beer.country.title
-    }
-
-    data = { key: beer.key, title: beer.title, synonyms: beer.synonyms,
-                     abv: beer.abv, srm: beer.srm, og: beer.og,
-                     tags: tags,
-                     brewery: brewery,
-                     country: country }
-
-    json_or_jsonp( data )
+    json_or_jsonp( BeerSerializer.new( beer ).as_json )
   end
 
 
@@ -112,50 +90,23 @@ class Server < Sinatra::Base
       brewery = Brewery.find_by_key!( key )
     end
 
-
-    beers = []
-    brewery.beers.each do |b|
-      beers << { key: b.key, title: b.title }
-    end
-
-    tags = []
-    if brewery.tags.present?
-      brewery.tags.each { |tag| tags << tag.key }
-    end
-
-    country = {
-      key:   brewery.country.key,
-      title: brewery.country.title
-    }
-
-    data = {  key: brewery.key,
-              title: brewery.title,
-              synonyms: brewery.synonyms,
-              since: brewery.since,
-              address: brewery.address,
-              web: brewery.web,
-              prod: brewery.prod,  # (estimated) annual production in hl e.g. 2_000 hl
-              tags: tags,
-              beers: beers,
-              country: country }
-
-    json_or_jsonp( data )
+    json_or_jsonp( BrewerySerializer.new( brewery ).as_json )
   end
 
 
 ### helper for json or jsonp response (depending on callback para)
 
 private
-def json_or_jsonp( data )
+def json_or_jsonp( json )
   callback = params.delete('callback')
   response = ''
 
   if callback
     content_type :js
-    response = "#{callback}(#{data.to_json})"
+    response = "#{callback}(#{json})"
   else
     content_type :json
-    response = data.to_json
+    response = json
   end
   
   response
