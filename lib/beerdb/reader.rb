@@ -66,12 +66,9 @@ class Reader
     end
   end
 
+
   def load_brewery_wikipedia( lang_key, name )
-    path = "#{include_path}/#{name}.yml"
-
-    logger.info "parsing data '#{name}' (#{path})..."
-
-    reader = HashReader.new( path )
+    reader = HashReaderV2.new( name, include_path )
 
     reader.each do |key, value|
       brewery = Brewery.find_by_key!( key )
@@ -81,17 +78,11 @@ class Reader
       brewery.wikipedia = wikipedia
       brewery.save!
     end
-
-    Prop.create_from_fixture!( name, path )
   end
 
 
   def load_brewery_prod( name )
-    path = "#{include_path}/#{name}.yml"
-
-    logger.info "parsing data '#{name}' (#{path})..."
-
-    reader = HashReader.new( path )
+    reader = HashReaderV2.new( name, include_path )
 
     reader.each do |key, value|
       brewery = Brewery.find_by_key!( key )
@@ -105,11 +96,9 @@ class Reader
         logger.warn "  unknown type for brewery prod value >#{value}<; regex pattern match failed"
       end
     end
-
-    Prop.create_from_fixture!( name, path )
   end
 
-  def load_beers_for_country_n_region( country_key, region_key, name, more_values={} )
+  def load_beers_for_country_n_region( country_key, region_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
@@ -117,41 +106,35 @@ class Reader
     region  = Region.find_by_key_and_country_id!( region_key, country.id )
     logger.debug "Region #{region.key} >#{region.title}<"
 
-    more_values[ :country_id ] = country.id
-    more_values[ :region_id  ] = region.id
+    more_attribs[ :country_id ] = country.id
+    more_attribs[ :region_id  ] = region.id
     
-    more_values[ :txt ] = name  # store source ref
+    more_attribs[ :txt ] = name  # store source ref
 
-    load_beers_worker( name, more_values )
+    load_beers_worker( name, more_attribs )
   end
 
-  def load_beers_for_country( country_key, name, more_values={} )
+  def load_beers_for_country( country_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
-    more_values[ :country_id ] = country.id
+    more_attribs[ :country_id ] = country.id
 
-    more_values[ :txt ] = name  # store source ref
+    more_attribs[ :txt ] = name  # store source ref
 
-    load_beers_worker( name, more_values )
+    load_beers_worker( name, more_attribs )
   end
 
-  def load_beers_worker( name, more_values={} )
-    path = "#{include_path}/#{name}.txt"
-
-    logger.info "parsing data '#{name}' (#{path})..."
-
-    reader = ValuesReader.new( path, more_values )
+  def load_beers_worker( name, more_attribs={} )
+    reader = ValuesReaderV2.new( name, include_path, more_attribs )
 
     reader.each_line do |new_attributes, values|
       Beer.create_or_update_from_values( new_attributes, values )
     end # each_line
-
-    Prop.create_from_fixture!( name, path )
   end
 
 
-  def load_breweries_for_country_n_region( country_key, region_key, name, more_values={} )
+  def load_breweries_for_country_n_region( country_key, region_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
@@ -159,37 +142,31 @@ class Reader
     region  = Region.find_by_key_and_country_id!( region_key, country.id )
     logger.debug "Region #{region.key} >#{region.title}<"
 
-    more_values[ :country_id ] = country.id
-    more_values[ :region_id  ] = region.id
+    more_attribs[ :country_id ] = country.id
+    more_attribs[ :region_id  ] = region.id
 
-    more_values[ :txt ] = name  # store source ref
+    more_attribs[ :txt ] = name  # store source ref
 
-    load_breweries_worker( name, more_values )
+    load_breweries_worker( name, more_attribs )
   end
 
-  def load_breweries_for_country( country_key, name, more_values={} )
+  def load_breweries_for_country( country_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
 
-    more_values[ :country_id ] = country.id
+    more_attribs[ :country_id ] = country.id
 
-    more_values[ :txt ] = name  # store source ref
+    more_attribs[ :txt ] = name  # store source ref
 
-    load_breweries_worker( name, more_values )
+    load_breweries_worker( name, more_attribs )
   end
 
-  def load_breweries_worker( name, more_values={} )
-    path = "#{include_path}/#{name}.txt"
-
-    logger.info "parsing data '#{name}' (#{path})..."
-
-    reader = ValuesReader.new( path, more_values )
+  def load_breweries_worker( name, more_attribs={} )
+    reader = ValuesReaderV2.new( name, include_path, more_attribs )
     
     reader.each_line do |new_attributes, values|
       Brewery.create_or_update_from_values( new_attributes, values )
     end # each_line
-
-    Prop.create_from_fixture!( name, path )
   end
 
 end # class Reader
