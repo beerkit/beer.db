@@ -78,55 +78,49 @@ class Beer < ActiveRecord::Base
     attribs[ :grade ] ||= 4
            
     ### check for "default" tags - that is, if present attribs[:tags] remove from hash
-    value_tag_keys += find_tags_in_hash!( attribs )
+    value_tag_keys += find_tags_in_attribs!( attribs )
 
     ## check for optional values
     values.each_with_index do |value,index|
-      if value =~ /^country:/   ## country:
-        value_country_key = value[8..-1]  ## cut off country: prefix
-        value_country = Country.find_by_key!( value_country_key )
-        attribs[ :country_id ] = value_country.id
-      elsif value =~ /^region:/   ## region:
-        value_region_key = value[7..-1]  ## cut off region: prefix
-        value_region = Region.find_by_key_and_country_id!( value_region_key, attribs[:country_id] )
-        attribs[ :region_id ] = value_region.id
-      elsif is_region?( value )  ## assume region code e.g. TX or N
-        value_region = Region.find_by_key_and_country_id!( value.downcase, attribs[:country_id] )
-        attribs[ :region_id ] = value_region.id
-      elsif value =~ /^city:/   ## city:
-        value_city_key = value[5..-1]  ## cut off city: prefix
-        value_city = City.find_by_key( value_city_key )
-        if value_city.present?
-          attribs[ :city_id ] = value_city.id
-        else
-          ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
-          logger.warn "city with key #{value_city_key} missing for beer #{attribs[:key]}"
-        end
-      elsif value =~ /^by:/   ## by:  -brewed by/brewery
-        value_brewery_key = value[3..-1]  ## cut off by: prefix
-        value_brewery = Brewery.find_by_key!( value_brewery_key )
-        attribs[ :brewery_id ] = value_brewery.id
+      if match_country(value) do |country|
+           attribs[ :country_id ] = country.id
+         end
+      elsif match_region_for_country(value, attribs[:country_id]) do |region|
+              attribs[ :region_id ] = region.id
+            end
+      elsif match_city(value) do |city|
+              if city.present?
+                attribs[ :city_id ] = city.id
+              else
+                ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
+                logger.warn "city with key #{value[5..-1]} missing for beer #{attribs[:key]}"
+              end
+            end
+      elsif match_brewery(value) do |brewery|
+              attribs[ :brewery_id ] = brewery.id
 
-        # for easy queries cache city and region ids
+              # for easy queries cache city and region ids
           
-        # 1) check if brewery has city - if yes, use it for beer too
-        if value_brewery.city.present?
-          attribs[ :city_id ] = value_brewery.city.id
-        end
+              # 1) check if brewery has city - if yes, use it for beer too
+              if brewery.city.present?
+                attribs[ :city_id ] = brewery.city.id
+              end
 
-        # 2) check if brewery has city w/ region if yes, use it for beer to
-        #   if not check for region for brewery
-        if value_brewery.city.present? && value_brewery.city.region.present?
-          attribs[ :region_id ] = value_brewery.city.region.id
-        elsif value_brewery.region.present?
-          attribs[ :region_id ] = value_brewery.region.id
-        end
+              # 2) check if brewery has city w/ region if yes, use it for beer to
+              #   if not check for region for brewery
+              if brewery.city.present? && brewery.city.region.present?
+                attribs[ :region_id ] = brewery.city.region.id
+              elsif brewery.region.present?
+                attribs[ :region_id ] = brewery.region.id
+              end
+            end
 
-      elsif is_year?( value )  # founded/established year e.g. 1776
-        attribs[ :since ] = value.to_i
-      elsif is_website?( value )   # check for url/internet address e.g. www.ottakringer.at
-        # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
-        attribs[ :web ] = value
+      elsif match_year( value ) do |num|  # founded/established year e.g. 1776
+              attribs[ :since ] = num
+            end
+      elsif match_website( value ) do |website|  # check for url/internet address e.g. www.ottakringer.at
+              attribs[ :web ] = website
+            end
       elsif value =~ /^<?\s*(\d+(?:\.\d+)?)\s*%$/  ## abv (alcohol by volumee)
         ## nb: allow leading < e.g. <0.5%
         value_abv_str = $1.dup   # convert to decimal? how? use float?

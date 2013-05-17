@@ -71,36 +71,30 @@ class Brewery < ActiveRecord::Base
     new_attributes[ :grade ] ||= 4
 
     ### check for "default" tags - that is, if present new_attributes[:tags] remove from hash
-    value_tag_keys += find_tags_in_hash!( new_attributes )
+    value_tag_keys += find_tags_in_attribs!( new_attributes )
 
     ## check for optional values
     values.each_with_index do |value,index|
-      if value =~ /^country:/   ## country:
-        value_country_key = value[8..-1]  ## cut off country: prefix
-        value_country = Country.find_by_key!( value_country_key )
-        new_attributes[ :country_id ] = value_country.id
-      elsif value =~ /^region:/   ## region:
-        value_region_key = value[7..-1]  ## cut off region: prefix
-        value_region = Region.find_by_key_and_country_id!( value_region_key, new_attributes[:country_id] )
-        new_attributes[ :region_id ] = value_region.id
-      elsif is_region?( value )  ## assume region code e.g. TX or N
-        value_region = Region.find_by_key_and_country_id!( value.downcase, new_attributes[:country_id] )
-        new_attributes[ :region_id ] = value_region.id
-      elsif value =~ /^city:/   ## city:
-        value_city_key = value[5..-1]  ## cut off city: prefix
-        value_city = City.find_by_key( value_city_key )
-        if value_city.present?
-          new_attributes[ :city_id ] = value_city.id
-        else
-          ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
-          logger.warn "city with key #{value_city_key} missing - for brewery #{new_attributes[:key]}"
-        end
+      if match_country(value) do |country|
+           new_attributes[ :country_id ] = country.id
+         end
+      elsif match_region_for_country(value,new_attributes[:country_id]) do |region|
+              new_attributes[ :region_id ] = region.id
+            end
+      elsif match_city(value) do |city|
+              if city.present?
+                new_attributes[ :city_id ] = city.id
+              else
+                ## todo/fix: add strict mode flag - fail w/ exit 1 in strict mode
+                logger.warn "city with key #{value[5..-1]} missing - for brewery #{new_attributes[:key]}"
+              end
 
-        ## for easy queries: cache region_id (from city)
-        #  - check if city w/ region if yes, use it for brewery too
-        if value_city.present? && value_city.region.present?
-          new_attributes[ :region_id ] = value_city.region.id
-        end
+              ## for easy queries: cache region_id (from city)
+              #  - check if city w/ region if yes, use it for brewery too
+              if city.present? && city.region.present?
+                new_attributes[ :region_id ] = city.region.id
+              end
+            end
       elsif is_year?( value )  # founded/established year e.g. 1776
         new_attributes[ :since ] = value.to_i
       elsif value =~ /^(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)$/  # e.g. 20_000 hl or 50hl etc.
