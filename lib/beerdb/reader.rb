@@ -2,11 +2,78 @@
 
 module BeerDb
 
+
+#
+# rename n split TextUtils::ValueHelper into
+#  WorldDb::Matcher  - match_country, etc.
+#  BeerDb::Matcher   - match_brewery, etc.
+
+
+## todo: move to worlddb for reuse!!! - find a better name?
+
+module FixtureMatcher
+
+  def match_xxx_for_country( name, xxx )  # xxx e.g. beers|breweries
+    if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/#{xxx}/
+      # new style: e.g. /at-austria/beers or ^at-austria!/beers
+      # auto-add required country code (from folder structure)
+      country_key = $1.dup
+      yield( country_key )
+      true # bingo - match found
+    elsif name =~ /\/([a-z]{2})\/#{xxx}/
+      # classic style: e.g. /at/beers (europe/at/beers)
+      # auto-add required country code (from folder structure)
+      country_key = $1.dup
+      yield( country_key )
+      true
+    else
+      false # no match found
+    end
+  end
+
+  def match_xxx_for_country_n_region( name, xxx ) # xxx e.g. beers|breweries
+    if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/#{xxx}/
+      # new style: e.g.  /at-austria/w-wien/beers or
+      #                  ^at-austria!/w-wien/beers 
+      # nb: country must start name (^) or coming after / e.g. europe/at-austria/...
+      #
+      # auto-add required country n region code (from folder structure)
+      country_key = $1.dup
+      region_key  = $2.dup
+      yield( country_key, region_key )
+      true # bingo - match found
+    else
+      false # no match found
+    end
+  end
+
+
+  def match_beers_for_country( name, &block )
+    match_xxx_for_country( name, 'beers', block )
+  end
+
+  def match_beers_for_country_n_region( name, &block )
+    match_xxx_for_country_n_region( name, 'beers', block )
+  end
+
+  def match_breweries_for_country( name, &block )
+    match_xxx_for_country( name, 'breweries', block )
+  end
+
+  def match_breweries_for_country_n_region( name, &block )
+    match_xxx_for_country_n_region( name, 'breweries', block )
+  end
+
+
+end # module FixtureMatcher
+
 class Reader
 
   include LogUtils::Logging
 
   include BeerDb::Models
+
+  include FixtureMatcher # see above
 
   attr_reader :include_path
 
@@ -31,35 +98,23 @@ class Reader
 
   def load( name )
 
-    if name =~ /\/([a-z]{2})\/beers/
-      # classic style: e.g. /at/beers
-      # auto-add required country code (from folder structure)
-      load_beers_for_country( $1, name )
-    elsif name =~ /\/([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/beers/
-      # new style: e.g.  /at-austria/w-wien/beers
-      # auto-add required country n region code (from folder structure)
-      load_beers_for_country_n_region( $1, $2, name )
-    elsif name =~ /\/([a-z]{2})-[^\/]+\/beers/
-      # new style: e.g. /at-austria/beers
-      # auto-add required country code (from folder structure)
-      load_beers_for_country( $1, name )
-    elsif name =~ /\.hl$/   # e.g. breweries.hl   # NB: must end w/ .hl
+    if name =~ /\.hl$/   # e.g. breweries.hl   # NB: must end w/ .hl
        load_brewery_prod( name )
     elsif name =~ /\/([a-z]{2})\.wikipedia/   # e.g. de.wikipedia
        # auto-add required lang e.g. de or en etc.
        load_brewery_wikipedia( $1, name )
-    elsif name =~ /\/([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/breweries/
-      # new style: e.g.  /at-austria/w-wien/breweries
-      # auto-add required country n region code (from folder structure)
-      load_breweries_for_country_n_region( $1, $2, name )
-    elsif name =~ /\/([a-z]{2})-[^\/]+\/breweries/
-      # new style: e.g.  /at-austria/breweries
-      # auto-add required country (from folder structure)
-      load_breweries_for_country( $1, name )
-    elsif name =~ /\/([a-z]{2})\/breweries/
-      # classic style: e.g. /at/breweries
-      # auto-add required country code (from folder structure)
-      load_breweries_for_country( $1, name )
+    elsif match_beers_for_country_n_region( name ) do |country_key, region_key|
+            load_beers_for_country_n_region( country_key, region_key, name )
+          end
+    elsif match_beers_for_country( name ) do |country_key|
+            load_beers_for_country( country_key, name )
+          end
+    elsif match_breweries_for_country_n_region( name ) do |country_key, region_key|
+            load_breweries_for_country_n_region( country_key, region_key, name )
+          end
+    elsif match_breweries_for_country( name ) do |country_key|
+            load_breweries_for_country( country_key, name )
+          end
     else
       logger.error "unknown beer.db fixture type >#{name}<"
       # todo/fix: exit w/ error
