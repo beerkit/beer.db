@@ -13,25 +13,25 @@ module BeerDb
 
 module FixtureMatcher
 
-  def match_xxx_for_country( name, xxx )  # xxx e.g. beers|breweries
+  def match_xxx_for_country( name, xxx, blk )  # xxx e.g. beers|breweries
     if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/#{xxx}/
       # new style: e.g. /at-austria/beers or ^at-austria!/beers
       # auto-add required country code (from folder structure)
       country_key = $1.dup
-      yield( country_key )
+      blk.call( country_key )
       true # bingo - match found
     elsif name =~ /\/([a-z]{2})\/#{xxx}/
       # classic style: e.g. /at/beers (europe/at/beers)
       # auto-add required country code (from folder structure)
       country_key = $1.dup
-      yield( country_key )
+      blk.call( country_key )
       true
     else
       false # no match found
     end
   end
 
-  def match_xxx_for_country_n_region( name, xxx ) # xxx e.g. beers|breweries
+  def match_xxx_for_country_n_region( name, xxx, blk ) # xxx e.g. beers|breweries
     if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/#{xxx}/
       # new style: e.g.  /at-austria/w-wien/beers or
       #                  ^at-austria!/w-wien/beers 
@@ -40,7 +40,7 @@ module FixtureMatcher
       # auto-add required country n region code (from folder structure)
       country_key = $1.dup
       region_key  = $2.dup
-      yield( country_key, region_key )
+      blk.call( country_key, region_key )
       true # bingo - match found
     else
       false # no match found
@@ -48,20 +48,20 @@ module FixtureMatcher
   end
 
 
-  def match_beers_for_country( name, &block )
-    match_xxx_for_country( name, 'beers', block )
+  def match_beers_for_country( name, &blk )
+    match_xxx_for_country( name, 'beers', blk )
   end
 
-  def match_beers_for_country_n_region( name, &block )
-    match_xxx_for_country_n_region( name, 'beers', block )
+  def match_beers_for_country_n_region( name, &blk )
+    match_xxx_for_country_n_region( name, 'beers', blk )
   end
 
-  def match_breweries_for_country( name, &block )
-    match_xxx_for_country( name, 'breweries', block )
+  def match_breweries_for_country( name, &blk )
+    match_xxx_for_country( name, 'breweries', blk )
   end
 
-  def match_breweries_for_country_n_region( name, &block )
-    match_xxx_for_country_n_region( name, 'breweries', block )
+  def match_breweries_for_country_n_region( name, &blk )
+    match_xxx_for_country_n_region( name, 'breweries', blk )
   end
 
 

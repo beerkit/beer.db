@@ -30,4 +30,5 @@ lib/beerdb/server/views/layout.erb
 lib/beerdb/stats.rb
 lib/beerdb/version.rb
 test/helper.rb
+test/test_fixture_matchers.rb
 test/test_values.rb
