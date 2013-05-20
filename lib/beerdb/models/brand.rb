@@ -25,6 +25,12 @@ class Brand < ActiveRecord::Base
     Brand.create_or_update_from_attribs( attribs, more_values )
   end
 
+  # convenience helper Brand.create_or_update_from_title
+  def self.create_or_update_from_title( title, more_attribs = {} )
+    values = [title]
+    Brand.create_or_update_from_values( values, more_attribs )
+  end
+
 
   def self.create_or_update_from_attribs( attribs, values )
 

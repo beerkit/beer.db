@@ -21,7 +21,7 @@ Hoe.spec 'beerdb' do
     ['activerecord', '~> 3.2'],  # NB: will include activesupport,etc.
     ### ['sqlite3',      '~> 1.3']  # NB: install on your own; remove dependency
 
-    ['worlddb', '~> 1.6'],  # NB: worlddb already includes
+    ['worlddb', '~> 1.7'],  # NB: worlddb already includes
                                #         - commander
                                #         - logutils
                                #         - textutils

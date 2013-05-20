@@ -4,12 +4,12 @@ module BeerDb::Models
 
 class Brewery < ActiveRecord::Base
 
-  extend TextUtils::TagHelper  # will add self.find_tags, self.find_tags_in_hash!, etc.
+  extend TextUtils::TagHelper  # will add self.find_tags, self.find_tags_in_attribs!, etc.
 
   # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
   #   self.create_or_update_from_values
   extend TextUtils::ValueHelper  # e.g. self.is_year?, self.is_region?, is_address?, is_taglist? etc.
-  extend TextUtils::AddressHelper  # e.g self.normalize_address, self.find_city_for_country, etc.
+  extend TextUtils::AddressHelper  # e.g self.normalize_addr, self.find_city_in_addr, etc.
 
   self.table_name = 'breweries'
 
@@ -95,16 +95,18 @@ class Brewery < ActiveRecord::Base
                 new_attributes[ :region_id ] = city.region.id
               end
             end
-      elsif is_year?( value )  # founded/established year e.g. 1776
-        new_attributes[ :since ] = value.to_i
-      elsif value =~ /^(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)$/  # e.g. 20_000 hl or 50hl etc.
-        value_prod = $1.gsub( /[ _]/, '' ).to_i
-        new_attributes[ :prod ] = value_prod
-      elsif is_website?( value )   # check for url/internet address e.g. www.ottakringer.at
-        # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
-        new_attributes[ :web ] = value
+      elsif match_year( value ) do |num|  # founded/established year e.g. 1776
+              new_attributes[ :since ] = num
+            end
+      elsif match_hl( value ) do |num|  # e.g. 20_000 hl or 50hl etc.
+              new_attributes[ :prod ] = num
+            end
+      elsif match_website( value ) do |website|  # check for url/internet address e.g. www.ottakringer.at
+              # fix: support more url format (e.g. w/o www. - look for .com .country code etc.)
+              new_attributes[ :web ] = website
+            end
       elsif is_address?( value ) # if value includes // assume address e.g. 3970 Weitra // Sparkasseplatz 160
-        new_attributes[ :address ] = normalize_address( value )
+        new_attributes[ :address ] = normalize_addr( value )
       elsif value =~ /^brands:/   # brands:
         value_brands = value[7..-1]  ## cut off brands: prefix
         value_brands = value_brands.strip  # remove leading and trailing spaces
@@ -146,8 +148,7 @@ class Brewery < ActiveRecord::Base
 
         ## todo: how to handle nil/empty address lines?
 
-        ## todo: use find_city_in_adr_for_country ?? too long ?? use adr or addr
-        city_title = find_city_for_country( country_key, new_attributes[:address] )
+        city_title = find_city_in_addr( new_attributes[:address], country_key )
         
         if city_title.present?
           
@@ -156,6 +157,7 @@ class Brewery < ActiveRecord::Base
             country_id: rec.country_id,
             region_id:  rec.region_id
           }
+          # todo: add convenience helper create_or_update_from_title
           city = City.create_or_update_from_values( city_values, city_attributes )
 
           ### fix/todo: set new autoadd flag too?
@@ -188,17 +190,15 @@ class Brewery < ActiveRecord::Base
       # pass 1) remove leading n trailing spaces
       brand_titles = brand_titles.map { |value| value.strip }
 
+      brand_attribs = {
+        brewery_id: rec.id,
+        country_id: rec.country_id,
+        region_id:  rec.region_id,
+        city_id:    rec.city_id
+      }
+
       brand_titles.each do |brand_title|
-
-        brand_values = [brand_title]  # NB: values MUST be an ary
-        brand_attribs = {
-          brewery_id: rec.id,
-          country_id: rec.country_id,
-          region_id:  rec.region_id,
-          city_id:    rec.city_id
-        }
-
-        Brand.create_or_update_from_values( brand_values, brand_attribs )
+        Brand.create_or_update_from_title( brand_title, brand_attribs )
       end
     end
 

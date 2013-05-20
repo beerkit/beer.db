@@ -4,7 +4,7 @@ module BeerDb::Models
 
 class Beer < ActiveRecord::Base
 
-  extend TextUtils::TagHelper  # will add self.find_tags, self.find_tags_in_hash!, etc.
+  extend TextUtils::TagHelper  # will add self.find_tags, self.find_tags_in_attribs!, etc.
 
   # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
   #   self.create_or_update_from_values
@@ -114,25 +114,24 @@ class Beer < ActiveRecord::Base
                 attribs[ :region_id ] = brewery.region.id
               end
             end
-
       elsif match_year( value ) do |num|  # founded/established year e.g. 1776
               attribs[ :since ] = num
             end
       elsif match_website( value ) do |website|  # check for url/internet address e.g. www.ottakringer.at
               attribs[ :web ] = website
             end
-      elsif value =~ /^<?\s*(\d+(?:\.\d+)?)\s*%$/  ## abv (alcohol by volumee)
-        ## nb: allow leading < e.g. <0.5%
-        value_abv_str = $1.dup   # convert to decimal? how? use float?
-        attribs[ :abv ] = value_abv_str
-      elsif value =~ /^(\d+(?:\.\d+)?)°$/  ## plato (stammwuerze/gravity?) e.g. 11.2°
-        ## nb: no whitespace allowed between ° and number e.g. 11.2°
-        value_og_str = $1.dup   # convert to decimal? how? use float?
-        attribs[ :og ] = value_og_str
-      elsif value =~ /^(\d+(?:\.\d+)?)\s*kcal(?:\/100ml)?$/  ## kcal
-         ## nb: allow 44.4 kcal/100ml or 44.4 kcal or 44.4kcal
-        value_kcal_str = $1.dup   # convert to decimal? how? use float?
-        attribs[ :kcal ] = value_kcal_str
+      elsif match_abv( value ) do |num|   # abv (alcohol by volume)
+              # nb: also allows leading < e.g. <0.5%
+              attribs[ :abv ] = num
+            end
+      elsif match_og( value ) do |num|  # plato (stammwuerze/gravity?) e.g. 11.2°
+              # nb: no whitespace allowed between ° and number e.g. 11.2°
+              attribs[ :og ] = num
+            end
+      elsif match_kcal( value ) do |num| # kcal
+              # nb: allow 44.4 kcal/100ml or 44.4 kcal or 44.4kcal
+              attribs[ :kcal ] = num
+            end
       elsif (values.size==(index+1)) && is_taglist?( value )  # tags must be last entry
         logger.debug "   found tags: >>#{value}<<"
         value_tag_keys += find_tags( value )

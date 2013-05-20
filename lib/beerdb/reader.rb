@@ -129,7 +129,7 @@ class Reader
     reader = ValuesReaderV2.new( name, include_path, more_attribs )
 
     reader.each_line do |new_attributes, values|
-      Beer.create_or_update_from_values( new_attributes, values )
+      Beer.create_or_update_from_attribs( new_attributes, values )
     end # each_line
   end
 
@@ -163,9 +163,9 @@ class Reader
 
   def load_breweries_worker( name, more_attribs={} )
     reader = ValuesReaderV2.new( name, include_path, more_attribs )
-    
+
     reader.each_line do |new_attributes, values|
-      Brewery.create_or_update_from_values( new_attributes, values )
+      Brewery.create_or_update_from_attribs( new_attributes, values )
     end # each_line
   end
 
