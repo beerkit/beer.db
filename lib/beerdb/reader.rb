@@ -13,39 +13,10 @@ module BeerDb
 
 module FixtureMatcher
 
-  def match_xxx_for_country( name, xxx, blk )  # xxx e.g. beers|breweries
-    if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/#{xxx}/
-      # new style: e.g. /at-austria/beers or ^at-austria!/beers
-      # auto-add required country code (from folder structure)
-      country_key = $1.dup
-      blk.call( country_key )
-      true # bingo - match found
-    elsif name =~ /\/([a-z]{2})\/#{xxx}/
-      # classic style: e.g. /at/beers (europe/at/beers)
-      # auto-add required country code (from folder structure)
-      country_key = $1.dup
-      blk.call( country_key )
-      true
-    else
-      false # no match found
-    end
-  end
+  # NB: moved to WorldDb::Matcher module -- include!!!
+  ## def match_xxx_for_country( name, xxx, blk )  # xxx e.g. beers|breweries
+  ## def match_xxx_for_country_n_region( name, xxx, blk ) # xxx e.g. beers|breweries
 
-  def match_xxx_for_country_n_region( name, xxx, blk ) # xxx e.g. beers|breweries
-    if name =~ /(?:^|\/)([a-z]{2})-[^\/]+\/([a-z]{1,2})-[^\/]+\/#{xxx}/
-      # new style: e.g.  /at-austria/w-wien/beers or
-      #                  ^at-austria!/w-wien/beers 
-      # nb: country must start name (^) or coming after / e.g. europe/at-austria/...
-      #
-      # auto-add required country n region code (from folder structure)
-      country_key = $1.dup
-      region_key  = $2.dup
-      blk.call( country_key, region_key )
-      true # bingo - match found
-    else
-      false # no match found
-    end
-  end
 
 
   def match_beers_for_country( name, &blk )
