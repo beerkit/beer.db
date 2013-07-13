@@ -3,21 +3,7 @@
 module BeerDb
 
 
-#
-# rename n split TextUtils::ValueHelper into
-#  WorldDb::Matcher  - match_country, etc.
-#  BeerDb::Matcher   - match_brewery, etc.
-
-
-## todo: move to worlddb for reuse!!! - find a better name?
-
-module FixtureMatcher
-
-  # NB: moved to WorldDb::Matcher module -- include!!!
-  ## def match_xxx_for_country( name, xxx, blk )  # xxx e.g. beers|breweries
-  ## def match_xxx_for_country_n_region( name, xxx, blk ) # xxx e.g. beers|breweries
-
-
+module Matcher
 
   def match_beers_for_country( name, &blk )
     match_xxx_for_country( name, 'beers', blk )
@@ -35,8 +21,8 @@ module FixtureMatcher
     match_xxx_for_country_n_region( name, 'breweries', blk )
   end
 
+end # module Matcher
 
-end # module FixtureMatcher
 
 class Reader
 
@@ -44,7 +30,8 @@ class Reader
 
   include BeerDb::Models
 
-  include FixtureMatcher # see above
+  include WorldDb::Matcher
+  include BeerDb::Matcher # lets us use match_teams_for_country etc.
 
   attr_reader :include_path
 
