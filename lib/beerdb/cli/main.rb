@@ -56,6 +56,9 @@ end
 command :create do |c|
   c.syntax = 'beerdb create [options]'
   c.description = 'Create DB schema'
+
+  c.option '--extras', 'Extra tables (drinks,bookmarks,users)'
+
   c.action do |args, options|
 
     LogUtils::Logger.root.level = :warn    if options.quiet.present?
@@ -63,10 +66,18 @@ command :create do |c|
 
     myopts.merge_commander_options!( options.__hash__ )
     connect_to_db( myopts )
-    
-    LogDb.create
-    WorldDb.create
-    BeerDb.create
+
+    if options.extras.present?
+      # quick hack: only create extra tables
+      BeerDb::CreateUsers.new.up
+      BeerDb::CreateBookmarks.new.up
+      BeerDb::CreateDrinks.new.up
+    else
+      LogDb.create
+      WorldDb.create
+      BeerDb.create
+    end
+
     puts 'Done.'
   end # action
 end # command create
@@ -175,6 +186,7 @@ command :serve do |c|
     # NB: server (HTTP service) not included in standard default require
     require 'beerdb/server'
 
+    ### fix: add ActiveRecord rack Middleware to close connection!! how?
     BeerDb::Server.run!
     
     puts 'Done.'

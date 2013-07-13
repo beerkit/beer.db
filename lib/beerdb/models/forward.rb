@@ -19,6 +19,10 @@ module BeerDb::Models
   class Brand < ActiveRecord::Base ; end
   class Brewery < ActiveRecord::Base ; end
 
+  class User < ActiveRecord::Base ; end
+  class Bookmark < ActiveRecord::Base ; end
+  class Drink < ActiveRecord::Base ; end
+
 end
 
 

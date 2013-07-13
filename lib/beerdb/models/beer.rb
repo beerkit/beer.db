@@ -22,6 +22,15 @@ class Beer < ActiveRecord::Base
 
   validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
+########################
+# begin extras/extension drink/bookmar/user
+
+  has_many :drinks ## :class_name => 'Drink'
+  has_many :bookmarks, :as => :bookmarkable
+
+# end extensions
+########
+
 
   def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
     rnd_offset = rand( Beer.count )   ## NB: call "global" std lib rand
