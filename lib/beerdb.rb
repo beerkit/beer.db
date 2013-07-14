@@ -36,6 +36,10 @@ require 'beerdb/models/brewery'
 require 'beerdb/models/user'      # db model extensions - move to its own addon gem?
 require 'beerdb/models/drink'     # db model extensions - move to its own addon gem?
 require 'beerdb/models/bookmark'  # db model extensions - move to its own addon gem?
+
+require 'beerdb/serializers/beer'
+require 'beerdb/serializers/brewery'
+
 require 'beerdb/schema'
 require 'beerdb/reader'
 require 'beerdb/deleter'
@@ -66,6 +70,27 @@ module BeerDb
     CreateDrinks.new.up
 
     BeerDb::Models::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
+  end
+
+
+
+  module CodeReaderContext
+    #  make models available w/o namespace
+    #  e.g. lets you use Beer instead of BeerDb::Models::Beer
+    include BeerDb::Models
+    ## <evaluated code here>
+  end
+
+  def self.load( name, include_path='.' )  # NB: pass in w/o .rb extension e.g use users etc.
+    path = "#{include_path}/#{name}.rb"
+
+    puts "*** loading seed data '#{name}' (#{path})..."
+
+    ::CodeReader.new( path ).eval( CodeReaderContext )
+    ## nb: will get evaluated in context of passed in module like
+    ## module CodeReaderContext
+    ##  <seed code here>
+    ## end
   end
 
 

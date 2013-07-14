@@ -59,6 +59,38 @@ class Server < Sinatra::Base
     erb :index
   end
 
+
+  get '/drinks/:key' do |key|
+
+    if ['l', 'latest'].include?( key )
+       # get latest drinks (w/ ratings)
+      drinks = Drink.order( 'updated_at DESC' ).limit(10).all
+    elsif ['t', 'top'].include?( key )
+      drinks = Drink.order( 'rating DESC, updated_at DESC' ).limit(10).all
+    else
+      # assume it's a user key
+      user = User.find_by_key!( key )
+      drinks = Drink.order( 'updated_at DESC' ).where( user_id: user.id ).all
+    end
+
+    data = []
+    drinks.each do |drink|
+      data << {
+         beer: { title:  drink.beer.title,
+                 key:    drink.beer.key },
+         rating:      drink.rating,
+         user: { name:   drink.user.name,
+                 key:    drink.user.key },
+         comments:    drink.comments,
+         place:       drink.place,
+         created_at:  drink.created_at,
+         updated_at:  drink.updated_at
+      }
+    end
+    
+    json_or_jsonp( data.to_json )
+  end
+
   get '/d*' do
     erb :debug
   end
