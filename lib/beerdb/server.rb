@@ -59,8 +59,9 @@ class Server < Sinatra::Base
     erb :index
   end
 
-
   get '/drinks/:key' do |key|
+
+    puts "  handle GET /drinks/:key"
 
     if ['l', 'latest'].include?( key )
        # get latest drinks (w/ ratings)
@@ -70,7 +71,7 @@ class Server < Sinatra::Base
     else
       # assume it's a user key
       user = User.find_by_key!( key )
-      drinks = Drink.order( 'updated_at DESC' ).where( user_id: user.id ).all
+      drinks = Drink.order( 'rating DESC, updated_at DESC' ).where( user_id: user.id ).all
     end
 
     data = []
@@ -90,6 +91,32 @@ class Server < Sinatra::Base
     
     json_or_jsonp( data.to_json )
   end
+
+
+  get '/drinks' do
+    if params[:method] == 'post'
+      
+      puts "  handle GET /drinks?method=post"
+      
+      user = User.find_by_key!( params[:user] )
+      beer = Beer.find_by_key!( params[:beer] )
+      rating = params[:rating].to_i
+      place  = params[:place]   # assumes for now a string or nil / pass through as is
+
+      attribs = {
+        user_id: user.id,
+        beer_id: beer.id,
+        rating:  rating,
+        place:   place
+      }
+      
+      drink = Drink.new
+      drink.update_attributes!( attribs )
+    end
+
+    json_or_jsonp( { status: 'ok' }.to_json )
+  end
+
 
   get '/d*' do
     erb :debug
