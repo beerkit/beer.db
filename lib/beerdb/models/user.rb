@@ -4,13 +4,14 @@ module BeerDb::Models
 
 class User < ActiveRecord::Base
 
-  has_many :drinks # beers w/ ratings
-  
+  has_many :notes # beers w/ ratings
+  has_many :drinks
+
   has_many :bookmarks # bookmarked beers
 
 
   before_save :on_before_save
-  
+
   def on_before_save
     if email.blank?
       self.key = 'xxx'

@@ -26,6 +26,7 @@ class Beer < ActiveRecord::Base
 # begin extras/extension drink/bookmar/user
 
   has_many :drinks ## :class_name => 'Drink'
+  has_many :notes  ## :class_name => 'Note'
   has_many :bookmarks, :as => :bookmarkable
 
 # end extensions

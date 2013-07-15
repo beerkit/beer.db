@@ -69,9 +69,10 @@ command :create do |c|
 
     if options.extras.present?
       # quick hack: only create extra tables
-      BeerDb::CreateUsers.new.up
-      BeerDb::CreateBookmarks.new.up
-      BeerDb::CreateDrinks.new.up
+      BeerDb::CreateDbExtrasUsers.new.up
+      BeerDb::CreateDbExtrasBookmarks.new.up
+      BeerDb::CreateDbExtrasNotes.new.up
+      BeerDb::CreateDbExtrasDrinks.new.up
     else
       LogDb.create
       WorldDb.create

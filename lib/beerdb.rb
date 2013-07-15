@@ -36,6 +36,7 @@ require 'beerdb/models/brewery'
 require 'beerdb/models/user'      # db model extensions - move to its own addon gem?
 require 'beerdb/models/drink'     # db model extensions - move to its own addon gem?
 require 'beerdb/models/bookmark'  # db model extensions - move to its own addon gem?
+require 'beerdb/models/note'      # db model extensions - move to its own addon gem?
 
 require 'beerdb/serializers/beer'
 require 'beerdb/serializers/brewery'
@@ -65,9 +66,10 @@ module BeerDb
     CreateDb.new.up
 
     ### fix: make optional do NOT auto create here
-    CreateUsers.new.up
-    CreateBookmarks.new.up
-    CreateDrinks.new.up
+    CreateDbExtrasUsers.new.up
+    CreateDbExtrasBookmarks.new.up
+    CreateDbExtrasDrinks.new.up
+    CreateDbExtrasNotes.new.up
 
     BeerDb::Models::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
   end

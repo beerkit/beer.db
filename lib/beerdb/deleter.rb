@@ -11,6 +11,7 @@ module BeerDb
 
       Bookmark.delete_all   # db model extension - move to its own addon?
       Drink.delete_all      # db model extension - move to its own addon?
+      Note.delete_all       # db model extension - move to its own addon?
       User.delete_all       # db model extension - move to its own addon?
 
       Beer.delete_all
