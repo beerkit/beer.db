@@ -1,37 +1,45 @@
 # encoding: utf-8
 
-require 'commander/import'
+require 'gli'
+ 
+include GLI::App
+
 
 require 'logutils/db'   # add support for logging to db
 require 'beerdb/cli/opts'
 
+
+
+program_desc 'beer.db command line tool'
+version BeerDb::VERSION
+
+
 LogUtils::Logger.root.level = :info   # set logging level to info 
+logger = LogUtils::Logger.root
 
 
-program :name,  'beerdb'
-program :version, BeerDb::VERSION
-program :description, "beer.db command line tool, version #{BeerDb::VERSION}"
+opts = BeerDb::Opts.new
 
-
-# default_command :help
-default_command :load
-
-program :help_formatter, Commander::HelpFormatter::TerminalCompact
-
-
-## todo: find a better name e.g. change to settings? config? safe_opts? why? why not?
-myopts = BeerDb::Opts.new
 
 ### global option (required)
 ## todo: add check that path is valid?? possible?
 
-global_option '-i', '--include PATH', String, "Data path (default is #{myopts.data_path})"
-global_option '-d', '--dbpath PATH', String, "Database path (default is #{myopts.db_path})"
-global_option '-n', '--dbname NAME', String, "Database name (datault is #{myopts.db_name})"
+desc 'Database path'
+arg_name 'PATH'
+default_value opts.db_path
+flag [:d, :dbpath]
 
-global_option '-q', '--quiet', "Only show warnings, errors and fatal messages"
-### todo/fix: just want --debug/--verbose flag (no single letter option wanted) - fix
-global_option '-w', '--verbose', "Show debug messages"
+desc 'Database name'
+arg_name 'NAME'
+default_value opts.db_name
+flag [:n, :dbname]
+
+desc '(Debug) Show debug messages'
+switch [:verbose], negatable: false    ## todo: use -w for short form? check ruby interpreter if in use too?
+
+desc 'Only show warnings, errors and fatal messages'
+switch [:q, :quiet], negatable: false
+
 
 
 def connect_to_db( options )
@@ -53,21 +61,17 @@ def connect_to_db( options )
 end
 
 
-command :create do |c|
-  c.syntax = 'beerdb create [options]'
-  c.description = 'Create DB schema'
+desc 'Create DB schema'
+command [:create] do |c|
 
-  c.option '--extras', 'Extra tables (drinks,bookmarks,users)'
+  c.desc 'Extra tables (notes,drinks,marks,users)'
+  c.switch [:extras], negatable: false 
 
-  c.action do |args, options|
+  c.action do |g,o,args|
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
+    connect_to_db( opts )
 
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts )
-
-    if options.extras.present?
+    if o[:extras].present?
       # quick hack: only create extra tables
       BeerDb::CreateDbExtrasUsers.new.up
       BeerDb::CreateDbExtrasBookmarks.new.up
@@ -78,115 +82,107 @@ command :create do |c|
       WorldDb.create
       BeerDb.create
     end
-
     puts 'Done.'
   end # action
 end # command create
 
-command :setup do |c|
-  c.syntax = 'beerdb setup [options]'
-  c.description = "Create DB schema 'n' load all data"
 
-  c.option '--world', 'Populate world tables'
-  ## todo: use --world-include - how? find better name?
-  c.option '--worldinclude PATH', String, 'World data path'
+desc "Create DB schema 'n' load all world and beer data"
+arg_name 'NAME'   # optional setup profile name
+command [:setup,:s] do |c|
 
-  c.option '--beer', 'Populate beer tables'
-  c.option '--delete', 'Delete all records'
+  c.desc 'Beer data path'
+  c.arg_name 'PATH'
+  c.default_value opts.data_path
+  c.flag [:i,:include]
 
-  c.action do |args, options|
+  c.desc 'World data path'
+  c.arg_name 'PATH'
+  c.flag [:worldinclude]   ## todo: use --world-include - how? find better name? add :'world-include' ???
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
+  c.action do |g,o,args|
 
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts )
-
+    connect_to_db( opts )
+ 
     ## todo: document optional setup profile arg (defaults to all)
     setup = args[0] || 'all'
     
-    if options.world.present? || options.beer.present?
-      
-      ## todo: check order for reference integrity
-      #  not really possible to delete world data if sport data is present
-      #   delete sport first
-      
-      if options.delete.present?
-        BeerDb.delete! if options.beer.present?
-        WorldDb.delete! if options.world.present?
-      end
-      
-      if options.world.present?
-        WorldDb.read_all( myopts.world_data_path )
-      end
-      
-      if options.beer.present?
-        BeerDb.read_setup( "setups/#{setup}", myopts.data_path )
-      end
-
-    else  # assume "plain" regular setup
-      LogDb.create
-      WorldDb.create
-      BeerDb.create
+    LogDb.create
+    WorldDb.create
+    BeerDb.create
     
-      WorldDb.read_all( myopts.world_data_path )
-      BeerDb.read_setup( "setups/#{setup}", myopts.data_path )
-    end
-
+    WorldDb.read_all( opts.world_data_path )
+    BeerDb.read_setup( "setups/#{setup}", opts.data_path )
     puts 'Done.'
   end # action
 end  # command setup
 
-command :load do |c|
-  ## todo: how to specify many fixutes <>... ??? in syntax
-  c.syntax = 'beerdb load [options] <fixtures>'
-  c.description = 'Load fixtures'
 
-  c.option '--delete', 'Delete all records'
+desc 'Update all beer data'
+arg_name 'NAME'   # optional setup profile name
+command [:update,:up,:u] do |c|
 
-  c.action do |args, options|
+  c.desc 'Beer data path'
+  c.arg_name 'PATH'
+  c.default_value opts.data_path
+  c.flag [:i,:include]
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
+  c.desc 'Delete all beer data records'
+  c.switch [:delete], negatable: false 
 
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts )
+  c.action do |g,o,args|
+
+    connect_to_db( opts )
+
+    ## todo: document optional setup profile arg (defaults to all)
+    setup = args[0] || 'all'
+
+    BeerDb.delete! if o[:delete].present?
+
+    BeerDb.read_setup( "setups/#{setup}", opts.data_path )
+    puts 'Done.'
+  end # action
+end  # command setup
+
+
+
+desc 'Load beer fixtures'
+arg_name 'NAME'   # multiple fixture names - todo/fix: use multiple option
+command [:load, :l] do |c|
+
+  c.desc 'Delete all beer data records'
+  c.switch [:delete], negatable: false 
+
+  c.action do |g,o,args|
+
+    connect_to_db( opts )
     
-    if options.delete.present?
-      LogDb.delete!
-      BeerDb.delete!
-    end
+    BeerDb.delete! if o[:delete].present?
 
-    # read plain text country/region/city fixtures
-    reader = BeerDb::Reader.new( myopts.data_path )
+    reader = BeerDb::Reader.new( opts.data_path )
+
     args.each do |arg|
       name = arg     # File.basename( arg, '.*' )
       reader.load( name )
     end # each arg
-    
+
     puts 'Done.'
   end
 end # command load
 
 
+
 ## fix/todo: add server alias (serve/server)
 
-command :serve do |c|
-  ## todo: how to specify many fixutes <>... ??? in syntax
-  c.syntax = 'beerdb serve [options]'
-  c.description = 'Start web service (HTTP JSON API)'
+desc 'Start web service (HTTP JSON API)'
+command [:serve,:server] do |c|
 
-  c.action do |args, options|
+  c.action do |g,o,args|
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
-
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts )
+    connect_to_db( opts )
 
     # NB: server (HTTP service) not included in standard default require
     require 'beerdb/server'
-
 
 # make sure connections get closed after every request e.g.
 #
@@ -211,19 +207,14 @@ command :serve do |c|
 
     puts 'Done.'
   end
-end # command load
+end # command serve
 
 
+desc 'Show stats'
 command :stats do |c|
-  c.syntax = 'beerdb stats [options]'
-  c.description = 'Show stats'
-  c.action do |args, options|
+  c.action do |g,o,args|
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
-
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts ) 
+    connect_to_db( opts ) 
     
     BeerDb.tables
     
@@ -232,16 +223,11 @@ command :stats do |c|
 end
 
 
+desc 'Show props'
 command :props do |c|
-  c.syntax = 'beerdb props [options]'
-  c.description = 'Show props'
-  c.action do |args, options|
+  c.action do |g,o,args|
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
-
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts ) 
+    connect_to_db( opts )
     
     BeerDb.props
     
@@ -249,17 +235,11 @@ command :props do |c|
   end
 end
 
-
+desc 'Show logs'
 command :logs do |c|
-  c.syntax = 'beerdb logs [options]'
-  c.description = 'Show logs'
-  c.action do |args, options|
+  c.action do |g,o,args|
 
-    LogUtils::Logger.root.level = :warn    if options.quiet.present?
-    LogUtils::Logger.root.level = :debug   if options.verbose.present?
-
-    myopts.merge_commander_options!( options.__hash__ )
-    connect_to_db( myopts ) 
+    connect_to_db( opts ) 
     
     LogDb::Models::Log.all.each do |log|
       puts "[#{log.level}] -- #{log.msg}"
@@ -271,17 +251,58 @@ end
 
 
 
+desc '(Debug) Test command suite'
 command :test do |c|
-  c.syntax = 'beerdb test [options]'
-  c.description = 'Debug/test command suite'
-  c.action do |args, options|
+  c.action do |g,o,args|
+
     puts "hello from test command"
     puts "args (#{args.class.name}):"
     pp args
-    puts "options:"
-    pp options
-    puts "options.__hash__:"
-    pp options.__hash__
+    puts "o (#{o.class.name}):"
+    pp o
+    puts "g (#{g.class.name}):"
+    pp g
+    
+    LogUtils::Logger.root.debug 'test debug msg'
+    LogUtils::Logger.root.info 'test info msg'
+    LogUtils::Logger.root.warn 'test warn msg'
+    
     puts 'Done.'
   end
 end
+
+
+
+pre do |g,c,o,args|
+  opts.merge_gli_options!( g )
+  opts.merge_gli_options!( o )
+
+  puts BeerDb.banner
+
+  if opts.verbose?
+    LogUtils::Logger.root.level = :debug
+  end
+
+  logger.debug "Executing #{c.name}"   
+  true
+end
+
+post do |global,c,o,args|
+  logger.debug "Executed #{c.name}"
+  true
+end
+
+
+on_error do |e|
+  puts
+  puts "*** error: #{e.message}"
+
+  if opts.verbose?
+    puts e.backtrace
+  end
+
+  false # skip default error handling
+end
+
+
+exit run(ARGV)

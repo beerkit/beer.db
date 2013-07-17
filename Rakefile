@@ -26,11 +26,11 @@ Hoe.spec 'beerdb' do
                                #         - logutils
                                #         - textutils
                                
-  ## 3rd party
-    ['commander', '~> 4.1.3']   # remove? -- already included as dep in worlddb                               
+     ## 3rd party
+    ['gli', '>= 2.5.6']
   ]
 
- self.licenses = ['Public Domain']
+  self.licenses = ['Public Domain']
 
   self.spec_extras = {
    :required_ruby_version => '>= 1.9.2'
