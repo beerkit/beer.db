@@ -45,12 +45,15 @@ class Server < Sinatra::Base
 
   ##################
   # Helpers
-  
-    helpers do
-      def path_prefix
-        request.env['SCRIPT_NAME']
-      end
-    end 
+  #
+  #  NB: helpers are just instance methods! no need in modular apps to use
+  #   helpers do
+  #    <code>
+  #  end
+
+  def path_prefix
+    request.env['SCRIPT_NAME']
+  end
 
   ##############################################
   # Controllers / Routing / Request Handlers
