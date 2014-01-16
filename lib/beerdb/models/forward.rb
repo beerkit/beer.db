@@ -1,7 +1,9 @@
 ### forward references
 ##   require first to resolve circular references
 
-module BeerDb::Models
+### fix: use Model (not Models)
+
+module BeerDb::Model
 
   ## todo: why? why not use include WorldDb::Models here???
 
@@ -29,8 +31,9 @@ end
 
 module WorldDb::Models
 
-  Beer    = BeerDb::Models::Beer
-  Brand   = BeerDb::Models::Brand
-  Brewery = BeerDb::Models::Brewery
+  Beer    = BeerDb::Model::Beer
+  Brand   = BeerDb::Model::Brand
+  Brewery = BeerDb::Model::Brewery
 
 end
+

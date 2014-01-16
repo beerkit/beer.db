@@ -1,11 +1,11 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
 class Drink < ActiveRecord::Base
 
-  belongs_to :beer, class_name: 'BeerDb::Models::Beer'
-  belongs_to :user, class_name: 'BeerDb::Models::User'
+  belongs_to :beer, class_name: 'BeerDb::Model::Beer'
+  belongs_to :user, class_name: 'BeerDb::Model::User'
 
   before_save :on_before_save
 
@@ -19,4 +19,4 @@ class Drink < ActiveRecord::Base
 
 end # class Drink
 
-end # module BeerDb::Models
+end # module BeerDb::Model

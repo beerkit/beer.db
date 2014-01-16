@@ -38,6 +38,12 @@ require 'beerdb/models/drink'     # db model extensions - move to its own addon 
 require 'beerdb/models/bookmark'  # db model extensions - move to its own addon gem?
 require 'beerdb/models/note'      # db model extensions - move to its own addon gem?
 
+## add backwards compatible namespace (delete later!)
+module BeerDb
+  Models = Model
+end
+
+
 require 'beerdb/serializers/beer'
 require 'beerdb/serializers/brewery'
 
@@ -71,7 +77,7 @@ module BeerDb
     CreateDbExtrasDrinks.new.up
     CreateDbExtrasNotes.new.up
 
-    BeerDb::Models::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
+    BeerDb::Model::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
   end
 
 
@@ -79,7 +85,7 @@ module BeerDb
   module CodeReaderContext
     #  make models available w/o namespace
     #  e.g. lets you use Beer instead of BeerDb::Models::Beer
-    include BeerDb::Models
+    include BeerDb::Models    # check does it work w/ alias e.g. Models == Model
     ## <evaluated code here>
   end
 

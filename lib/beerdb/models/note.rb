@@ -1,12 +1,12 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
 class Note < ActiveRecord::Base
 
-  belongs_to :beer, class_name: 'BeerDb::Models::Beer'
-  belongs_to :user, class_name: 'BeerDb::Models::User'
+  belongs_to :beer, class_name: 'BeerDb::Model::Beer'
+  belongs_to :user, class_name: 'BeerDb::Model::User'
 
 end # class Note
 
-end # module BeerDb::Models
+end # module BeerDb::Model

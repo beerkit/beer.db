@@ -7,7 +7,7 @@ require 'helper'
 
 class TestFixtureMatchers < MiniTest::Unit::TestCase
 
-  include BeerDb::FixtureMatcher
+  include BeerDb::Matcher
 
 
   def test_country

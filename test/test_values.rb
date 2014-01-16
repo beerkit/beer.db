@@ -8,6 +8,7 @@
 
 require 'helper'
 
+
 class TestValues < MiniTest::Unit::TestCase
 
   def setup
@@ -33,14 +34,14 @@ class TestValues < MiniTest::Unit::TestCase
     beer = Beer.create_or_update_from_values( values, more_attribs )
 
     beer2 = Beer.find_by_key!( key )
-    assert( beer.id == beer2.id )
+    assert_equal beer.id,  beer2.id
 
-    assert( beer.title         == values[0] )
-    assert( beer.country_id    == AT.id )
-    assert( beer.country.title == AT.title )
-    assert( beer.abv           == 5.2 )
-    assert( beer.og            == 11.8 )
-    assert( beer.srm           == nil )
+    assert_equal beer.title,         values[0]
+    assert_equal beer.country_id,    AT.id 
+    assert_equal beer.country.title, AT.title
+    assert_equal beer.abv,           5.2
+    assert_equal beer.og,            11.8
+    assert_equal beer.srm,           nil
   end
 
   def test_load_brewery_values
@@ -67,24 +68,24 @@ class TestValues < MiniTest::Unit::TestCase
     by = Brewery.create_or_update_from_values( values, more_attribs )
 
     by2 = Brewery.find_by_key!( key )
-    assert( by.id == by2.id )
+    assert_equal by.id, by2.id
 
-    assert( by.title         == values[1] )
-    assert( by.country_id    == AT.id )
-    assert( by.country.title == AT.title )
-    assert( by.since         == 1838 )
-    assert( by.web           == 'www.ottakringer.at' )
-    assert( by.address       == '1160 Wien // Ottakringer Platz 1' )
-    assert( by.grade         == 4 )
+    assert_equal by.title,         values[1]
+    assert_equal by.country_id,    AT.id
+    assert_equal by.country.title, AT.title
+    assert_equal by.since,         1838
+    assert_equal by.web,           'www.ottakringer.at'
+    assert_equal by.address,       '1160 Wien // Ottakringer Platz 1'
+    assert_eqaul by.grade,         4
 
     # check auto-created brand
 
     br = Brand.find_by_key!( 'ottakringer')
 
-    assert( br.title         == 'Ottakringer' )
-    assert( br.brewery_id    == by.id )
-    assert( br.brewery.title == by.title )
-    assert( br.country_id    == by.country_id )
+    assert_equal br.title,         'Ottakringer'
+    assert_equal br.brewery_id,    by.id
+    assert_equal br.brewery.title, by.title
+    assert_equal br.country_id,    by.country_id
   end
 
 
@@ -111,10 +112,10 @@ class TestValues < MiniTest::Unit::TestCase
     by = Brewery.create_or_update_from_values( values, more_attribs )
 
     by2 = Brewery.find_by_key!( key )
-    assert( by.id == by2.id )
+    assert_equal by.id, by2.id
 
-    assert( by.title         == 'Ottakringer Brauerei' )
-    assert( by.grade         == 2 )
+    assert_equal by.title, 'Ottakringer Brauerei'
+    assert_equal by.grade, 2
   end
 
   def test_load_brewery_values_w_grade_in_synonyms
@@ -143,11 +144,11 @@ class TestValues < MiniTest::Unit::TestCase
     by = Brewery.create_or_update_from_values( values, more_attribs )
 
     by2 = Brewery.find_by_key!( key )
-    assert( by.id == by2.id )
+    assert_equal by.id, by2.id
 
-    assert( by.title         == 'Ottakringer Brauerei' )
-    assert( by.synonyms      == 'Otta' )
-    assert( by.grade         == 2 )
+    assert_equal by.title,    'Ottakringer Brauerei'
+    assert_equal by.synonyms, 'Otta'
+    assert_equal by.grade,     2
   end
 
 

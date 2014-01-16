@@ -119,6 +119,12 @@ Just install the gem:
     $ gem install beerdb
 
 
+## Free Open Public Domain Datasets
+
+- [`beer.db`](https://github.com/openbeer) - free open public domain beer n brewery data for use in any (programming) language
+
+
+
 ## License
 
 The `beerdb` scripts are dedicated to the public domain.
@@ -126,5 +132,6 @@ Use it as you please with no restrictions whatsoever.
 
 ## Questions? Comments?
 
-Send them along to the [Open Beer & Brewery Database Forum/Mailing List](http://groups.google.com/group/beerdb). Thanks!
+Send them along to the [Open Beer & Brewery Database Forum/Mailing List](http://groups.google.com/group/beerdb).
+Thanks!
 

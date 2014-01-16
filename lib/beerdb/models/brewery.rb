@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
 class Brewery < ActiveRecord::Base
 
@@ -13,12 +13,14 @@ class Brewery < ActiveRecord::Base
 
   self.table_name = 'breweries'
 
+  ## fix: change Models to Model !!
+
   belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
   belongs_to :region,  :class_name => 'WorldDb::Models::Region',  :foreign_key => 'region_id'
   belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
 
-  has_many   :beers,   :class_name => 'BeerDb::Models::Beer',     :foreign_key => 'brewery_id'
-  has_many   :brands,  :class_name => 'BeerDb::Models::Brand',    :foreign_key => 'brand_id'
+  has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brewery_id'
+  has_many   :brands,  :class_name => 'BeerDb::Model::Brand',    :foreign_key => 'brand_id'
 
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'

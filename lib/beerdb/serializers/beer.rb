@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
   class BeerSerializer
 
@@ -42,4 +42,4 @@ module BeerDb::Models
 
   end # class BeerSerializer
 
-end # module BeerDb::Models
+end # module BeerDb::Model

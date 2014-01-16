@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
 class Beer < ActiveRecord::Base
 
@@ -10,12 +10,13 @@ class Beer < ActiveRecord::Base
   #   self.create_or_update_from_values
   extend TextUtils::ValueHelper  # e.g. self.is_year?, self.is_region?, self.is_address?, is_taglist? etc.
 
+  ### fix: rename to Models to Model
   belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
   belongs_to :region,  :class_name => 'WorldDb::Models::Region',  :foreign_key => 'region_id'
   belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
 
-  belongs_to :brand,   :class_name => 'BeerDb::Models::Brewery',  :foreign_key => 'brand_id'
-  belongs_to :brewery, :class_name => 'BeerDb::Models::Brewery',  :foreign_key => 'brewery_id'
+  belongs_to :brand,   :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brand_id'
+  belongs_to :brewery, :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brewery_id'
 
   has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
   has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
@@ -191,4 +192,4 @@ class Beer < ActiveRecord::Base
 
 end # class Beer
 
-end # module BeerDb::Models
+end # module BeerDb::Model

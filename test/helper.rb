@@ -29,9 +29,9 @@ Region  = WorldDb::Models::Region
 
 ## todo: get all models aliases (e.g. from console script)
 
-Beer    = BeerDb::Models::Beer
-Brand   = BeerDb::Models::Brand
-Brewery = BeerDb::Models::Brewery
+Beer    = BeerDb::Model::Beer
+Brand   = BeerDb::Model::Brand
+Brewery = BeerDb::Model::Brewery
 
 
 def setup_in_memory_db

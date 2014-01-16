@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module BeerDb::Models
+module BeerDb::Model
 
 class User < ActiveRecord::Base
 
@@ -23,4 +23,5 @@ class User < ActiveRecord::Base
 
 end # class User
 
-end # module BeerDb::Models
+end # module BeerDb::Model
+
