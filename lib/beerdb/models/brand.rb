@@ -7,11 +7,9 @@ class Brand < ActiveRecord::Base
   # NB: use extend - is_<type>? become class methods e.g. self.is_<type>?
   extend TextUtils::ValueHelper  # e.g. self.find_key_n_title, self.is_year?, self.is_region?, is_address?, is_taglist? etc.
 
-  ## fix: change Models to Model !!!
-
-  belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
-  belongs_to :region,  :class_name => 'WorldDb::Models::Region',  :foreign_key => 'region_id'
-  belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
+  belongs_to :country, :class_name => 'WorldDb::Model::Country', :foreign_key => 'country_id'
+  belongs_to :region,  :class_name => 'WorldDb::Model::Region',  :foreign_key => 'region_id'
+  belongs_to :city,    :class_name => 'WorldDb::Model::City',    :foreign_key => 'city_id'
 
   belongs_to :brewery, :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brewery_id'
 

@@ -24,8 +24,8 @@ require 'active_record'
 require 'beerdb'
 require 'logutils/db'   # NB: explict require required for LogDb (not automatic) 
 
-Country = WorldDb::Models::Country
-Region  = WorldDb::Models::Region
+Country = WorldDb::Model::Country
+Region  = WorldDb::Model::Region
 
 ## todo: get all models aliases (e.g. from console script)
 

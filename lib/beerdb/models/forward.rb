@@ -1,21 +1,20 @@
 ### forward references
 ##   require first to resolve circular references
 
-### fix: use Model (not Models)
 
 module BeerDb::Model
 
   ## todo: why? why not use include WorldDb::Models here???
 
-  Continent = WorldDb::Models::Continent
-  Country   = WorldDb::Models::Country
-  Region    = WorldDb::Models::Region
-  City      = WorldDb::Models::City
+  Continent = WorldDb::Model::Continent
+  Country   = WorldDb::Model::Country
+  Region    = WorldDb::Model::Region
+  City      = WorldDb::Model::City
 
-  Tag       = WorldDb::Models::Tag
-  Tagging   = WorldDb::Models::Tagging
+  Tag       = WorldDb::Model::Tag
+  Tagging   = WorldDb::Model::Tagging
 
-  Prop      = WorldDb::Models::Prop
+  Prop      = WorldDb::Model::Prop
 
   class Beer < ActiveRecord::Base ; end
   class Brand < ActiveRecord::Base ; end
@@ -29,7 +28,7 @@ module BeerDb::Model
 end
 
 
-module WorldDb::Models
+module WorldDb::Model
 
   Beer    = BeerDb::Model::Beer
   Brand   = BeerDb::Model::Brand

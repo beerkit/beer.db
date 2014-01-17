@@ -1,6 +1,4 @@
-module WorldDb::Models
-
-### fix: use Model (not Models)
+module WorldDb::Model
 
 class City
     has_many :beers,     :class_name => 'BeerDb::Model::Beer',    :foreign_key => 'city_id'
@@ -8,5 +6,6 @@ class City
     has_many :breweries, :class_name => 'BeerDb::Model::Brewery', :foreign_key => 'city_id'
 end # class Country
 
-end # module WorldDb::Models
+end # module WorldDb::Model
+
 

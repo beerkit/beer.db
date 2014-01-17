@@ -6,19 +6,19 @@ module BeerDb
 module Matcher
 
   def match_beers_for_country( name, &blk )
-    match_xxx_for_country( name, 'beers', blk )
+    match_xxx_for_country( name, 'beers', &blk )
   end
 
   def match_beers_for_country_n_region( name, &blk )
-    match_xxx_for_country_n_region( name, 'beers', blk )
+    match_xxx_for_country_n_region( name, 'beers', &blk )
   end
 
   def match_breweries_for_country( name, &blk )
-    match_xxx_for_country( name, 'breweries', blk )
+    match_xxx_for_country( name, 'breweries', &blk )
   end
 
   def match_breweries_for_country_n_region( name, &blk )
-    match_xxx_for_country_n_region( name, 'breweries', blk )
+    match_xxx_for_country_n_region( name, 'breweries', &blk )
   end
 
 end # module Matcher
@@ -30,7 +30,7 @@ class Reader
 
   include BeerDb::Models
 
-  include WorldDb::Matcher
+  include WorldDb::Matcher   ## fix: move to BeerDb::Matcher module ??? - cleaner?? why? why not?
   include BeerDb::Matcher # lets us use match_teams_for_country etc.
 
   attr_reader :include_path

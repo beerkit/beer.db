@@ -13,17 +13,15 @@ class Brewery < ActiveRecord::Base
 
   self.table_name = 'breweries'
 
-  ## fix: change Models to Model !!
-
-  belongs_to :country, :class_name => 'WorldDb::Models::Country', :foreign_key => 'country_id'
-  belongs_to :region,  :class_name => 'WorldDb::Models::Region',  :foreign_key => 'region_id'
-  belongs_to :city,    :class_name => 'WorldDb::Models::City',    :foreign_key => 'city_id'
+  belongs_to :country, :class_name => 'WorldDb::Model::Country', :foreign_key => 'country_id'
+  belongs_to :region,  :class_name => 'WorldDb::Model::Region',  :foreign_key => 'region_id'
+  belongs_to :city,    :class_name => 'WorldDb::Model::City',    :foreign_key => 'city_id'
 
   has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brewery_id'
   has_many   :brands,  :class_name => 'BeerDb::Model::Brand',    :foreign_key => 'brand_id'
 
-  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Models::Tagging'
-  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Models::Tag'
+  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
+  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
 
   validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
@@ -232,4 +230,4 @@ class Brewery < ActiveRecord::Base
 end # class Brewery
 
 
-end # module BeerDb::Models
+end # module BeerDb::Model

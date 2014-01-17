@@ -1,7 +1,4 @@
-
-### fix: use Model (not Models)
-
-module WorldDb::Models
+module WorldDb::Model
 
 class Region
     has_many :beers,     :class_name => 'BeerDb::Model::Beer',    :foreign_key => 'region_id'
@@ -9,5 +6,5 @@ class Region
     has_many :breweries, :class_name => 'BeerDb::Model::Brewery', :foreign_key => 'region_id'
 end # class Region
 
-end # module WorldDb::Models
+end # module WorldDb::Model
 

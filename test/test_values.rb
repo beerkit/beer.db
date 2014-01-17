@@ -76,7 +76,7 @@ class TestValues < MiniTest::Unit::TestCase
     assert_equal by.since,         1838
     assert_equal by.web,           'www.ottakringer.at'
     assert_equal by.address,       '1160 Wien // Ottakringer Platz 1'
-    assert_eqaul by.grade,         4
+    assert_equal by.grade,         4
 
     # check auto-created brand
 
