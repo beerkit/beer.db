@@ -114,14 +114,18 @@ class Reader
   def load_beers_for_country_n_region( country_key, region_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )
     logger.debug "Country #{country.key} >#{country.title} (#{country.code})<"
+    more_attribs[ :country_id ] = country.id
 
     # NB: region lookup requires country id (region key only unique for country)
-    region  = Region.find_by_key_and_country_id!( region_key, country.id )
-    logger.debug "Region #{region.key} >#{region.title}<"
+    region  = Region.find_by_key_and_country_id( region_key, country.id )
+    if region.nil?
+      # note: allow unknown region keys; issue warning n skip region
+      logger.warn "Region w/ key >#{region_key}< not found; skip adding region"
+    else
+      logger.debug "Region #{region.key} >#{region.title}<"
+      more_attribs[ :region_id  ] = region.id
+    end
 
-    more_attribs[ :country_id ] = country.id
-    more_attribs[ :region_id  ] = region.id
-    
     more_attribs[ :txt ] = name  # store source ref
 
     load_beers_worker( name, more_attribs )
