@@ -86,10 +86,10 @@ class Beer < ActiveRecord::Base
     ## check for grades (e.g. ***/**/*) in titles (will add attribs[:grade] to hash)
     ## if grade missing; set default to 4; lets us update overwrite 1,2,3 values on update
     attribs[ :grade ] ||= 4
-           
+    
     ### check for "default" tags - that is, if present attribs[:tags] remove from hash
     value_tag_keys += find_tags_in_attribs!( attribs )
-
+    
     ## check for optional values
     values.each_with_index do |value,index|
       if match_country(value) do |country|
