@@ -13,9 +13,6 @@ module Matcher
     match_xxx_for_country_n_region( name, 'beers', &blk )
   end
 
-  ## todo: add match_brewpubs ???
-  ##   - autoadd  brewpub flag!! use more_attribs??
-
   def match_breweries_for_country( name, &blk )
     match_xxx_for_country( name, 'breweries', &blk )
   end
@@ -23,6 +20,16 @@ module Matcher
   def match_breweries_for_country_n_region( name, &blk )
     match_xxx_for_country_n_region( name, 'breweries', &blk )
   end
+
+  ## todo: autoadd  brewpub flag!! use more_attribs??
+  def match_brewpubs_for_country( name, &blk )
+    match_xxx_for_country( name, 'brewpubs', &blk )
+  end
+
+  def match_brewpubs_for_country_n_region( name, &blk )
+    match_xxx_for_country_n_region( name, 'brewpubs', &blk )
+  end
+
 
 end # module Matcher
 
@@ -45,7 +52,7 @@ class Reader
 
 
   def load_setup( name )
-    path = "#{include_path}/#{name}.yml"
+    path = "#{include_path}/#{name}.txt"
 
     logger.info "parsing data '#{name}' (#{path})..."
 
@@ -57,14 +64,10 @@ class Reader
   end # method load_setup
 
 
+
   def load( name )
 
-    if name =~ /\.hl$/   # e.g. breweries.hl   # NB: must end w/ .hl
-       load_brewery_prod( name )
-    elsif name =~ /\/([a-z]{2})\.wikipedia/   # e.g. de.wikipedia
-       # auto-add required lang e.g. de or en etc.
-       load_brewery_wikipedia( $1, name )
-    elsif match_beers_for_country_n_region( name ) do |country_key, region_key|
+    if match_beers_for_country_n_region( name ) do |country_key, region_key|
             load_beers_for_country_n_region( country_key, region_key, name )
           end
     elsif match_beers_for_country( name ) do |country_key|
@@ -76,43 +79,20 @@ class Reader
     elsif match_breweries_for_country( name ) do |country_key|
             load_breweries_for_country( country_key, name )
           end
+    elsif match_brewpubs_for_country_n_region( name ) do |country_key, region_key|
+            ## todo: autoadd  brewpub flag!! use more_attribs??
+            load_breweries_for_country_n_region( country_key, region_key, name )
+          end
+    elsif match_brewpubs_for_country( name ) do |country_key|
+            ## todo: autoadd  brewpub flag!! use more_attribs??
+            load_breweries_for_country( country_key, name )
+          end
     else
       logger.error "unknown beer.db fixture type >#{name}<"
       # todo/fix: exit w/ error
     end
   end
 
-
-  def load_brewery_wikipedia( lang_key, name )
-    reader = HashReaderV2.new( name, include_path )
-
-    reader.each do |key, value|
-      brewery = Brewery.find_by_key!( key )
-      
-      wikipedia = "#{lang_key}.wikipedia.org/wiki/#{value.strip}"
-      logger.debug "  adding #{key} => >#{wikipedia}<"
-      brewery.wikipedia = wikipedia
-      brewery.save!
-    end
-  end
-
-
-  def load_brewery_prod( name )
-    reader = HashReaderV2.new( name, include_path )
-
-    reader.each do |key, value|
-      brewery = Brewery.find_by_key!( key )
-      
-      if value =~ /(?:([0-9][0-9_ ]+[0-9]|[0-9]{1,2})\s*hl)/  # e.g. 20_0000 hl or 50hl etc.
-        prod =  $1.gsub(/[ _]/, '').to_i
-        logger.debug "  adding #{key} => >#{prod}<"
-        brewery.prod = prod
-        brewery.save!
-      else
-        logger.warn "  unknown type for brewery prod value >#{value}<; regex pattern match failed"
-      end
-    end
-  end
 
   def load_beers_for_country_n_region( country_key, region_key, name, more_attribs={} )
     country = Country.find_by_key!( country_key )

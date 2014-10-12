@@ -5,6 +5,9 @@
 
 # core and stlibs
 
+## stdlibs
+# -- get required already by worlddb (remove ??)
+
 require 'yaml'
 require 'pp'
 require 'logger'
@@ -14,10 +17,11 @@ require 'erb'
 
 # 3rd party gems / libs
 
-require 'active_record'   ## todo: add sqlite3? etc.
+#  -- get required by worlddb
+# require 'active_record'   ## todo: add sqlite3? etc.
+# require 'logutils'
+# require 'textutils'
 
-require 'logutils'
-require 'textutils'
 require 'worlddb'
 
 ######################
@@ -176,7 +180,7 @@ end
 
 # our own code
 
-require 'beerdb/version'
+require 'beerdb/version'   ## version always goes first
 
 require 'beerdb/models/forward'
 require 'beerdb/models/country'
@@ -191,7 +195,9 @@ require 'beerdb/models/drink'     # db model extensions - move to its own addon 
 require 'beerdb/models/bookmark'  # db model extensions - move to its own addon gem?
 require 'beerdb/models/note'      # db model extensions - move to its own addon gem?
 
-## add backwards compatible namespace (delete later!)
+
+## add backwards compatible namespace
+##  todo: move to forward -- check sportdb/worlddb convention ??
 module BeerDb
   Models = Model
 end
@@ -230,28 +236,7 @@ module BeerDb
     CreateDbExtrasDrinks.new.up
     CreateDbExtrasNotes.new.up
 
-    BeerDb::Model::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
-  end
-
-
-
-  module CodeReaderContext
-    #  make models available w/o namespace
-    #  e.g. lets you use Beer instead of BeerDb::Models::Beer
-    include BeerDb::Models    # check does it work w/ alias e.g. Models == Model
-    ## <evaluated code here>
-  end
-
-  def self.load( name, include_path='.' )  # NB: pass in w/o .rb extension e.g use users etc.
-    path = "#{include_path}/#{name}.rb"
-
-    puts "*** loading seed data '#{name}' (#{path})..."
-
-    ::CodeReader.new( path ).eval( CodeReaderContext )
-    ## nb: will get evaluated in context of passed in module like
-    ## module CodeReaderContext
-    ##  <seed code here>
-    ## end
+    ConfDb::Model::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
   end
 
 
@@ -282,6 +267,8 @@ module BeerDb
     Stats.new.tables
   end
 
+  ###
+  # fix: (re)use ConfDb.props
   def self.props
     Stats.new.props
   end
