@@ -1,4 +1,7 @@
-module WorldDb::Model
+# encoding: UTF-8
+
+module WorldDb
+  module Model
 
 class City
     has_many :beers,     :class_name => 'BeerDb::Model::Beer',    :foreign_key => 'city_id'
@@ -6,6 +9,6 @@ class City
     has_many :breweries, :class_name => 'BeerDb::Model::Brewery', :foreign_key => 'city_id'
 end # class Country
 
-end # module WorldDb::Model
-
+  end # module Model
+end # module WorldDb
 

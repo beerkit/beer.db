@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
-module BeerDb::Model
+module BeerDb
+  module Model
 
 class Beer < ActiveRecord::Base
 
@@ -17,10 +18,17 @@ class Beer < ActiveRecord::Base
   belongs_to :brand,   :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brand_id'
   belongs_to :brewery, :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brewery_id'
 
-  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
-  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
 
-  validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
+  ## has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
+  ## has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
+
+  has_many :taggings, class_name: 'TagDb::Model::Tagging', :as      => :taggable
+  has_many :tags,     class_name: 'TagDb::Model::Tag',     :through => :taggings
+
+
+  ## fix/todo: move to regex to patterns; see worlddb
+  validates :key, :format => { :with => /\A[a-z][a-z0-9]+\z/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
+
 
 ########################
 # begin extras/extension drink/bookmar/user
@@ -191,4 +199,5 @@ class Beer < ActiveRecord::Base
 
 end # class Beer
 
-end # module BeerDb::Model
+  end # module Model
+end # module BeerDb

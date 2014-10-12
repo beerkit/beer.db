@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
-module BeerDb::Model
+module BeerDb
+  module Model
 
 class Brewery < ActiveRecord::Base
 
@@ -20,10 +21,14 @@ class Brewery < ActiveRecord::Base
   has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brewery_id'
   has_many   :brands,  :class_name => 'BeerDb::Model::Brand',    :foreign_key => 'brand_id'
 
-  has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
-  has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
+  ## has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
+  ## has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
 
-  validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
+  has_many :taggings, class_name: 'TagDb::Model::Tagging', :as      => :taggable
+  has_many :tags,     class_name: 'TagDb::Model::Tag',     :through => :taggings
+
+
+  validates :key, :format => { :with => /\A[a-z][a-z0-9]+\z/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
 
   def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
@@ -229,5 +234,6 @@ class Brewery < ActiveRecord::Base
 
 end # class Brewery
 
+  end # module Model
+end # module BeerDb
 
-end # module BeerDb::Model

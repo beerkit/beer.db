@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
-module BeerDb::Model
+module BeerDb
+  module Model
 
 class Bookmark < ActiveRecord::Base
 
@@ -28,4 +29,5 @@ class Bookmark < ActiveRecord::Base
 
 end # class Bookmark
 
-end # module BeerDb::Model
+  end # module Model
+end # module BeerDb

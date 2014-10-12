@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
-module BeerDb::Model
+module BeerDb
+  module Model
 
 class Brand < ActiveRecord::Base
 
@@ -15,7 +16,7 @@ class Brand < ActiveRecord::Base
 
   has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brand_id'
 
-  validates :key, :format => { :with => /^[a-z][a-z0-9]+$/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
+  validates :key, :format => { :with => /\A[a-z][a-z0-9]+\z/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
 
   def self.create_or_update_from_values( values, more_attribs = {} )
@@ -57,4 +58,5 @@ class Brand < ActiveRecord::Base
 
 end # class Brand
 
-end # module BeerDb::Model
+  end # module Model
+end # module BeerDb

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
-module BeerDb::Model
+module BeerDb
+  module Model
 
 class Note < ActiveRecord::Base
 
@@ -9,4 +10,6 @@ class Note < ActiveRecord::Base
 
 end # class Note
 
-end # module BeerDb::Model
+  end # module Model
+end # module BeerDb
+
