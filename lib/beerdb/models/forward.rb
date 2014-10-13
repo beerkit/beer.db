@@ -24,11 +24,6 @@ module BeerDb
   class Brand < ActiveRecord::Base ; end
   class Brewery < ActiveRecord::Base ; end
 
-  class User < ActiveRecord::Base ; end
-  class Bookmark < ActiveRecord::Base ; end
-  class Drink < ActiveRecord::Base ; end
-  class Note < ActiveRecord::Base ; end
-
   end # module Model
 
   ## convenience alias (for better english ;-) )
@@ -36,7 +31,6 @@ module BeerDb
   Models = Model
   
 end # module BeerDb
-
 
 
 

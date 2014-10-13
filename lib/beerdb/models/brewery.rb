@@ -21,9 +21,6 @@ class Brewery < ActiveRecord::Base
   has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brewery_id'
   has_many   :brands,  :class_name => 'BeerDb::Model::Brand',    :foreign_key => 'brand_id'
 
-  ## has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
-  ## has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
-
   has_many :taggings, class_name: 'TagDb::Model::Tagging', :as      => :taggable
   has_many :tags,     class_name: 'TagDb::Model::Tag',     :through => :taggings
 
@@ -31,21 +28,11 @@ class Brewery < ActiveRecord::Base
   validates :key, :format => { :with => /\A[a-z][a-z0-9]+\z/, :message => 'expected two or more lowercase letters a-z or 0-9 digits' }
 
 
-  def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
-    rnd_offset = rand( Brewery.count )   ## NB: call "global" std lib rand
-    Brewery.offset( rnd_offset ).limit( 1 )
-  end
+  ### support old names (read-only) for now  (remove later ??)
 
+  def founded()        since;  end
+  def founded=(value)  self.since = value; end
 
-  ### support old names (read-only) for now  (remove later)
-
-  def founded
-    since
-  end
-
-  def founded=(value)
-    self.since = value
-  end
 
   def as_json_v2( opts={} )
     # NB: do NOT overwrite "default" / builtin as_json, thus, lets use as_json_v2

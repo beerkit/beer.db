@@ -30,17 +30,13 @@ require 'worlddb'
 require 'beerdb/version'   ## version always goes first
 
 require 'beerdb/models/forward'
-require 'beerdb/models/country'
-require 'beerdb/models/region'
-require 'beerdb/models/city'
+require 'beerdb/models/world/country'
+require 'beerdb/models/world/region'
+require 'beerdb/models/world/city'
 require 'beerdb/models/tag'
 require 'beerdb/models/beer'
 require 'beerdb/models/brand'
 require 'beerdb/models/brewery'
-require 'beerdb/models/user'      # db model extensions - move to its own addon gem?
-require 'beerdb/models/drink'     # db model extensions - move to its own addon gem?
-require 'beerdb/models/bookmark'  # db model extensions - move to its own addon gem?
-require 'beerdb/models/note'      # db model extensions - move to its own addon gem?
 
 
 require 'beerdb/serializers/beer'
@@ -71,10 +67,13 @@ module BeerDb
     CreateDb.new.up
 
     ### fix: make optional do NOT auto create here
-    CreateDbExtrasUsers.new.up
-    CreateDbExtrasBookmarks.new.up
-    CreateDbExtrasDrinks.new.up
-    CreateDbExtrasNotes.new.up
+    ### fix: use if defined? BeerDbNote or similar or/and check if table exist ??
+    ###      or move to beerdb-note ??
+
+    # CreateDbExtrasUsers.new.up
+    # CreateDbExtrasBookmarks.new.up
+    # CreateDbExtrasDrinks.new.up
+    # CreateDbExtrasNotes.new.up
 
     ConfDb::Model::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
   end
