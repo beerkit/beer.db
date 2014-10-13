@@ -30,7 +30,14 @@ module BeerDb
   class Note < ActiveRecord::Base ; end
 
   end # module Model
+
+  ## convenience alias (for better english ;-) )
+  ##   lets you use =>  include Models  (instead of include Model)
+  Models = Model
+  
 end # module BeerDb
+
+
 
 
 module WorldDb

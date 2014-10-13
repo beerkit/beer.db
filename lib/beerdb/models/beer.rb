@@ -19,9 +19,6 @@ class Beer < ActiveRecord::Base
   belongs_to :brewery, :class_name => 'BeerDb::Model::Brewery',  :foreign_key => 'brewery_id'
 
 
-  ## has_many :taggings, :as => :taggable, :class_name => 'WorldDb::Model::Tagging'
-  ## has_many :tags,  :through => :taggings, :class_name => 'WorldDb::Model::Tag'
-
   has_many :taggings, class_name: 'TagDb::Model::Tagging', :as      => :taggable
   has_many :tags,     class_name: 'TagDb::Model::Tag',     :through => :taggings
 
@@ -41,22 +38,10 @@ class Beer < ActiveRecord::Base
 ########
 
 
-  def self.rnd  # find random beer  - fix: use "generic" activerecord helper and include/extend class
-    rnd_offset = rand( Beer.count )   ## NB: call "global" std lib rand
-    Beer.offset( rnd_offset ).limit( 1 )
-  end
-
   ### support old names (read-only) for now  (remove later)
 
-  def color
-    puts "*** depreceated fn api - use srm"
-    srm
-  end
-
-  def plato
-    puts "*** depreceated fn api - use og"
-    og
-  end
+  def color()  puts "*** depreceated fn api - use srm"; srm;  end
+  def plato()  puts "*** depreceated fn api - use og";  og;   end
 
   def color=(value)
     puts "*** depreceated fn api - use srm="
@@ -67,7 +52,8 @@ class Beer < ActiveRecord::Base
     puts "*** depreceated fn api - use og="
     self.og = value
   end
-  
+
+
   def as_json_v2( opts={} )
     # NB: do NOT overwrite "default" / builtin as_json, thus, lets use as_json_v2
     BeerSerializer.new( self ).as_json

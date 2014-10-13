@@ -19,3 +19,8 @@
     ## end
   end
 
+
+  def self.props
+    Stats.new.props
+  end
+
