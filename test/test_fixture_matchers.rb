@@ -3,7 +3,6 @@
 
 require 'helper'
 
-### todo/fix: move to worlddb along with fixture matcher module!!
 
 class TestFixtureMatchers < MiniTest::Unit::TestCase
 

@@ -14,6 +14,8 @@ require 'logger'
 require 'optparse'
 require 'fileutils'
 require 'erb'
+require 'uri'
+
 
 # 3rd party gems / libs
 
