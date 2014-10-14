@@ -2,8 +2,8 @@
 
 beer.db Command Line Tool in Ruby
 
-* home  :: [github.com/geraldb/beer.db.ruby](https://github.com/geraldb/beer.db.ruby)
-* bugs  :: [github.com/geraldb/beer.db.ruby/issues](https://github.com/geraldb/beer.db.ruby/issues)
+* home  :: [github.com/beerkit/beer.db.ruby](https://github.com/beerkit/beer.db.ruby)
+* bugs  :: [github.com/beerkit/beer.db.ruby/issues](https://github.com/beerkit/beer.db.ruby/issues)
 * gem   :: [rubygems.org/gems/beerdb](https://rubygems.org/gems/beerdb)
 * rdoc  :: [rubydoc.info/gems/beerdb](http://rubydoc.info/gems/beerdb)
 * forum :: [groups.google.com/group/beerdb](https://groups.google.com/group/beerdb)
