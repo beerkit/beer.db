@@ -79,6 +79,8 @@ command [:create] do |c|
       BeerDb::CreateDbExtrasDrinks.new.up
     else
       LogDb.create
+      ConfDb.create
+      TagDb.create
       WorldDb.create
       BeerDb.create
     end
@@ -108,9 +110,11 @@ command [:setup,:s] do |c|
     setup = args[0] || 'all'
     
     LogDb.create
+    ConfDb.create
+    TagDb.create
     WorldDb.create
     BeerDb.create
-    
+
     WorldDb.read_all( opts.world_data_path )
     BeerDb.read_setup( "setups/#{setup}", opts.data_path )
     puts 'Done.'
@@ -146,32 +150,6 @@ end  # command setup
 
 
 
-desc 'Load beer fixtures'
-arg_name 'NAME'   # multiple fixture names - todo/fix: use multiple option
-command [:load, :l] do |c|
-
-  c.desc 'Delete all beer data records'
-  c.switch [:delete], negatable: false 
-
-  c.action do |g,o,args|
-
-    connect_to_db( opts )
-    
-    BeerDb.delete! if o[:delete].present?
-
-    reader = BeerDb::Reader.new( opts.data_path )
-
-    args.each do |arg|
-      name = arg     # File.basename( arg, '.*' )
-      reader.load( name )
-    end # each arg
-
-    puts 'Done.'
-  end
-end # command load
-
-
-
 ## fix/todo: add server alias (serve/server)
 
 desc 'Start web service (HTTP JSON API)'
@@ -182,7 +160,7 @@ command [:serve,:server] do |c|
     connect_to_db( opts )
 
     # NB: server (HTTP service) not included in standard default require
-    require 'beerdb/server'
+    require 'beerdb/service'
 
 # make sure connections get closed after every request e.g.
 #
@@ -192,18 +170,18 @@ command [:serve,:server] do |c|
 #
 
     puts 'before add middleware ConnectionManagement'
-    BeerDb::Server.use ActiveRecord::ConnectionAdapters::ConnectionManagement
+    BeerDb::Service.use ActiveRecord::ConnectionAdapters::ConnectionManagement
     puts 'after add middleware ConnectionManagement'
     ## todo: check if we can check on/dump middleware stack
 
     ## rack middleware might not work with multi-threaded thin web server; close it ourselfs
-    BeerDb::Server.after do
+    BeerDb::Service.after do
       puts "  #{Thread.current.object_id} -- make sure db connections gets closed after request"
       # todo: check if connection is open - how? 
       ActiveRecord::Base.connection.close
     end    
 
-    BeerDb::Server.run!
+    BeerDb::Service.run!
 
     puts 'Done.'
   end
@@ -229,11 +207,13 @@ command :props do |c|
 
     connect_to_db( opts )
     
-    BeerDb.props
+    ### fix: use ConfDb.props or similar !!!
+    ### BeerDb.props
     
     puts 'Done.'
   end
 end
+
 
 desc 'Show logs'
 command :logs do |c|

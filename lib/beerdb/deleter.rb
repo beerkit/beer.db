@@ -4,15 +4,18 @@ module BeerDb
 
   class Deleter
     
-    include BeerDb::Models
+    include Models
 
     def run
       # for now delete all tables
 
-      Bookmark.delete_all   # db model extension - move to its own addon?
-      Drink.delete_all      # db model extension - move to its own addon?
-      Note.delete_all       # db model extension - move to its own addon?
-      User.delete_all       # db model extension - move to its own addon?
+      ### fix: use if defined? BeerDbNote or similar or/and check if table exist ??
+      ###      or move to beerdb-note ??
+
+      ## Bookmark.delete_all   # db model extension - move to its own addon?
+      ## Drink.delete_all      # db model extension - move to its own addon?
+      ## Note.delete_all       # db model extension - move to its own addon?
+      ## User.delete_all       # db model extension - move to its own addon?
 
       Beer.delete_all
       Brand.delete_all
