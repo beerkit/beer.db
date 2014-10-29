@@ -21,7 +21,6 @@ module Matcher
     match_xxx_for_country_n_region( name, 'breweries', &blk )
   end
 
-  ## todo: autoadd  brewpub flag!! use more_attribs??
   def match_brewpubs_for_country( name, &blk )
     match_xxx_for_country( name, 'brewpubs', &blk )
   end
@@ -80,12 +79,10 @@ class Reader
             load_breweries_for_country( country_key, name )
           end
     elsif match_brewpubs_for_country_n_region( name ) do |country_key, region_key|
-            ## todo: autoadd  brewpub flag!! use more_attribs??
-            load_breweries_for_country_n_region( country_key, region_key, name )
+            load_breweries_for_country_n_region( country_key, region_key, name, brewpub: true )
           end
     elsif match_brewpubs_for_country( name ) do |country_key|
-            ## todo: autoadd  brewpub flag!! use more_attribs??
-            load_breweries_for_country( country_key, name )
+            load_breweries_for_country( country_key, name, brewpub: true )
           end
     else
       logger.error "unknown beer.db fixture type >#{name}<"
@@ -202,6 +199,15 @@ class Reader
   end
 
   def load_breweries_worker( name, more_attribs={} )
+    
+    if name =~ /\(m\)/     # check for (m) mid-size/medium marker -todo- use $?? must be last?
+       more_attribs[ :prod_m ] = true
+    elsif name =~ /\(l\)/  # check for (l) large marker - todo - use $?? must be last?
+       more_attribs[ :prod_l ] = true
+    else
+      ## no marker; do nothing
+    end
+
     reader = ValuesReaderV2.new( name, include_path, more_attribs )
 
     reader.each_line do |new_attributes, values|

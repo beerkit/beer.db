@@ -33,6 +33,16 @@ class Brewery < ActiveRecord::Base
   def founded()        since;  end
   def founded=(value)  self.since = value; end
 
+  def opened()        since;  end
+  def openend=(value)  self.since = value; end
+
+  def m?()  prod_m == true;  end
+  def l?()  prod_l == true;  end
+  
+  ## TODO: activerecord supplies brewpub? already? same as attrib; check w/ test case (and remove here)
+  def brewpub?()  brewpub == true;  end   
+
+
 
   def as_json_v2( opts={} )
     # NB: do NOT overwrite "default" / builtin as_json, thus, lets use as_json_v2

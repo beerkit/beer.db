@@ -120,16 +120,20 @@ create_table :breweries do |t|
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :address
   t.integer :since
+  ### fix: rename back to founded or use opened/closed
+  ## fix: add flag for  ca./about  boolean opened_guess / opened_est / opened_??
+  ##   ca. / about  1010  marker   e.g  t.boolean : opened_est (for estimate) or similar!!!
   ## renamed to founded to since
   ## t.integer :founded  # year founded/established    - todo/fix: rename to since? 
   t.integer :closed  # optional;  year brewery closed
 
 ## todo: add optional parent brewery (owned_by)  ???
 
-  t.boolean  :brewpub
-  t.boolean  :prod20   # prod > 20_000 hl  (mid-size/regional brewery)
-  t.boolean  :prod100  # prod > 100_000 hl
-
+  t.boolean  :brewpub, :null => false, :default => false
+  t.boolean  :prod_m,  :null => false, :default => false   # prod medium  (mid-size/regional brewery)
+                       #   e.g. > 15_000 barrels (us)
+  t.boolean  :prod_l,  :null => false, :default => false   # prod large
+                       #   e.g. > 500_000 hl (at), > 6_000_000 barrels (us)
 
   t.integer :prod  # (estimated) annual production/capacity in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
   t.integer :prod_grade   # 1/2/3/4/5/6/7/8/9/10/11

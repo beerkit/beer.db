@@ -52,14 +52,6 @@ require 'beerdb/stats'
 
 module BeerDb
 
-  def self.banner
-    "beerdb #{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
-  end
-
-  def self.root
-    "#{File.expand_path( File.dirname(File.dirname(__FILE__)) )}"
-  end
-
   def self.main
     require 'beerdb/cli/main'
     # Runner.new.run(ARGV) old code
