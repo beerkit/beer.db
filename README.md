@@ -49,7 +49,7 @@ by.country.key
 => 'ie'
 
 by.country.title
-=> 'Irland'
+=> 'Ireland'
 
 by.city.title
 => 'Dublin'
