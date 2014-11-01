@@ -146,7 +146,7 @@ class Brewery < ActiveRecord::Base
        
       country_key = rec.country.key
 
-      if country_key == 'at' || country_key == 'de'
+      if country_key == 'be' || country_key == 'at' || country_key == 'de'
 
         ## todo: how to handle nil/empty address lines?
 
@@ -207,8 +207,16 @@ class Brewery < ActiveRecord::Base
     ##################
     ## add taggings
 
-    if value_tag_keys.size > 0
-        
+##
+##  fix: delete all tags first or only add diff?
+##  fix e.g.
+##
+# [debug]    adding 1 taggings: >>trappist<<...
+# rake aborted!
+# ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: columns taggable_id, taggable_type, tag_id are not unique: INSERT INTO "taggings" ("created_at", "tag_id", "taggable_id", "taggable_type", "updated_at") VALUES (?, ?, ?, ?, ?)
+#    if value_tag_keys.size > 0
+
+=begin
       value_tag_keys.uniq!  # remove duplicates
       logger.debug "   adding #{value_tag_keys.size} taggings: >>#{value_tag_keys.join('|')}<<..."
 
@@ -223,6 +231,7 @@ class Brewery < ActiveRecord::Base
         rec.tags << tag
       end
     end
+=end
 
     rec # NB: return created or updated obj
 

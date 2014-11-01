@@ -2,7 +2,7 @@
 module BeerDb
   MAJOR = 0 ## todo: namespace inside version or something - why? why not??
   MINOR = 9
-  PATCH = 5
+  PATCH = 6
   VERSION = [MAJOR,MINOR,PATCH].join('.')
 
   def self.version
