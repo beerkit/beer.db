@@ -146,7 +146,14 @@ class Brewery < ActiveRecord::Base
        
       country_key = rec.country.key
 
-      if country_key == 'be' || country_key == 'at' || country_key == 'de'
+      ###
+      ## see  textutils/helper/address_helper for details about countries supported e.g.
+      ##   github.com/rubylibs/textutils/blob/master/lib/textutils/helper/address_helper.rb
+
+      if country_key == 'be' || country_key == 'at' ||
+         country_key == 'de' ||
+         country_key == 'cz' || country_key == 'sk' ||
+         country_key == 'us'
 
         ## todo: how to handle nil/empty address lines?
 
@@ -154,6 +161,10 @@ class Brewery < ActiveRecord::Base
         
         if city_title.present?
           
+          ## for czech  - some cleanup
+          ##   remove any (remaining) digits in title
+          city_title.gsub( /[0-9]/, '' ).strip
+
           city_values = [city_title]
           city_attributes = {
             country_id: rec.country_id,
