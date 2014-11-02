@@ -162,8 +162,8 @@ class Brewery < ActiveRecord::Base
         if city_title.present?
           
           ## for czech  - some cleanup
-          ##   remove any (remaining) digits in title
-          city_title.gsub( /[0-9]/, '' ).strip
+          ##   remove any (remaining) digits in city title
+          city_title = city_title.gsub( /[0-9]/, '' ).strip
 
           city_values = [city_title]
           city_attributes = {
