@@ -162,6 +162,17 @@ class Beer < ActiveRecord::Base
     ##################
     # add taggings 
 
+##
+##  fix: delete all tags first or only add diff?
+##  fix e.g.
+##
+## [debug] update Beer 1340-opatsvetlevycepni:
+## [debug] {"title":"Opat Světlé Výčepní","key":"opatsvetlevycepni","country_id":130,"txt":"cz-czech-republic!/beers","grade":4,"brewery_id":839,"city_id":1154,"region_id":241,"abv":4.2,"og":11.0}
+## [debug]    adding 1 taggings: >>pale lager<<...
+## rake aborted!
+## ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: columns taggable_id, taggable_type, tag_id are not unique: INSERT INTO "taggings" ("created_at", "tag_id", "taggable_id", "taggable_type", "updated_at") VALUES (?, ?, ?, ?, ?)
+
+=begin
     if value_tag_keys.size > 0
         
         value_tag_keys.uniq!  # remove duplicates
@@ -178,7 +189,8 @@ class Beer < ActiveRecord::Base
           rec.tags << tag
         end
     end
-    
+=end
+
     rec # NB: return created or updated obj
 
   end # method create_or_update_from_values
