@@ -19,6 +19,9 @@ require 'uri'
 
 # 3rd party gems / libs
 
+require 'zip'   ## (optionally for textutils e.g. soft dependency - pull in here)
+
+
 #  -- get required by worlddb
 # require 'active_record'   ## todo: add sqlite3? etc.
 # require 'logutils'
@@ -46,6 +49,8 @@ require 'beerdb/serializers/brewery'
 
 require 'beerdb/schema'
 require 'beerdb/reader'
+require 'beerdb/reader_file'
+require 'beerdb/reader_zip'
 require 'beerdb/deleter'
 require 'beerdb/stats'
 
@@ -83,6 +88,12 @@ module BeerDb
   def self.read_setup( setup, include_path, opts={} )
     reader = Reader.new( include_path, opts )
     reader.load_setup( setup )
+  end
+
+  def self.read_setup_from_zip( setup, zip_path, opts={} )  ## todo/check - use a better (shorter) name ??
+    reader = ZipReader.new( zip_path, opts )
+    reader.load_setup( setup )
+    reader.close
   end
 
   def self.read_all( include_path, opts={} )  # load all builtins (using plain text reader); helper for convenience

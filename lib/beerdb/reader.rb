@@ -33,7 +33,7 @@ module Matcher
 end # module Matcher
 
 
-class Reader
+class ReaderBase
 
   include LogUtils::Logging
 
@@ -42,20 +42,9 @@ class Reader
   include WorldDb::Matcher   ## fix: move to BeerDb::Matcher module ??? - cleaner?? why? why not?
   include BeerDb::Matcher # lets us use match_teams_for_country etc.
 
-  attr_reader :include_path
-
-
-  def initialize( include_path, opts = {} )
-    @include_path = include_path
-  end
-
 
   def load_setup( name )
-    path = "#{include_path}/#{name}.txt"
-
-    logger.info "parsing data '#{name}' (#{path})..."
-
-    reader = FixtureReader.new( path )
+    reader = create_fixture_reader( name )   ### "virtual" method - required by concrete class
 
     reader.each do |fixture_name|
       load( fixture_name )
@@ -124,7 +113,8 @@ class Reader
 
 
   def load_beers_worker( name, more_attribs={} )
-    reader = ValuesReaderV2.new( name, include_path, more_attribs )
+
+    reader = create_beers_reader( name, more_attribs )  ### "virtual" method - required by concrete class
 
     ### todo: cleanup - check if [] works for build_title...
     #     better cleaner way ???
@@ -208,7 +198,7 @@ class Reader
       ## no marker; do nothing
     end
 
-    reader = ValuesReaderV2.new( name, include_path, more_attribs )
+    reader = create_breweries_reader( name, more_attribs ) ### "virtual" method - required by concrete class
 
     reader.each_line do |new_attributes, values|
       
@@ -225,5 +215,5 @@ class Reader
     end # each_line
   end
 
-end # class Reader
+end # class ReaderBase
 end # module BeerDb

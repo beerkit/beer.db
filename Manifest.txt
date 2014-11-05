@@ -17,6 +17,8 @@ lib/beerdb/models/world/city.rb
 lib/beerdb/models/world/country.rb
 lib/beerdb/models/world/region.rb
 lib/beerdb/reader.rb
+lib/beerdb/reader_file.rb
+lib/beerdb/reader_zip.rb
 lib/beerdb/schema.rb
 lib/beerdb/serializers/beer.rb
 lib/beerdb/serializers/brewery.rb

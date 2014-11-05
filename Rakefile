@@ -32,6 +32,8 @@ Hoe.spec 'beerdb' do
     ## 3rd party
     ['gli', '>= 2.5.6'],
 
+    ['rubyzip'],   ## NOTE: used for ZipReader (optional in textutils, thus, pull it in here)
+
     ['activerecord']  # NB: will include activesupport,etc.
     ### ['sqlite3',      '~> 1.3']  # NB: install on your own; remove dependency
   ]
