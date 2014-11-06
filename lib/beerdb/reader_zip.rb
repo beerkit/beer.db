@@ -50,7 +50,11 @@ class ZipReader < ReaderBase
     logger.debug "  zip entry path >>#{path}<<"
 
     ## cut-off at-austria-master/    NOTE: includes trailing slash (if present)
-    @zip_prefix = path[ 0...(path.size-name.size) ]
+    ## logger.debug "  path.size #{path.size} >>#{path}<<"
+    ## logger.debug "  name.size #{name.size+4} >>#{name}<<"
+
+    ## note: add +4 for extension (.txt)
+    @zip_prefix = path[ 0...(path.size-(name.size+4)) ]
     logger.debug "  zip entry prefix >>#{@zip_prefix}<<"
 
     logger.info "parsing data in zip '#{name}' (#{path})..."
@@ -61,11 +65,17 @@ class ZipReader < ReaderBase
 
   def create_beers_reader( name, more_attribs={} )
     path = name_to_zip_entry_path( name )
+
+    logger.debug "parsing data (beers) in zip '#{name}' (#{path})..."
+
     ValuesReader.from_zip( @zip_file, path, more_attribs )
   end
 
   def create_breweries_reader( name, more_attribs={} )
     path = name_to_zip_entry_path( name )
+
+    logger.debug "parsing data (breweries) in zip '#{name}' (#{path})..."
+
     ValuesReader.from_zip( @zip_file, path, more_attribs )
   end
 
