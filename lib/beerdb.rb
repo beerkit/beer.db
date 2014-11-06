@@ -90,8 +90,8 @@ module BeerDb
     reader.load_setup( setup )
   end
 
-  def self.read_setup_from_zip( setup, zip_path, opts={} )  ## todo/check - use a better (shorter) name ??
-    reader = ZipReader.new( zip_path, opts )
+  def self.read_setup_from_zip( zip_name, setup, include_path, opts={} )  ## todo/check - use a better (shorter) name ??
+    reader = ZipReader.new( zip_name, include_path, opts )
     reader.load_setup( setup )
     reader.close
   end

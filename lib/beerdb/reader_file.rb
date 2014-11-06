@@ -2,16 +2,16 @@
 
 module BeerDb
 
-class Reader < ReaderBase  ## todo: "old" classic reader - rename to FileReader ?? why? why not?
+## todo: "old" classic reader - rename to FileReader ?? why? why not?
 
-  attr_reader :include_path
+class Reader < ReaderBase  
 
   def initialize( include_path, opts = {} )
     @include_path = include_path
   end
 
   def create_fixture_reader( name )
-    path = "#{include_path}/#{name}.txt"
+    path = "#{@include_path}/#{name}.txt"
 
     logger.info "parsing data '#{name}' (#{path})..."
 
@@ -19,11 +19,11 @@ class Reader < ReaderBase  ## todo: "old" classic reader - rename to FileReader 
   end
 
   def create_beers_reader( name, more_attribs={} )
-    ValuesReaderV2.new( name, include_path, more_attribs )
+    ValuesReaderV2.new( name, @include_path, more_attribs )
   end
 
   def create_breweries_reader( name, more_attribs={} )
-    ValuesReaderV2.new( name, include_path, more_attribs )
+    ValuesReaderV2.new( name, @include_path, more_attribs )
   end
 
 
