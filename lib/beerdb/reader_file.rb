@@ -13,19 +13,50 @@ class Reader < ReaderBase
   def create_fixture_reader( name )
     path = "#{@include_path}/#{name}.txt"
 
-    logger.info "parsing data '#{name}' (#{path})..."
+    logger.info "parsing data (setup) '#{name}' (#{path})..."
 
-    FixtureReader.new( path )
+    FixtureReader.from_file( path )
   end
 
   def create_beers_reader( name, more_attribs={} )
-    ValuesReaderV2.new( name, @include_path, more_attribs )
+    real_name = name_to_real_name( name )
+    
+    path = "#{@include_path}/#{real_name}.txt"
+
+    logger.info "parsing data (beers) '#{name}' (#{path})..."
+
+    ValuesReader.from_file( path, more_attribs )
+    ## ValuesReaderV2.new( name, @include_path, more_attribs )
   end
 
   def create_breweries_reader( name, more_attribs={} )
-    ValuesReaderV2.new( name, @include_path, more_attribs )
+    real_name = name_to_real_name( name )
+
+    path = "#{@include_path}/#{real_name}.txt"
+
+    logger.info "parsing data (breweries) '#{name}' (#{path})..."
+
+    ValuesReader.from_file( path, more_attribs )
+    ## ValuesReaderV2.new( name, @include_path, more_attribs )
   end
 
+private
+
+  def name_to_real_name( name )
+    # map name to real_name path
+    # name might include !/ for virtual path (gets cut off)
+    # e.g. at-austria!/w-wien/beers becomse w-wien/beers
+    pos = name.index( '!/')
+    if pos.nil?
+      name # not found; real path is the same as name
+    else
+      # cut off everything until !/ e.g.
+      # at-austria!/w-wien/beers becomes
+      # w-wien/beers
+      name[ (pos+2)..-1 ]
+    end
+  end
 
 end # class Reader
 end # module BeerDb
+
