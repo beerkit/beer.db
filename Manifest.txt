@@ -1,13 +1,9 @@
-History.md
+HISTORY.md
 Manifest.txt
 README.md
 Rakefile
-bin/beerdb
-lib/beerdb.rb
-lib/beerdb/cli/main.rb
-lib/beerdb/cli/opts.rb
-lib/beerdb/console.rb
 lib/beerdb/deleter.rb
+lib/beerdb/models.rb
 lib/beerdb/models/beer.rb
 lib/beerdb/models/brand.rb
 lib/beerdb/models/brewery.rb

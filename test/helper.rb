@@ -3,16 +3,11 @@
 
 ## minitest setup
 
-# require 'minitest/unit'
 require 'minitest/autorun'
-
-# include MiniTest::Unit  # lets us use TestCase instead of MiniTest::Unit::TestCase
 
 
 # our own code
-
-require 'beerdb'
-require 'logutils/db'   # NOTE: explict require required for LogDb (not automatic) 
+require 'beerdb/models'
 
 
 Country = WorldDb::Model::Country
@@ -43,13 +38,9 @@ def setup_in_memory_db
 
 
   ## build schema
-
-  LogDb.create
-  ConfDb.create
-  TagDb.create
-  WorldDb.create
-  BeerDb.create
+  BeerDb.create_all
 end
+
 
 def fillup_in_memory_db
   ## add some counties

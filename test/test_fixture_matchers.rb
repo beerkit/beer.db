@@ -4,7 +4,7 @@
 require 'helper'
 
 
-class TestFixtureMatchers < MiniTest::Unit::TestCase
+class TestFixtureMatchers < MiniTest::Test
 
   include WorldDb::Matcher
   include BeerDb::Matcher

@@ -1,38 +1,11 @@
-# beerdb
+# beerdb-models - beer.db schema 'n' models for easy (re)use
 
-beer.db Command Line Tool in Ruby
 
-* home  :: [github.com/beerkit/beer.db.ruby](https://github.com/beerkit/beer.db.ruby)
-* bugs  :: [github.com/beerkit/beer.db.ruby/issues](https://github.com/beerkit/beer.db.ruby/issues)
-* gem   :: [rubygems.org/gems/beerdb](https://rubygems.org/gems/beerdb)
-* rdoc  :: [rubydoc.info/gems/beerdb](http://rubydoc.info/gems/beerdb)
+* home  :: [github.com/beerkit/beer.db.models](https://github.com/beerkit/beer.db.models)
+* bugs  :: [github.com/beerkit/beer.db.models/issues](https://github.com/beerkit/beer.db.models/issues)
+* gem   :: [rubygems.org/gems/beerdb-models](https://rubygems.org/gems/beerdb-models)
+* rdoc  :: [rubydoc.info/gems/beerdb-models](http://rubydoc.info/gems/beerdb-models)
 * forum :: [groups.google.com/group/beerdb](https://groups.google.com/group/beerdb)
-
-
-## Usage Command Line
-
-      beer.db command line tool, version 0.5.0
-    
-      Commands:
-        create               Create DB schema
-        help                 Display global or [command] help documentation.
-        load                 Load fixtures
-        logs                 Show logs
-        props                Show props
-        serve                Start web service (HTTP JSON API)
-        setup                Create DB schema 'n' load all data
-        stats                Show stats
-        test                 Debug/test command suite
-    
-      Global Options:
-        -i, --include PATH   Data path (default is .) 
-        -d, --dbpath PATH    Database path (default is .) 
-        -n, --dbname NAME    Database name (datault is beer.db) 
-        -q, --quiet          Only show warnings, errors and fatal messages 
-        -w, --verbose        Show debug messages 
-        -h, --help           Display help documentation 
-        -v, --version        Display version information 
-        -t, --trace          Display backtrace when an error occurs 
 
 
 ## Usage Models
@@ -112,22 +85,9 @@ wien.breweries
 ```
 
 
-## Install
-
-Just install the gem:
-
-    $ gem install beerdb
-
-
-## Free Open Public Domain Datasets
-
-- [`beer.db`](https://github.com/openbeer) - free open public domain beer n brewery data for use in any (programming) language
-
-
-
 ## License
 
-The `beerdb` scripts are dedicated to the public domain.
+The `beerdb-models` scripts are dedicated to the public domain.
 Use it as you please with no restrictions whatsoever.
 
 ## Questions? Comments?

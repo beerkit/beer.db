@@ -1,33 +1,7 @@
-###
-# NB: for local testing run like:
-#
-# 1.9.x: ruby -Ilib lib/beerdb.rb
-
-# core and stlibs
-
-## stdlibs
-# -- get required already by worlddb (remove ??)
-
-require 'yaml'
-require 'pp'
-require 'logger'
-require 'optparse'
-require 'fileutils'
-require 'erb'
-require 'uri'
+# encoding: utf-8
 
 
-# 3rd party gems / libs
-
-require 'zip'   ## (optionally for textutils e.g. soft dependency - pull in here)
-
-
-#  -- get required by worlddb
-# require 'active_record'   ## todo: add sqlite3? etc.
-# require 'logutils'
-# require 'textutils'
-
-require 'worlddb'
+require 'worlddb/models'    # Note: pull in all required stdlibs n gems via worlddb/models
 
 
 # our own code
@@ -57,10 +31,6 @@ require 'beerdb/stats'
 
 module BeerDb
 
-  def self.main
-    require 'beerdb/cli/main'
-    # Runner.new.run(ARGV) old code
-  end
 
   def self.create
     CreateDb.new.up
@@ -75,6 +45,15 @@ module BeerDb
     # CreateDbExtrasNotes.new.up
 
     ConfDb::Model::Prop.create!( key: 'db.schema.beer.version', value: VERSION )
+  end
+
+  ## convenience helper for all-in-one create for tables
+  def self.create_all
+    LogDb.create
+    ConfDb.create
+    TagDb.create
+    WorldDb.create
+    BeerDb.create
   end
 
 
@@ -107,6 +86,10 @@ module BeerDb
     Deleter.new.run
   end # method delete!
 
+  def self.delete_all!( opts={} )
+    # to be done
+  end
+
   def self.tables
     Stats.new.tables
   end
@@ -115,9 +98,6 @@ module BeerDb
 end  # module BeerDb
 
 
-if __FILE__ == $0
-  BeerDb.main
-else
-  # say hello
-  puts BeerDb.banner
-end
+
+# say hello
+puts BeerDb.banner  if $DEBUG || (defined?($RUBYLIBS_DEBUG) && $RUBYLIBS_DEBUG)

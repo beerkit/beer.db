@@ -9,7 +9,7 @@
 require 'helper'
 
 
-class TestValues < MiniTest::Unit::TestCase
+class TestValues < MiniTest::Test
 
   def setup
     #  delete all beers, brands, breweries in in-memory only db

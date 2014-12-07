@@ -1,8 +1,9 @@
+# encoding: utf-8
 
 module BeerDb
   MAJOR = 0 ## todo: namespace inside version or something - why? why not??
-  MINOR = 9
-  PATCH = 13
+  MINOR = 10
+  PATCH = 0
   VERSION = [MAJOR,MINOR,PATCH].join('.')
 
   def self.version
@@ -10,7 +11,7 @@ module BeerDb
   end
 
   def self.banner
-    "beerdb/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
+    "beerdb-models/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
   end
 
   def self.root
