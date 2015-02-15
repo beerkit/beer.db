@@ -8,12 +8,12 @@
 * forum :: [groups.google.com/group/beerdb](https://groups.google.com/group/beerdb)
 
 
-## Class Model Diagram
-
-![](beerdb-models.png)
-
 
 ## Usage Models
+
+Class Model Diagram
+
+![](beerdb-models.png)
 
 Brewery Model
 
