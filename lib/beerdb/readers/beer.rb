@@ -28,7 +28,7 @@ class BeerReader
   end
 
   def self.from_string( text, more_attribs={} )
-    BreweryReader.new( text, more_attribs )
+    BeerReader.new( text, more_attribs )
   end  
 
   def initialize( text, more_attribs={} )
@@ -38,7 +38,7 @@ class BeerReader
   end
 
 
-  def read()  ### ( name, more_attribs={} )
+  def read()
 
     reader = ValuesReader.from_string( @text, @more_attribs )
 

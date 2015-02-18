@@ -1,0 +1,28 @@
+###############################
+# Great Beers from Europe
+
+
+[Aass Bryggeri]
+  Ole Steens Gate 10 // 3007 Drammen  
+  Buskerud › Østlandet › Norway
+  www.aass.no
+
+# Norways's oldest brewery, 1834
+#  Bryggeri -- is norwegian for brewery
+#  Østlandet -- is norwegian for eastern norway
+
+Aass Bock,  6.5%, dunkler_bock
+Aass Juleøl, 6.2%, dunkler_bock
+
+
+[Abbaye des Rocs]
+  Chaussée Brunehault 37 // 7387 Montignies-sur-Roc
+  Hainaut › Belgium
+  www.abbaye-des-rocs.com
+  
+# Brasserie des Rocs (formerly known as Brasserie de l'Abbaye des Rocs
+
+Blanche des Honnelles, 6%, belgian_witbier
+Abbaye des Rocs Brune, 9%, dunkles_starkbier 
+
+

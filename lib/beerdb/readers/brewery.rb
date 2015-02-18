@@ -40,7 +40,7 @@ class BreweryReader
 
 
 
-  def read()  ### ( name, more_attribs={} )
+  def read()
 
 =begin
     if name =~ /\(m\)/     # check for (m) mid-size/medium marker -todo- use $?? must be last?

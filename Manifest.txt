@@ -23,6 +23,8 @@ lib/beerdb/serializers/beer.rb
 lib/beerdb/serializers/brewery.rb
 lib/beerdb/stats.rb
 lib/beerdb/version.rb
+test/data/great-beers-europe.txt
 test/helper.rb
 test/test_fixture_matchers.rb
+test/test_reader_quick.rb
 test/test_values.rb
