@@ -39,7 +39,7 @@ class TestValues < MiniTest::Test
     assert_equal beer.title,         values[0]
     assert_equal beer.country_id,    AT.id 
     assert_equal beer.country.title, AT.title
-    assert_equal beer.abv,           5.2
+    assert_equal beer.abv,           5.2       ## use BigDecimal why, why not??
     assert_equal beer.og,            11.8
     assert_equal beer.srm,           nil
   end

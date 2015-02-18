@@ -17,9 +17,13 @@ require 'beerdb/models/beer'
 require 'beerdb/models/brand'
 require 'beerdb/models/brewery'
 
-
 require 'beerdb/serializers/beer'
 require 'beerdb/serializers/brewery'
+
+require 'beerdb/readers/beer'
+require 'beerdb/readers/brewery'
+require 'beerdb/readers/quick'
+
 
 require 'beerdb/schema'
 require 'beerdb/reader'

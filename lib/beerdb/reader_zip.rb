@@ -68,15 +68,24 @@ class ZipReader < ReaderBase
 
     logger.debug "parsing data (beers) in zip '#{name}' (#{path})..."
 
-    ValuesReader.from_zip( @zip_file, path, more_attribs )
+    BeerReader.from_zip( @zip_file, path, more_attribs )
   end
+
 
   def create_breweries_reader( name, more_attribs={} )
     path = name_to_zip_entry_path( name )
 
     logger.debug "parsing data (breweries) in zip '#{name}' (#{path})..."
 
-    ValuesReader.from_zip( @zip_file, path, more_attribs )
+    if name =~ /\(m\)/     # check for (m) mid-size/medium marker -todo- use $?? must be last?
+       more_attribs[ :prod_m ] = true
+    elsif name =~ /\(l\)/  # check for (l) large marker - todo - use $?? must be last?
+       more_attribs[ :prod_l ] = true
+    else
+      ## no marker; do nothing
+    end
+
+    BreweryReader.from_zip( @zip_file, path, more_attribs )
   end
 
 private

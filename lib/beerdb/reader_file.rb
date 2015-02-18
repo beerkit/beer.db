@@ -25,8 +25,7 @@ class Reader < ReaderBase
 
     logger.info "parsing data (beers) '#{name}' (#{path})..."
 
-    ValuesReader.from_file( path, more_attribs )
-    ## ValuesReaderV2.new( name, @include_path, more_attribs )
+    BeerReader.from_file( path, more_attribs )
   end
 
   def create_breweries_reader( name, more_attribs={} )
@@ -36,8 +35,15 @@ class Reader < ReaderBase
 
     logger.info "parsing data (breweries) '#{name}' (#{path})..."
 
-    ValuesReader.from_file( path, more_attribs )
-    ## ValuesReaderV2.new( name, @include_path, more_attribs )
+    if name =~ /\(m\)/     # check for (m) mid-size/medium marker -todo- use $?? must be last?
+       more_attribs[ :prod_m ] = true
+    elsif name =~ /\(l\)/  # check for (l) large marker - todo - use $?? must be last?
+       more_attribs[ :prod_l ] = true
+    else
+      ## no marker; do nothing
+    end
+
+    BreweryReader.from_file( path, more_attribs )
   end
 
 private
