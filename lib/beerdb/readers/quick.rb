@@ -56,8 +56,8 @@ class QuickReader
         new_attributes.delete(:header)   ## note: do NOT forget to remove from hash!
       end
 
-      puts "new line w/ attributes:"
-      pp new_attributes
+      puts "new line w/ attributes: #{new_attributes.inspect}"
+      puts "         w/ values:     #{values.inspect}"
 
       ## Brewery.create_or_update_from_attribs( new_attributes, values )
     end # each_line
