@@ -3,26 +3,153 @@
 
 
 [Aass Bryggeri]
-  Ole Steens Gate 10 // 3007 Drammen  
+  Ole Steens Gate 10 // 3007 Drammen
   Buskerud › Østlandet › Norway
   www.aass.no
 
 # Norways's oldest brewery, 1834
 #  Bryggeri -- is norwegian for brewery
-#  Østlandet -- is norwegian for eastern norway
+#  Østlandet -- is norwegian for eastern norway (region)
 
 Aass Bock,  6.5%, dunkler_bock
 Aass Juleøl, 6.2%, dunkler_bock
 
 
-[Abbaye des Rocs]
+[Abbaye des Rocs]   ## Brasserie des Rocs (formerly known as Brasserie de l'Abbaye des Rocs
   Chaussée Brunehault 37 // 7387 Montignies-sur-Roc
-  Hainaut › Belgium
+  Hainaut › Wallonie › Belgium
   www.abbaye-des-rocs.com
-  
-# Brasserie des Rocs (formerly known as Brasserie de l'Abbaye des Rocs
 
 Blanche des Honnelles, 6%, belgian_witbier
 Abbaye des Rocs Brune, 9%, dunkles_starkbier 
 
+
+[Achelse Kluis]
+  De Kluis 1 // De Sint-Benedictusabdij // 3930 Hamont-Achel
+  Limburg › Vlaanderen › Belgium
+  www.achelsekluis.org
+
+# De Sint-Benedictusabdij -- in dutch is Saint-Benedictus Abbey
+
+Achel 8 Bruin, 8%, trappist
+Achel Extra Bruin, 9.5%,  trappist
+
+
+[Airbräu]
+  Terminalstraße Mitte 18 // München Airport Center // 85356 München
+  Oberbayern › Bayern › Germany
+  www.airbraeu.de
+
+Fliegerquell (Helles), 5.2%, lager|unfiltriert
+Kumulus (Weißbier),    5.4%, weissbier
+
+
+[Aktienbrauerei]   ## Aktienbrauerei Kaufbeuren (ABK)
+  Hohe Buchleuthe 3 // 87600 Kaufbeuren
+  Schwaben › Bayern › Germany
+  www.aktienbrauerei.de
+
+Kellerbier Naturtrüb, 5.1%, kellerbier
+Fendt Dieselrossöl,   5.9%, maerzen
+
+
+[A. Le Coq]
+  Laulupeo Pst 15 // 50050 Tartu
+  Tartu › Estonia
+  www.alecoq.ee
+
+A. Le Coq Porter,      6.5%, porter
+A. Le Coq Double Bock,   7%, bock
+
+
+[Alhambra]
+  Avenida de Murcia 1 // 18012 Granada
+  www.cervezasalhambra.es
+  Andalucía › Spain
+
+Alhambra Premium Lager, 4.6%, lager
+Mezquita,               7.2%, weizenbier
+
+
+[Allersheim]
+  Allersheim 6 // 37603 Holzminden
+  Niedersachsen › Germany
+  www.brauerei-allersheim.de
+
+Allersheimer Landbier, 5%, pilsner
+##  Allersheimer Blue Moon, 1.9%, colabiermix  ## Cola-Bier-Mix
+
+
+[Almond 22]    ##  Birra Almond '22
+  Contrada Remartello 47/H // 65014 Loreto Aprutino
+  www.birraalmond.com
+  Pescara › Abruzzo › Italy
+
+## old address (until 2014?): Via Colle di Mezzo 25 // 65010 Spoltore
+
+Torbata,  8.7%, barleywine
+Farrotta, 5.7%, dinkelbier
+
+
+[Alpirsbach]   ## Alpirsbacher Klosterbräu
+  Marktplatz 1 // 72275 Alpirsbach
+  Baden-Württemberg › Germany
+  www.alpirsbacher.de
+
+Alpirsbacher Klosterbräu Kleiner Mönch,  5.2%, lager
+Alpirsbacher Klosterbräu Schwarzes Pils, 4.9%, pilsner    ## note: no longer available
+
+
+[Altöttinger]   ## Altöttinger Hell-Bräu
+  Herrenmühlstraße 15 // 84503 Altötting
+  Oberbayern › Bayern › Germany
+  www.hellbraeu.de
+
+Altöttinger Bayrisch Dunkel, 5.2%, dunkel
+Altöttinger Fein-Herb, 5%, lager
+
+
+[Amber]    ## Browar Amber
+  Bielkówko // ul. Gregorkiewicza 1 // 83-050 Kolbudy
+  Gdańsk › Pomorskie [Pomeranian] › Poland
+  www.browar-amber.pl
+
+Koźlak, 6.5%, dunkler_bock
+Żywe,   6.2%, pilsner
+
+
+[Andechs]  ## Klosterbrauerei Andechs
+  Bergstr. 2 // 82346 Andechs
+  Oberbayern › Bayern › Germany
+  www.andechs.de
+
+Andechser Bergbock Hell, 7%, bock
+Andechser Doppelbock Dunkel, 7%, dunkler_bock
+
+
+[Anker]  ## Brouwerij Het Anker
+  Guido Gezellelaan 49 // 2800 Mechelen
+  Antwerpen › Vlaanderen › Belgium
+  www.hetanker.be
+
+Gouden Carolus Classic,    8.5%, strong_dark_ale
+Gouden Carolus Christmas, 10.5%, strong_dark_ale
+
+
+[Ankerbrauerei Nördlingen]   ## Ankerbräu
+  Ankergasse 4 // 86720 Nördlingen
+  www.ankerbrauerei.de
+  Schwaben › Bayern › Germany
+
+Ankerbräu Lager Hell, 5%, lager
+Nördlinger Premium Pils, 4.7%, pilsner
+
+
+[Apatinska Pivara]
+  Trg oslobodjenja 5 // 25260 Apatin
+  www.jelenpivo.com
+  West Bačka › Vojvodina › Serbia
+
+Jelen Pivo, 5%, lager
+Apatinsko Pivo, 5%, lager
 

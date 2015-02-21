@@ -8,8 +8,8 @@ class CreateDb < ActiveRecord::Migration
 def up
 
 create_table :beers do |t|
-  t.string  :key,   :null => false   # import/export key
-  t.string  :title, :null => false
+  t.string  :key,      null: false   # import/export key
+  t.string  :title,    null: false
   t.string  :synonyms  # comma separated list of synonyms
 
   t.string  :web    # optional url link (e.g. )
@@ -18,17 +18,17 @@ create_table :beers do |t|
   # t.boolean  :bottle,  :null => false, :default => false # Flaschenbier
   # t.boolean  :draft,   :null => false, :default => false # Fassbier
   ## todo: check seasonal is it proper english?
-  t.boolean  :seasonal, :null => false, :default => false # all year or just eg. Festbier/Oktoberfest Special
-  t.boolean  :limited, :null => false, :default => false   # one year or season only
+  t.boolean  :seasonal, null: false, default: false # all year or just eg. Festbier/Oktoberfest Special
+  t.boolean  :limited,  null: false, default: false   # one year or season only
   ## todo: add microbrew/brewpub flag?
   #### t.boolean  :brewpub, :null => false, :default => false
-  
+
   ## add t.boolean :lite  flag ??
-  t.decimal    :kcal    # kcal/100ml e.g. 45.0 kcal/100ml
+  t.decimal    :kcal,  precision: 10, scale: 2     # kcal/100ml e.g. 45.0 kcal/100ml
 
   ## check: why decimal and not float? 
-  t.decimal    :abv    # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
-  t.decimal    :og     # malt extract (original gravity) in plato
+  t.decimal    :abv,   precision: 10, scale: 2     # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
+  t.decimal    :og,    precision: 10, scale: 2     # malt extract (original gravity) in plato
   t.integer    :srm    # color in srm
   t.integer    :ibu    # bitterness in ibu
 
@@ -66,13 +66,13 @@ create_table :beers do |t|
   # - C-grade /3nd class/ tier3/ / speciality, minor ?
 
   # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
-  t.integer :grade, :null => false, :default => 4
+  t.integer :grade,  null: false, default: 4
 
   t.string  :txt            # source ref
-  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+  t.boolean :txt_auto, null: false, default: false     # inline? got auto-added?
 
 
-  t.references :country,  :null => false
+  t.references :country,  null: false
   t.references :region   # optional
   t.references :city     # optional
 
@@ -81,33 +81,33 @@ end
 
 
 create_table :brands do |t|   # beer families (sharing same name e.g. brand)
-  t.string  :key,   :null => false   # import/export key
-  t.string  :title, :null => false
+  t.string  :key,     null: false   # import/export key
+  t.string  :title,   null: false
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :web   # optional web page (e.g. www.ottakringer.at)
   t.string  :wiki  # optional wiki(pedia page)
   t.integer :since
 
   ## scope of brand (global/intern'l/national/regional/local) ??
-  t.boolean :global,     :null => false, :default => false 
-  t.boolean :internl,    :null => false, :default => false
-  t.boolean :national,   :null => false, :default => false
-  t.boolean :regional,   :null => false, :default => false
-  t.boolean :local,      :null => false, :default => false
+  t.boolean :global,     null: false, default: false 
+  t.boolean :internl,    null: false, default: false
+  t.boolean :national,   null: false, default: false
+  t.boolean :regional,   null: false, default: false
+  t.boolean :local,      null: false, default: false
 
   # t.integer :brand_grade   # 1/2/3/4/5  (global/intern'l/national/regional/local)
 
   # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
-  t.integer :grade, :null => false, :default => 4
+  t.integer :grade, null: false, default: 4
   #   -- todo: add plus 1 for brewery w/ *** ??
 
   t.string  :txt            # source ref
-  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+  t.boolean :txt_auto,  null: false, default: false     # inline? got auto-added?
 
 
   t.references :brewery   # optional (for now)
 
-  t.references :country,   :null => false
+  t.references :country,  null: false
   t.references :region   # optional
   t.references :city     # optional
 
@@ -115,8 +115,8 @@ create_table :brands do |t|   # beer families (sharing same name e.g. brand)
 end
 
 create_table :breweries do |t|
-  t.string  :key,   :null => false   # import/export key
-  t.string  :title, :null => false
+  t.string  :key,    null: false   # import/export key
+  t.string  :title,  null: false
   t.string  :synonyms  # comma separated list of synonyms
   t.string  :address
   t.integer :since
@@ -129,10 +129,10 @@ create_table :breweries do |t|
 
 ## todo: add optional parent brewery (owned_by)  ???
 
-  t.boolean  :brewpub, :null => false, :default => false
-  t.boolean  :prod_m,  :null => false, :default => false   # prod medium  (mid-size/regional brewery)
+  t.boolean  :brewpub, null: false, default: false
+  t.boolean  :prod_m,  null: false, default: false   # prod medium  (mid-size/regional brewery)
                        #   e.g. > 15_000 barrels (us)
-  t.boolean  :prod_l,  :null => false, :default => false   # prod large
+  t.boolean  :prod_l,  null: false, default: false   # prod large
                        #   e.g. > 500_000 hl (at), > 6_000_000 barrels (us)
 
   t.integer :prod  # (estimated) annual production/capacity in hl (1hl=100l) e.g. megabrewery 2_000_000, microbrewery 1_000 hl; brewbup 500 hl etc.
@@ -153,11 +153,11 @@ create_table :breweries do |t|
 
 
   # use stars in .txt e.g. # ***/**/*/- => 1/2/3/4
-  t.integer :grade, :null => false, :default => 4
+  t.integer :grade,  null: false, default: 4
 
 
   t.string  :txt            # source ref
-  t.boolean :txt_auto, :null => false, :default => false     # inline? got auto-added?
+  t.boolean :txt_auto, null: false, default: false     # inline? got auto-added?
 
   t.string  :web        # optional web page (e.g. www.ottakringer.at)
   t.string  :wikipedia  # optional wiki(pedia page)
@@ -176,7 +176,7 @@ create_table :breweries do |t|
   # todo: add t.references :parent  # for parent brewery
   # (or better use has many parents w/ percentage of ownership; might not be 100%)
 
-  t.references :country,   :null => false
+  t.references :country,   null: false
   t.references :region   # optional
   t.references :city     # optional
   
