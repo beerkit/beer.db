@@ -144,5 +144,17 @@ class ReaderBase
     load_breweries_worker( name, more_attribs )
   end
 
+
+
+  def load_beers_worker( name, more_attribs )
+    reader = create_beers_reader( name, more_attribs )
+    reader.read
+  end
+
+  def load_breweries_worker( name, more_attribs )
+    reader = create_breweries_reader( name, more_attribs )
+    reader.read
+  end
+
 end # class ReaderBase
 end # module BeerDb
