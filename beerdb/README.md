@@ -42,11 +42,6 @@ Just install the gem:
     $ gem install beerdb
 
 
-## Free Open Public Domain Datasets
-
-- [`beer.db`](https://github.com/openbeer) - free open public domain beer n brewery data for use in any (programming) language
-
-
 
 ## License
 
