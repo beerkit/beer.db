@@ -1,0 +1,26 @@
+require 'hoe'
+require './lib/beerdb/note/version.rb'
+
+Hoe.spec 'beerdb-note' do
+
+  self.version = BeerDbNote::VERSION
+
+  self.summary = 'beerdb-note gem - beer.db addon for notes, bookmarks, drinks, etc.'
+  self.description = summary
+
+  self.urls = ['https://github.com/beerkit/beer.db.note.ruby']
+
+  self.author = 'Gerald Bauer'
+  self.email = 'beerdb@googlegroups.com'
+
+  # switch extension to .markdown for gihub formatting
+  self.readme_file = 'README.md'
+  self.history_file = 'HISTORY.md'
+
+  self.licenses = ['Public Domain']
+
+  self.spec_extras = {
+   :required_ruby_version => '>= 1.9.2'
+  }
+
+end

@@ -1,0 +1,6 @@
+HISTORY.md
+Manifest.txt
+README.md
+Rakefile
+lib/beerdb/note.rb
+lib/beerdb/note/version.rb

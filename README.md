@@ -4,7 +4,7 @@ Gem Family:
 
 - [**beerdb**](beerdb) - open beer database (beer.db) command line tool
 - [beerdb-models](beerdb-models) - beer.db schema 'n' models for easy (re)use
-
+- [beerdb-note](beerdb-note) - beer.db addon for notes, bookmarks, drinks, etc.
 
 
 
