@@ -1,0 +1,38 @@
+require 'hoe'
+require './lib/beerdb/cli/version.rb'
+
+
+Hoe.spec 'beerdb' do
+
+  self.version = BeerDbCli::VERSION
+
+  self.summary = 'beerdb - beer.db command line tool'
+  self.description = summary
+
+  self.urls    = ['https://github.com/beerkit/beer.db.ruby']
+
+  self.author  = 'Gerald Bauer'
+  self.email   = 'beerdb@googlegroups.com'
+
+  # switch extension to .markdown for gihub formatting
+  self.readme_file  = 'README.md'
+  self.history_file = 'HISTORY.md'
+
+  self.extra_deps = [
+    ['beerdb-models', '>= 0.10.0'],
+
+    ['datafile', '>= 0.1.1'],
+    ['fetcher', '>= 0.4.4'],
+
+    ## 3rd party
+    ['gli', '>= 2.12.2'],
+    ['sqlite3']
+  ]
+
+  self.licenses = ['Public Domain']
+
+  self.spec_extras = {
+    required_ruby_version: '>= 1.9.2'
+  }
+
+end

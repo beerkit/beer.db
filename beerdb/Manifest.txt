@@ -1,0 +1,10 @@
+HISTORY.md
+Manifest.txt
+README.md
+Rakefile
+bin/beerdb
+lib/beerdb.rb
+lib/beerdb/cli/main.rb
+lib/beerdb/cli/opts.rb
+lib/beerdb/cli/version.rb
+lib/beerdb/console.rb
