@@ -15,7 +15,7 @@ Tag       = WorldDb::Models::Tag
 Tagging   = WorldDb::Models::Tagging
 Continent = WorldDb::Models::Continent
 Country   = WorldDb::Models::Country
-Region    = WorldDb::Models::Region
+State     = WorldDb::Models::State
 City      = WorldDb::Models::City
 Prop      = WorldDb::Models::Prop
 
@@ -52,10 +52,10 @@ MX = Country.find_by_key( 'mx' )
 
 WIEN = City.find_by_key( 'wien' )
 
-### some regions
+### some states
 
-NO = Region.find_by_key_and_country_id( 'no', AT.id )  # at - niederoesterreich
-OO = Region.find_by_key_and_country_id( 'oo', AT.id )  # at - oberoesterreich
+NO = State.find_by_key_and_country_id( 'no', AT.id )  # at - niederoesterreich
+OO = State.find_by_key_and_country_id( 'oo', AT.id )  # at - oberoesterreich
 
 #### some beers
 

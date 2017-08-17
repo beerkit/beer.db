@@ -11,7 +11,7 @@ require 'beerdb/models'
 
 
 Country = WorldDb::Model::Country
-Region  = WorldDb::Model::Region
+State   = WorldDb::Model::State
 
 ## todo: get all models aliases (e.g. from console script)
 
@@ -46,18 +46,18 @@ def fillup_in_memory_db
   ## add some counties
 
   at = Country.create!( key: 'at', title: 'Austria', code: 'AUT', pop: 0, area: 0 )
-  Region.create!( key: 'w', title: 'Wien', country_id: at.id )
-  
+  State.create!( key: 'w', title: 'Wien', country_id: at.id )
+
   de = Country.create!( key: 'de', title: 'Germany', code: 'DEU', pop: 0, area: 0 )
-  Region.create!( key: 'by', title: 'Bayern', country_id: de.id )
-  
+  State.create!( key: 'by', title: 'Bayern', country_id: de.id )
+
 end
 
 setup_in_memory_db()
 fillup_in_memory_db()
 
-AT   =  Country.find_by_key!( 'at' )
-W    =  Region.find_by_key!( 'w' )
+AT   =  Country.find_by!( key: 'at' )
+W    =  State.find_by!( key: 'w' )
 
-DE   =  Country.find_by_key!( 'de' )
-BY   =  Region.find_by_key!( 'by' )
+DE   =  Country.find_by!( key: 'de' )
+BY   =  State.find_by!( key: 'by' )

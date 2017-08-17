@@ -10,7 +10,7 @@ require 'beerdb/version'   ## version always goes first
 
 require 'beerdb/models/forward'
 require 'beerdb/models/world/country'
-require 'beerdb/models/world/region'
+require 'beerdb/models/world/state'
 require 'beerdb/models/world/city'
 require 'beerdb/models/tag'
 require 'beerdb/models/beer'

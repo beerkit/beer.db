@@ -11,7 +11,7 @@ lib/beerdb/models/forward.rb
 lib/beerdb/models/tag.rb
 lib/beerdb/models/world/city.rb
 lib/beerdb/models/world/country.rb
-lib/beerdb/models/world/region.rb
+lib/beerdb/models/world/state.rb
 lib/beerdb/reader.rb
 lib/beerdb/reader_file.rb
 lib/beerdb/reader_zip.rb

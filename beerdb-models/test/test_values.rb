@@ -37,7 +37,7 @@ class TestValues < MiniTest::Test
     assert_equal beer.id,  beer2.id
 
     assert_equal beer.title,         values[0]
-    assert_equal beer.country_id,    AT.id 
+    assert_equal beer.country_id,    AT.id
     assert_equal beer.country.title, AT.title
     assert_equal beer.abv,           5.2
     assert_equal beer.og,            11.8
@@ -64,7 +64,7 @@ class TestValues < MiniTest::Test
       country_id: AT.id
     }
 
-    
+
     by = Brewery.create_or_update_from_values( values, more_attribs )
 
     by2 = Brewery.find_by_key!( key )
@@ -122,7 +122,7 @@ class TestValues < MiniTest::Test
 
     ## fix!!!!!!!!: use different brewery! use one w/ synonyms
     ###
-    
+
     # ottakringer, Ottakringer Brauerei, 1838, www.ottakringer.at, WI, city:wien, 1160 Wien // Ottakringer Platz 1
     #   brands: Ottakringer
 
@@ -170,7 +170,7 @@ class TestValues < MiniTest::Test
 
     more_attribs = {
       country_id: AT.id,
-      region_id: W.id
+      state_id: W.id
     }
 
     by = Brewery.create_or_update_from_values( values, more_attribs )
@@ -193,7 +193,7 @@ class TestValues < MiniTest::Test
     assert( br.brewery_id    == by.id )
     assert( br.brewery.title == by.title )
     assert( br.country_id    == by.country_id )
-    
+
     # todo: check for auto-created city
     assert( by.city.title == 'Wien' )
   end
@@ -201,12 +201,12 @@ class TestValues < MiniTest::Test
 
   def test_load_brewery_values_w_city_de
 
-    # hofbraeu, Hofbräu München, 1589, www.hofbraeu-muenchen.de, 81829 München // Hofbräuallee 1 
+    # hofbraeu, Hofbräu München, 1589, www.hofbraeu-muenchen.de, 81829 München // Hofbräuallee 1
 
     key = 'hofbraeu'
 
     values = [
-      key, 
+      key,
       'Hofbräu München',
       '1589',
       'www.hofbraeu-muenchen.de',
@@ -216,7 +216,7 @@ class TestValues < MiniTest::Test
 
     more_attribs = {
       country_id: DE.id,
-      region_id:  BY.id
+      state_id:  BY.id
     }
 
     by = Brewery.create_or_update_from_values( values, more_attribs )

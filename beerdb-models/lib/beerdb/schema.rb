@@ -3,9 +3,11 @@
 module BeerDb
 
 
-class CreateDb < ActiveRecord::Migration
+class CreateDb
+
 
 def up
+    ActiveRecord::Schema.define do
 
 create_table :beers do |t|
   t.string  :key,      null: false   # import/export key
@@ -26,7 +28,7 @@ create_table :beers do |t|
   ## add t.boolean :lite  flag ??
   t.decimal    :kcal,  precision: 10, scale: 2     # kcal/100ml e.g. 45.0 kcal/100ml
 
-  ## check: why decimal and not float? 
+  ## check: why decimal and not float?
   t.decimal    :abv,   precision: 10, scale: 2     # Alcohol by volume (abbreviated as ABV, abv, or alc/vol) e.g. 4.9 %
   t.decimal    :og,    precision: 10, scale: 2     # malt extract (original gravity) in plato
   t.integer    :srm    # color in srm
@@ -73,7 +75,7 @@ create_table :beers do |t|
 
 
   t.references :country,  null: false
-  t.references :region   # optional
+  t.references :state    # optional
   t.references :city     # optional
 
   t.timestamps
@@ -89,7 +91,7 @@ create_table :brands do |t|   # beer families (sharing same name e.g. brand)
   t.integer :since
 
   ## scope of brand (global/intern'l/national/regional/local) ??
-  t.boolean :global,     null: false, default: false 
+  t.boolean :global,     null: false, default: false
   t.boolean :internl,    null: false, default: false
   t.boolean :national,   null: false, default: false
   t.boolean :regional,   null: false, default: false
@@ -108,7 +110,7 @@ create_table :brands do |t|   # beer families (sharing same name e.g. brand)
   t.references :brewery   # optional (for now)
 
   t.references :country,  null: false
-  t.references :region   # optional
+  t.references :state    # optional
   t.references :city     # optional
 
   t.timestamps
@@ -124,7 +126,7 @@ create_table :breweries do |t|
   ## fix: add flag for  ca./about  boolean opened_guess / opened_est / opened_??
   ##   ca. / about  1010  marker   e.g  t.boolean : opened_est (for estimate) or similar!!!
   ## renamed to founded to since
-  ## t.integer :founded  # year founded/established    - todo/fix: rename to since? 
+  ## t.integer :founded  # year founded/established    - todo/fix: rename to since?
   t.integer :closed  # optional;  year brewery closed
 
 ## todo: add optional parent brewery (owned_by)  ???
@@ -177,17 +179,14 @@ create_table :breweries do |t|
   # (or better use has many parents w/ percentage of ownership; might not be 100%)
 
   t.references :country,   null: false
-  t.references :region   # optional
+  t.references :state    # optional
   t.references :city     # optional
-  
+
   t.timestamps
 end
 
+ end  # Schema.define
 end # method up
-
-def down
-  raise ActiveRecord::IrreversibleMigration
-end
 
 
 end # class CreateDb

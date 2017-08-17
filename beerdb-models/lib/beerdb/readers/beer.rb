@@ -29,7 +29,7 @@ class BeerReader
 
   def self.from_string( text, more_attribs={} )
     BeerReader.new( text, more_attribs )
-  end  
+  end
 
   def initialize( text, more_attribs={} )
     ## todo/fix: how to add opts={} ???
@@ -44,12 +44,12 @@ class BeerReader
 
     ### todo: cleanup - check if [] works for build_title...
     #     better cleaner way ???
-    if @more_attribs[:region_id].present?
-      known_breweries_source = Brewery.where( region_id:  @more_attribs[:region_id] )
+    if @more_attribs[:state_id].present?
+      known_breweries_source = Brewery.where( state_id:  @more_attribs[:state_id] )
     elsif @more_attribs[:country_id].present?
       known_breweries_source = Brewery.where( country_id: @more_attribs[:country_id] )
     else
-      logger.warn "no region or country specified; use empty brewery ary for header mapper"
+      logger.warn "no state or country specified; use empty brewery ary for header mapper"
       known_breweries_source = []
     end
 
@@ -61,7 +61,7 @@ class BeerReader
       ## note: check for header attrib; if present remove
       ### todo: cleanup code later
       ## fix: add to new_attributes hash instead of values ary
-      ##   - fix: match_brewery()   move region,city code out of values loop for reuse at the end
+      ##   - fix: match_brewery()   move state,city code out of values loop for reuse at the end
       if new_attributes[:header].present?
         brewery_line = new_attributes[:header].dup   # note: make sure we make a copy; will use in-place string ops
         new_attributes.delete(:header)   ## note: do NOT forget to remove from hash!

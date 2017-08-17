@@ -12,7 +12,7 @@ module BeerDb
 
   Continent = WorldDb::Model::Continent
   Country   = WorldDb::Model::Country
-  Region    = WorldDb::Model::Region
+  State     = WorldDb::Model::State
   City      = WorldDb::Model::City
 
   Tag       = TagDb::Model::Tag
@@ -29,7 +29,7 @@ module BeerDb
   ## convenience alias (for better english ;-) )
   ##   lets you use =>  include Models  (instead of include Model)
   Models = Model
-  
+
 end # module BeerDb
 
 
@@ -43,4 +43,3 @@ module WorldDb
 
   end # module Model
 end # module WorldDb
-

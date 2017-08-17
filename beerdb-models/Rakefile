@@ -3,13 +3,13 @@ require './lib/beerdb/version.rb'
 
 
 Hoe.spec 'beerdb-models' do
-  
+
   self.version = BeerDb::VERSION
-  
+
   self.summary = "beerdb-models - beer.db schema 'n' models for easy (re)use"
   self.description = summary
 
-  self.urls    = ['https://github.com/beerkit/beer.db.models']
+  self.urls    = ['https://github.com/beerkit/beer.db']
 
   self.author  = 'Gerald Bauer'
   self.email   = 'beerdb@googlegroups.com'
@@ -19,13 +19,13 @@ Hoe.spec 'beerdb-models' do
   self.history_file = 'HISTORY.md'
 
   self.extra_deps = [
-    ['worlddb-models', '>= 2.2.0'],  # Note: worlddb-models pulls in all dependencies
+    ['worlddb-models', '>= 2.3.4'],  # Note: worlddb-models pulls in all dependencies
   ]
 
   self.licenses = ['Public Domain']
 
   self.spec_extras = {
-    required_ruby_version: '>= 1.9.2'
+    required_ruby_version: '>= 2.3'
   }
 
 end

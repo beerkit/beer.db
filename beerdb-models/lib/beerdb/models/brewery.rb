@@ -9,13 +9,13 @@ class Brewery < ActiveRecord::Base
 
   # NB: use extend - is_<type>? become class methods e.g. self.is_<type>? for use in
   #   self.create_or_update_from_values
-  extend TextUtils::ValueHelper  # e.g. self.is_year?, self.is_region?, is_address?, is_taglist? etc.
+  extend TextUtils::ValueHelper  # e.g. self.is_year?, self.is_state?, is_address?, is_taglist? etc.
   extend TextUtils::AddressHelper  # e.g self.normalize_addr, self.find_city_in_addr, etc.
 
   self.table_name = 'breweries'
 
   belongs_to :country, :class_name => 'WorldDb::Model::Country', :foreign_key => 'country_id'
-  belongs_to :region,  :class_name => 'WorldDb::Model::Region',  :foreign_key => 'region_id'
+  belongs_to :state,   :class_name => 'WorldDb::Model::State',   :foreign_key => 'state_id'
   belongs_to :city,    :class_name => 'WorldDb::Model::City',    :foreign_key => 'city_id'
 
   has_many   :beers,   :class_name => 'BeerDb::Model::Beer',     :foreign_key => 'brewery_id'
@@ -38,9 +38,9 @@ class Brewery < ActiveRecord::Base
 
   def m?()  prod_m == true;  end
   def l?()  prod_l == true;  end
-  
+
   ## TODO: activerecord supplies brewpub? already? same as attrib; check w/ test case (and remove here)
-  def brewpub?()  brewpub == true;  end   
+  def brewpub?()  brewpub == true;  end
 
 
 
@@ -80,8 +80,8 @@ class Brewery < ActiveRecord::Base
       if match_country(value) do |country|
            new_attributes[ :country_id ] = country.id
          end
-      elsif match_region_for_country(value,new_attributes[:country_id]) do |region|
-              new_attributes[ :region_id ] = region.id
+      elsif match_state_for_country(value,new_attributes[:country_id]) do |state|
+              new_attributes[ :state_id ] = state.id
             end
       elsif match_city(value) do |city|
               if city.present?
@@ -91,10 +91,10 @@ class Brewery < ActiveRecord::Base
                 logger.warn "city with key #{value[5..-1]} missing - for brewery #{new_attributes[:key]}"
               end
 
-              ## for easy queries: cache region_id (from city)
-              #  - check if city w/ region if yes, use it for brewery too
-              if city.present? && city.region.present?
-                new_attributes[ :region_id ] = city.region.id
+              ## for easy queries: cache state_id (from city)
+              #  - check if city w/ state if yes, use it for brewery too
+              if city.present? && city.state.present?
+                new_attributes[ :state_id ] = city.state.id
               end
             end
       elsif match_year( value ) do |num|  # founded/established year e.g. 1776
@@ -131,19 +131,19 @@ class Brewery < ActiveRecord::Base
       logger.debug "create Brewery:"
       rec = Brewery.new
     end
-      
+
     logger.debug new_attributes.to_json
 
     rec.update_attributes!( new_attributes )
 
 
     ##############################
-    # auto-add city if not present and country n region present
-    
+    # auto-add city if not present and country n state present
+
     if new_attributes[:city_id].blank? &&
        new_attributes[:country_id].present? &&
-       new_attributes[:region_id].present?
-       
+       new_attributes[:state_id].present?
+
       country_key = rec.country.key
 
       ###
@@ -158,9 +158,9 @@ class Brewery < ActiveRecord::Base
         ## todo: how to handle nil/empty address lines?
 
         city_title = find_city_in_addr( new_attributes[:address], country_key )
-        
+
         if city_title.present?
-          
+
           ## for czech  - some cleanup
           ##   remove any (remaining) digits in city title
           city_title = city_title.gsub( /[0-9]/, '' ).strip
@@ -168,7 +168,7 @@ class Brewery < ActiveRecord::Base
           city_values = [city_title]
           city_attributes = {
             country_id: rec.country_id,
-            region_id:  rec.region_id
+            state_id:   rec.state_id
           }
           # todo: add convenience helper create_or_update_from_title
           city = City.create_or_update_from_values( city_values, city_attributes )
@@ -194,7 +194,7 @@ class Brewery < ActiveRecord::Base
 
       ## todo/fix: use strip_inline_comments (e.g #() or (()) - why?? why not??)
       #   - allows titles as usual (use new syntax for inline comments e.g. #() or (()) for example)
-      
+
       # remove optional longer title part in () e.g. Las Palmas (de Gran Canaria), Palma (de Mallorca)
       value_brands = TextUtils.strip_subtitles( value_brands )
 
@@ -206,7 +206,7 @@ class Brewery < ActiveRecord::Base
       brand_attribs = {
         brewery_id: rec.id,
         country_id: rec.country_id,
-        region_id:  rec.region_id,
+        state_id:   rec.state_id,
         city_id:    rec.city_id
       }
 
@@ -253,4 +253,3 @@ end # class Brewery
 
   end # module Model
 end # module BeerDb
-

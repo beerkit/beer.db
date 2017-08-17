@@ -46,7 +46,7 @@ class TestFixtureMatchers < MiniTest::Test
   end # method test_country
 
 
-  def test_country_n_region
+  def test_country_n_state
 
     beers_at = [
       'europe/at-austria/w-wien/beers',
@@ -57,9 +57,9 @@ class TestFixtureMatchers < MiniTest::Test
     ]
 
     beers_at.each do |name|
-      found = match_beers_for_country_n_region( name ) do |country_key,region_key|
+      found = match_beers_for_country_n_state( name ) do |country_key,state_key|
         assert( country_key == 'at')
-        assert( region_key  == 'w' )
+        assert( state_key  == 'w' )
       end
       assert( found == true )
     end
@@ -73,13 +73,13 @@ class TestFixtureMatchers < MiniTest::Test
     ]
 
     breweries_at.each do |name|
-      found = match_breweries_for_country_n_region( name ) do |country_key,region_key|
+      found = match_breweries_for_country_n_state( name ) do |country_key,state_key|
         assert( country_key == 'at')
-        assert( region_key  == 'w' )
+        assert( state_key  == 'w' )
       end
       assert( found == true )
     end
-  end # method test_country_n_region
+  end # method test_country_n_state
 
 
 end # class TestFixtureMatchers
