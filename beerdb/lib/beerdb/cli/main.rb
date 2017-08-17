@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-### NOTE: wrap gli config into a class
+### Note: wrap gli config into a class
 ##  see github.com/davetron5000/gli/issues/153
 
 
@@ -8,7 +8,7 @@ module BeerDb
 
   class Tool
      def initialize
-       LogUtils::Logger.root.level = :info   # set logging level to info 
+       LogUtils::Logger.root.level = :info   # set logging level to info
      end
 
      def run( args )
@@ -28,18 +28,19 @@ module BeerDb
    def self.opts=(value)  @@opts = value; end
    def self.opts()        @@opts; end
 
+
    def self.connect_to_db( options )
      puts "working directory: #{Dir.pwd}"
 
-     db_config = {
+     config = {
        adapter: 'sqlite3',
        database: "#{options.db_path}/#{options.db_name}"
      }
 
      puts "Connecting to db using settings: "
-     pp db_config
+     pp config
 
-     ActiveRecord::Base.establish_connection( db_config )
+     BeerDb.connect( config )
 
      LogDb.setup  # start logging to db (that is, save logs in logs table in db)
    end
@@ -47,7 +48,7 @@ module BeerDb
 
 
 logger = LogUtils::Logger.root
-opts   = BeerDb::Opts.new 
+opts   = BeerDb::Opts.new
 
 
 
@@ -82,7 +83,7 @@ command [:build,:b] do |c|
   c.action do |g,o,args|
 
     datafile = Datafile::Datafile.load_file( './Datafile' )
-    datafile.download  # datafile step 1 - download all datasets/zips 
+    datafile.download  # datafile step 1 - download all datasets/zips
 
     connect_to_db( opts )
 
@@ -139,7 +140,7 @@ command [:new,:n] do |c|
 
     ## step 2: same as command build (todo - reuse code)
     datafile = Datafile::Datafile.load_file( './Datafile' )
-    datafile.download  # datafile step 1 - download all datasets/zips 
+    datafile.download  # datafile step 1 - download all datasets/zips
 
     connect_to_db( opts )  ### todo: check let connect go first?? - for logging (logs) to db  ???
 
@@ -157,7 +158,7 @@ desc 'Create DB schema'
 command [:create] do |c|
 
   c.desc 'Extra tables (notes,drinks,marks,users)'
-  c.switch [:extras], negatable: false 
+  c.switch [:extras], negatable: false
 
   c.action do |g,o,args|
 
@@ -193,10 +194,10 @@ command [:setup,:s] do |c|
   c.action do |g,o,args|
 
     connect_to_db( opts )
- 
+
     ## todo: document optional setup profile arg (defaults to all)
     setup = args[0] || 'all'
-    
+
     BeerDb.create_all
 
     WorldDb.read_all( opts.world_data_path )
@@ -216,7 +217,7 @@ command [:update,:up,:u] do |c|
   c.flag [:i,:include]
 
   c.desc 'Delete all beer data records'
-  c.switch [:delete], negatable: false 
+  c.switch [:delete], negatable: false
 
   c.action do |g,o,args|
 
@@ -239,12 +240,12 @@ arg_name 'NAME'   # multiple fixture names - todo/fix: use multiple option
 command [:load, :l] do |c|
 
   c.desc 'Delete all beer data records'
-  c.switch [:delete], negatable: false 
+  c.switch [:delete], negatable: false
 
   c.action do |g,o,args|
 
     connect_to_db( opts )
-    
+
     BeerDb.delete! if o[:delete].present?
 
     reader = BeerDb::Reader.new( opts.data_path )
@@ -287,9 +288,9 @@ command [:serve,:server] do |c|
     ## rack middleware might not work with multi-threaded thin web server; close it ourselfs
     BeerDb::Service.after do
       puts "  #{Thread.current.object_id} -- make sure db connections gets closed after request"
-      # todo: check if connection is open - how? 
+      # todo: check if connection is open - how?
       ActiveRecord::Base.connection.close
-    end    
+    end
 
     BeerDb::Service.run!
 
@@ -302,10 +303,10 @@ desc 'Show stats'
 command :stats do |c|
   c.action do |g,o,args|
 
-    connect_to_db( opts ) 
-    
+    connect_to_db( opts )
+
     BeerDb.tables
-    
+
     puts 'Done.'
   end
 end
@@ -316,10 +317,10 @@ command :props do |c|
   c.action do |g,o,args|
 
     connect_to_db( opts )
-    
+
     ### fix: use ConfDb.props or similar !!!
     ### BeerDb.props
-    
+
     puts 'Done.'
   end
 end
@@ -329,12 +330,12 @@ desc 'Show logs'
 command :logs do |c|
   c.action do |g,o,args|
 
-    connect_to_db( opts ) 
-    
+    connect_to_db( opts )
+
     LogDb::Models::Log.all.each do |log|
       puts "[#{log.level}] -- #{log.msg}"
     end
-    
+
     puts 'Done.'
   end
 end
@@ -352,11 +353,11 @@ command :test do |c|
     pp o
     puts "g (#{g.class.name}):"
     pp g
-    
+
     LogUtils::Logger.root.debug 'test debug msg'
     LogUtils::Logger.root.info 'test info msg'
     LogUtils::Logger.root.warn 'test warn msg'
-    
+
     puts 'Done.'
   end
 end
@@ -373,7 +374,7 @@ pre do |g,c,o,args|
     LogUtils::Logger.root.level = :debug
   end
 
-  logger.debug "Executing #{c.name}"   
+  logger.debug "Executing #{c.name}"
   true
 end
 

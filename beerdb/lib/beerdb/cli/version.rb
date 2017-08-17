@@ -5,9 +5,9 @@
 
 module BeerDbCli    # todo/check - rename to BeerDbTool or BeerDbCommands or BeerDbShell ??
 
-  MAJOR = 0
-  MINOR = 10
-  PATCH = 1
+  MAJOR = 1
+  MINOR = 0
+  PATCH = 0
   VERSION = [MAJOR,MINOR,PATCH].join('.')
 
   def self.version
@@ -23,4 +23,3 @@ module BeerDbCli    # todo/check - rename to BeerDbTool or BeerDbCommands or Bee
   end
 
 end # module BeerDbCli
-

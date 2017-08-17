@@ -9,7 +9,7 @@ Hoe.spec 'beerdb' do
   self.summary = 'beerdb - beer.db command line tool'
   self.description = summary
 
-  self.urls    = ['https://github.com/beerkit/beer.db.ruby']
+  self.urls    = ['https://github.com/beerkit/beer.db']
 
   self.author  = 'Gerald Bauer'
   self.email   = 'beerdb@googlegroups.com'
@@ -19,10 +19,10 @@ Hoe.spec 'beerdb' do
   self.history_file = 'HISTORY.md'
 
   self.extra_deps = [
-    ['beerdb-models', '>= 0.10.0'],
+    ['beerdb-models', '>= 1.1.1'],
 
-    ['datafile', '>= 0.1.1'],
-    ['fetcher', '>= 0.4.4'],
+    ['datafile', '>= 0.2.5'],
+    ['fetcher', '>= 0.4.5'],
 
     ## 3rd party
     ['gli', '>= 2.12.2'],
@@ -32,7 +32,7 @@ Hoe.spec 'beerdb' do
   self.licenses = ['Public Domain']
 
   self.spec_extras = {
-    required_ruby_version: '>= 1.9.2'
+    required_ruby_version: '>= 2.3'
   }
 
 end
