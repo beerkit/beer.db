@@ -1,0 +1,161 @@
+<!--
+   fix/cleanup: move to README or similar
+     remove from gem
+  -->
+
+
+<h1>beer.db JSON(P) API Demo</h1>
+
+<h2>Examples</h2>
+
+<h3>Get beer by key <code>/beer/<span class='params'>:key</span></code></h3>
+
+<table>
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/guinness") %>'>
+        /beer/<span class='params'>guinness</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/murphysred") %>'>
+        /beer/<span class='params'>murphysred</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/brooklynlager") %>'>
+        /beer/<span class='params'>brooklynlager</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+<tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/corona") %>'>
+        /beer/<span class='params'>corona</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/dosequisamber") %>'>
+        /beer/<span class='params'>dosequisamber</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/ottakringerhelles") %>'>
+        /beer/<span class='params'>ottakringerhelles</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+</table>
+
+<h3>Get random beer <code>/beer/<span class='params'>rand</span></code></h3>
+
+<table>
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/beer/rand") %>'>
+        /beer/<span class='params'>rand</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+</table>
+
+
+<h3>Get brewery by key <code>/brewery/<span class='params'>:key</span></code></h3>
+
+<table>
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/guinness") %>'>
+        /brewery/<span class='params'>guinness</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/fuller") %>'>
+        /brewery/<span class='params'>fullers</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/brooklyn") %>'>
+        /brewery/<span class='params'>brooklyn</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+<tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/gmodelo") %>'>
+        /brewery/<span class='params'>gmodelo</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/ottakringer") %>'>
+        /brewery/<span class='params'>ottakringer</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+
+</table>
+
+<h3>Get random brewery <code>/brewery/<span class='params'>rand</span></code></h3>
+
+<table>
+ <tr>
+  <td>
+    <code>
+     <a href='<%= url("/brewery/rand") %>'>
+        /brewery/<span class='params'>rand</span>
+     </a>
+    </code>
+  </td>
+ </tr>
+</table>
+
+
+<%= erb :'_debug' %>
