@@ -99,6 +99,73 @@ module BeerDb
   end
 
 
+  def self.connect( config={} )
+
+    if config.empty?
+      puts "ENV['DATBASE_URL'] - >#{ENV['DATABASE_URL']}<"
+
+      db = URI.parse( ENV['DATABASE_URL'] || 'sqlite3:///beer.db' )
+
+      if db.scheme == 'postgres'
+        config = {
+          adapter: 'postgresql',
+          host: db.host,
+          port: db.port,
+          username: db.user,
+          password: db.password,
+          database: db.path[1..-1],
+          encoding: 'utf8'
+        }
+      else # assume sqlite3
+       config = {
+         adapter: db.scheme, # sqlite3
+         database: db.path[1..-1] # beer.db (Note: cut off leading /, thus 1..-1)
+      }
+      end
+    end
+
+    puts "Connecting to db using settings: "
+    pp config
+    ActiveRecord::Base.establish_connection( config )
+    # ActiveRecord::Base.logger = Logger.new( STDOUT )
+
+
+    ## if sqlite3 add (use) some pragmas for speedups
+    if config[:adapter] == 'sqlite3'
+      if config[:database] == ':memory:'
+        ## do nothing for in memory database; no pragmas needed
+        puts "sqlite3 - no pragmas; using in memory database"
+      else
+        puts "sqlite3 - pragmas for speedup"
+        con = ActiveRecord::Base.connection
+        con.execute( 'PRAGMA synchronous=OFF;' )
+        con.execute( 'PRAGMA journal_mode=OFF;' )
+        con.execute( 'PRAGMA temp_store=MEMORY;' )
+      end
+    end
+  end  # method connect
+
+
+  def self.setup_in_memory_db
+    # Database Setup & Config
+
+    config = {
+      adapter:  'sqlite3',
+      database: ':memory:'
+    }
+
+    pp config
+
+    ActiveRecord::Base.logger = Logger.new( STDOUT )
+    ## ActiveRecord::Base.colorize_logging = false  - no longer exists - check new api/config setting?
+
+    ## Note: every connect will create a new empty in memory db
+    ActiveRecord::Base.establish_connection( config )
+
+    ## build schema
+    BeerDb.create_all
+  end
+
 end  # module BeerDb
 
 

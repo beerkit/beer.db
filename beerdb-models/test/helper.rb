@@ -20,44 +20,11 @@ Brand   = BeerDb::Model::Brand
 Brewery = BeerDb::Model::Brewery
 
 
-def setup_in_memory_db
-  # Database Setup & Config
+BeerDb.setup_in_memory_db()
 
-  db_config = {
-    adapter:  'sqlite3',
-    database: ':memory:'
-  }
+## add some counties
+AT = Country.create!( key: 'at', title: 'Austria', code: 'AUT', pop: 0, area: 0 )
+W  = State.create!( key: 'w', title: 'Wien', country_id: AT.id )
 
-  pp db_config
-
-  ActiveRecord::Base.logger = Logger.new( STDOUT )
-  ## ActiveRecord::Base.colorize_logging = false  - no longer exists - check new api/config setting?
-
-  ## NB: every connect will create a new empty in memory db
-  ActiveRecord::Base.establish_connection( db_config )
-
-
-  ## build schema
-  BeerDb.create_all
-end
-
-
-def fillup_in_memory_db
-  ## add some counties
-
-  at = Country.create!( key: 'at', title: 'Austria', code: 'AUT', pop: 0, area: 0 )
-  State.create!( key: 'w', title: 'Wien', country_id: at.id )
-
-  de = Country.create!( key: 'de', title: 'Germany', code: 'DEU', pop: 0, area: 0 )
-  State.create!( key: 'by', title: 'Bayern', country_id: de.id )
-
-end
-
-setup_in_memory_db()
-fillup_in_memory_db()
-
-AT   =  Country.find_by!( key: 'at' )
-W    =  State.find_by!( key: 'w' )
-
-DE   =  Country.find_by!( key: 'de' )
-BY   =  State.find_by!( key: 'by' )
+DE = Country.create!( key: 'de', title: 'Germany', code: 'DEU', pop: 0, area: 0 )
+BY = State.create!( key: 'by', title: 'Bayern', country_id: DE.id )
