@@ -2,6 +2,6 @@
 
 require 'beerdb'
 
-## todo: set x flag for file
+## note: set x flag for bin/beerdb file
 
 BeerDb.main

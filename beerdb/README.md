@@ -19,7 +19,6 @@
         logs                 Show logs
         props                Show props
         serve                Start web service (HTTP JSON API)
-        setup                Create DB schema 'n' load all data
         stats                Show stats
         test                 Debug/test command suite
 

@@ -3,11 +3,11 @@
 # Note: BeerDb::VERSION gets used by core, that is, beerdb-models
 
 
-module BeerDbCli    # todo/check - rename to BeerDbTool or BeerDbCommands or BeerDbShell ??
+module BeerDbTool    # todo/check - rename to BeerDbCli or BeerDbCommands or BeerDbShell ??
 
   MAJOR = 1
   MINOR = 0
-  PATCH = 0
+  PATCH = 1
   VERSION = [MAJOR,MINOR,PATCH].join('.')
 
   def self.version
@@ -22,4 +22,4 @@ module BeerDbCli    # todo/check - rename to BeerDbTool or BeerDbCommands or Bee
     "#{File.expand_path( File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) )}"
   end
 
-end # module BeerDbCli
+end # module BeerDbTool

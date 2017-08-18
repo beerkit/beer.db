@@ -4,7 +4,7 @@ require './lib/beerdb/cli/version.rb'
 
 Hoe.spec 'beerdb' do
 
-  self.version = BeerDbCli::VERSION
+  self.version = BeerDbTool::VERSION
 
   self.summary = 'beerdb - beer.db command line tool'
   self.description = summary
@@ -20,6 +20,7 @@ Hoe.spec 'beerdb' do
 
   self.extra_deps = [
     ['beerdb-models', '>= 1.1.1'],
+    ['beerdb-note', '>= 0.0.1' ],    ## (auto-)add notes extension / addon too
 
     ['datafile', '>= 0.2.5'],
     ['fetcher', '>= 0.4.5'],
