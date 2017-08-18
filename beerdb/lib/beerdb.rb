@@ -1,7 +1,8 @@
 # encoding: utf-8
 
-require 'beerdb/models'   # Note: pull in all required deps via beerdb-models
 
+require 'beerdb/models'   # Note: pull in all required deps via beerdb-models
+require 'beerdb/note'     # add extension/addon for notes etc.
 
 require 'fetcher'
 require 'datafile'
