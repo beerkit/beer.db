@@ -20,39 +20,38 @@ BeerDb.tables   ## print table stats
 
 
 
-class BeerService < Webservice::Base
+class BeerDbService < Webservice::Base
   include BeerDb::Models   # e.g. Beer, Brewery, Brand, etc.
 
-  puts "hello from class BeerService"
+  puts "hello from class #{self.name}"
 
 
   def self.hello
-     puts "!!! hello from hello"
+     puts "hello from method self.hello"
 
      pp Beer.count
      pp Beer.rnd
+
+     puts "[debug] hello self name:>#{self.name}< object_id:(#{self.object_id})"
   end
 end
 
 
 
-def load_file( path )
-    code = File.open( path, 'r:bom|utf-8' ).read
-
-    app_class = Class.new( BeerService )
-    app_class.instance_eval( code )  ## use class_eval ??
-    app_class
+def read_code( path )
+  File.open( path, 'r:bom|utf-8' ).read
 end
 
 
-## builder = Webservice::Builder.load_file( './script/service/starter.rb' )
-## try to include BeerDb::Models
-## builder.app_class.include BeerDb::Models
+code = read_code( './script/service/starter.rb' )
 
-app_class = load_file( './script/service/starter.rb' )
+BeerDbService.class_eval( code )  ## note: MUST use class_eval (do NOT use instance_eval)  !!!
+
+app_class = BeerDbService
 
 puts "app_class:"
 pp app_class
+pp app_class.superclass
 
 #############
 # for testing startup server

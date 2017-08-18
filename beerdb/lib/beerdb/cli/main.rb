@@ -275,6 +275,40 @@ end
 
 
 
+desc 'Start web service (HTTP JSON API)'
+arg_name 'NAME'   # optional setup profile name
+command [:serve,:server,:s] do |c|
+
+  c.action do |g,o,args|
+
+    ## todo: document optional script arg (defaults to service)
+    script = args[0] || 'service'
+
+    script_path = "#{script}.rb"   ## auto-add .rb extension
+    ###############
+    ## todo/fix: add fetch if not found locally!!!
+
+    ## fix: use textutils File.read_utf8 !!!!
+    code = File.open( script_path, 'r:bom|utf-8' ).read
+
+    connect_to_db( opts )
+
+    BeerDb.tables   ## print table stats
+
+    BeerDbService.class_eval( code )  ## note: MUST use class_eval (do NOT use instance_eval)  !!!
+
+    puts "dump routes:"
+    pp BeerDbService.routes
+
+    puts "starting server..."
+    BeerDbService.run!
+
+    puts 'Done.'
+  end
+end # command serve
+
+
+
 desc '(Debug) Test command suite'
 command :test do |c|
   c.action do |g,o,args|

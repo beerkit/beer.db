@@ -4,6 +4,8 @@
 require 'beerdb/models'   # Note: pull in all required deps via beerdb-models
 require 'beerdb/note'     # add extension/addon for notes etc.
 
+require 'webservice'
+
 require 'fetcher'
 require 'datafile'
 
@@ -23,6 +25,15 @@ module BeerDb
   end
 
 end  # module BeerDb
+
+
+####
+##  used for server/service command
+##   "preconfigured" base class for webservice
+class BeerDbService < Webservice::Base
+  include BeerDb::Models   # e.g. Beer, Brewery, Brand, etc.
+end
+
 
 
 BeerDb.main  if __FILE__ == $0

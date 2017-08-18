@@ -24,6 +24,7 @@ Hoe.spec 'beerdb' do
 
     ['datafile', '>= 0.2.5'],
     ['fetcher', '>= 0.4.5'],
+    ['webservice', '>= 0.2.1'],
 
     ## 3rd party
     ['gli', '>= 2.12.2'],
