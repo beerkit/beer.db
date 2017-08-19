@@ -4,11 +4,11 @@
 hello()
 
 
-puts "[debug] eval (top) self name:>#{self.name}< object_id:(#{self.object_id})"
+puts "[debug] eval (top) self = #<#{self.name}:#{self.object_id}>"
 
 get '/hello' do
 
-  puts "[debug] eval (get /hello) self.class name:>#{self.class.name}< object_id:(#{self.class.object_id})"
+  puts "[debug] eval (get /hello) self.class = #<#{self.class.name}:#{self.class.object_id}>"
 
   data = { text: 'hello' }
   data
@@ -17,7 +17,7 @@ end
 
 get '/test' do
 
-  puts "[debug] eval (get /test) self.class name:>#{self.class.name}< object_id:(#{self.class.object_id})"
+  puts "[debug] eval (get /test) self.class = #<#{self.class.name}:#{self.class.object_id}>"
 
   pp Beer.count
 
@@ -44,23 +44,19 @@ get '/t3' do
 end
 
 
-get '/beer/:key' do
+get '/beer/(r|rnd|rand|random)' do   # special keys for random beer
+  Beer.rnd
+end
 
-  if ['r', 'rnd', 'rand', 'random'].include?( params['key'] )
-    # special key for random beer
-    beer = Beer.rnd
-  else
-    beer = Beer.find_by_key!( params['key'] )
-  end
+get '/beer/:key' do
+  Beer.find_by!( key: params['key'] )
 end
 
 
-get '/brewery/:key' do
+get '/brewery/(r|rnd|rand|random)' do   # special keys for random brewery
+  Brewery.rnd
+end
 
-  if ['r', 'rnd', 'rand', 'random'].include?( params['key'] )
-    # special key for random brewery
-    brewery = Brewery.rnd
-  else
-    brewery = Brewery.find_by_key!( params['key'] )
-  end
+get '/brewery/:key' do
+  Brewery.find_by!( key: params['key'] )
 end

@@ -32,33 +32,22 @@ class BeerDbService < Webservice::Base
      pp Beer.count
      pp Beer.rnd
 
-     puts "[debug] hello self name:>#{self.name}< object_id:(#{self.object_id})"
+     puts "[debug] hello self = #<#{self.name}:#{self.object_id}>"
   end
 end
 
 
 
-def read_code( path )
-  File.open( path, 'r:bom|utf-8' ).read
-end
-
-
-code = read_code( './script/service/starter.rb' )
+code = File.read_utf8( './script/service/starter.rb' )
 
 BeerDbService.class_eval( code )  ## note: MUST use class_eval (do NOT use instance_eval)  !!!
-
-app_class = BeerDbService
-
-puts "app_class:"
-pp app_class
-pp app_class.superclass
 
 #############
 # for testing startup server
 
 puts "dump routes:"
-pp app_class.routes
+pp BeerDbService.routes
 
 puts "starting server..."
-app_class.run!
+BeerDbService.run!
 puts "bye"

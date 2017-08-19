@@ -288,8 +288,7 @@ command [:serve,:server,:s] do |c|
     ###############
     ## todo/fix: add fetch if not found locally!!!
 
-    ## fix: use textutils File.read_utf8 !!!!
-    code = File.open( script_path, 'r:bom|utf-8' ).read
+    code = File.read_utf8( script_path )
 
     connect_to_db( opts )
 
