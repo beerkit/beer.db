@@ -7,10 +7,13 @@ module BeerDb::Model
     def initialize( beer )
       @beer = beer
     end
-    
+
     attr_reader :beer
-    
+
     def as_json
+      ## note: as_json returns record as a hash
+      ##   note: NOT yet converted with to_json or JSON.pretty_generate etc.
+
       brewery = {}
       if beer.brewery.present?
         brewery = { key: beer.brewery.key,
@@ -36,8 +39,8 @@ module BeerDb::Model
                tags:     tags,
                brewery: brewery,
                country: country }
-      
-      data.to_json
+
+      data
     end
 
   end # class BeerSerializer
