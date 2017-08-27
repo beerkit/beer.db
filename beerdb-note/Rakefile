@@ -8,7 +8,7 @@ Hoe.spec 'beerdb-note' do
   self.summary = 'beerdb-note gem - beer.db addon for notes, bookmarks, drinks, etc.'
   self.description = summary
 
-  self.urls = ['https://github.com/beerkit/beer.db.note.ruby']
+  self.urls = ['https://github.com/beerkit/beer.db']
 
   self.author = 'Gerald Bauer'
   self.email = 'beerdb@googlegroups.com'
@@ -19,8 +19,12 @@ Hoe.spec 'beerdb-note' do
 
   self.licenses = ['Public Domain']
 
+  self.extra_deps = [
+    ['beerdb-models', '>= 1.2.0']
+  ]
+
   self.spec_extras = {
-   :required_ruby_version => '>= 1.9.2'
+   :required_ruby_version => '>= 2.3'
   }
 
 end

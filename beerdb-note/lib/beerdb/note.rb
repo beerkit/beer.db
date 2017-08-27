@@ -1,14 +1,15 @@
 # encoding: utf-8
 
 ###
-# note: it's an addon to beerdb (get all libs via beerdb)
-require 'beerdb'
+# note: it's an addon to beerdb (get all libs via beerdb-models)
+require 'beerdb/models'
 
 
 # our own code
 
 require 'beerdb/note/version' # let it always go first
 
+require 'beerdb/note/schema'
 require 'beerdb/note/models/forward'
 require 'beerdb/note/models/user'
 require 'beerdb/note/models/drink'
@@ -32,4 +33,3 @@ end # module BeerDbNote
 
 
 puts BeerDbNote.banner   # say hello
-

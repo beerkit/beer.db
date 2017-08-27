@@ -5,6 +5,5 @@
 #   - note is the name of a model(!) - lets avoid confusion
 
 module BeerDbNote
-  VERSION = '0.0.1'
+  VERSION = '0.1.0'
 end
-

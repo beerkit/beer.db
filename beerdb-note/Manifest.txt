@@ -3,4 +3,12 @@ Manifest.txt
 README.md
 Rakefile
 lib/beerdb/note.rb
+lib/beerdb/note/models/bookmark.rb
+lib/beerdb/note/models/drink.rb
+lib/beerdb/note/models/forward.rb
+lib/beerdb/note/models/note.rb
+lib/beerdb/note/models/user.rb
+lib/beerdb/note/schema.rb
 lib/beerdb/note/version.rb
+test/helper.rb
+test/test_extras.rb
