@@ -19,12 +19,12 @@ Hoe.spec 'beerdb' do
   self.history_file = 'HISTORY.md'
 
   self.extra_deps = [
-    ['beerdb-models', '>= 1.1.1'],
-    ['beerdb-note',   '>= 0.0.1'],    ## (auto-)add notes extension / addon too
+    ['beerdb-models', '>= 1.2.0'],
+    ['beerdb-note',   '>= 0.1.0'],    ## (auto-)add notes extension / addon too
 
     ['datafile',   '>= 0.2.5'],
     ['fetcher',    '>= 0.4.5'],
-    ['webservice', '>= 0.3.1'],
+    ['webservice', '>= 0.5.0'],
 
     ## 3rd party
     ['gli', '>= 2.12.2'],
