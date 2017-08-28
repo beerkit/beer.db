@@ -284,9 +284,15 @@ command [:serve,:server,:s] do |c|
     ## todo: document optional script arg (defaults to service)
     script = args[0] || 'service'
 
-    script_path = "#{script}.rb"   ## auto-add .rb extension
-    ###############
-    ## todo/fix: add fetch if not found locally!!!
+    script_path = "#{script}.rb"     ## auto-add .rb extension
+
+    unless File.exist?( script_path ) ## if file doesn't exist try to fetch service script
+      script_path = "./#{script}.rb"   ## use / save script in local (current) working dir/folder
+      worker = Fetcher::Worker.new
+      ## note: lets use http:// instead of https:// for now - lets us use person proxy (NOT working w/ https for now)
+      worker.copy( "http://github.com/beerkit/beer.db.service/raw/master/#{script}.rb", script_path )
+    end
+
 
     code = File.read_utf8( script_path )
 
