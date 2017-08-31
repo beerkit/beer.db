@@ -69,7 +69,20 @@ class BeerDbService < Webservice::Base
   get '/logs(.:format)?' do
     LogDb::Models::Log.all
   end
-end
+
+
+  ## add favicon support
+  get '/favicon.ico' do
+    ## use 302 to redirect
+    ##  note: use strg+F5 to refresh page (clear cache for favicon.ico)
+    redirect '/webservice-beerdb-32x32.png'
+  end
+
+  get '/webservice-beerdb-32x32.png' do
+    send_file "#{BeerDbTool.root}/assets/webservice-beerdb-32x32.png"
+  end
+
+end  # class BeerDbService
 
 
 

@@ -284,6 +284,8 @@ command [:serve,:server,:s] do |c|
     ## todo: document optional script arg (defaults to service)
     script = args[0] || 'service'
 
+    ## todo/fix: add support for (default) Service (with no extension)
+
     script_path = "#{script}.rb"     ## auto-add .rb extension
 
     unless File.exist?( script_path ) ## if file doesn't exist try to fetch service script

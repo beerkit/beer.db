@@ -2,6 +2,7 @@ HISTORY.md
 Manifest.txt
 README.md
 Rakefile
+assets/webservice-beerdb-32x32.png
 bin/beerdb
 lib/beerdb.rb
 lib/beerdb/cli/main.rb
