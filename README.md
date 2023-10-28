@@ -7,6 +7,12 @@ Gem Family:
 - [beerdb-note](beerdb-note) - beer.db addon for notes, bookmarks, drinks, etc.
 
 
+More:
+
+- [beerdb-service](beerdb-service) - beer.db HTTP JSON API (web service) scripts 
+
+
+
 
 ## Free Open Public Domain Datasets
 
@@ -15,8 +21,6 @@ Gem Family:
 
 
 ## License
-
-![](https://publicdomainworks.github.io/buttons/zero88x31.png)
 
 The `beerdb` scripts are dedicated to the public domain.
 Use it as you please with no restrictions whatsoever.
