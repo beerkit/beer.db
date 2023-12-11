@@ -1,0 +1,23 @@
+
+<% breweries_count = country.breweries.count
+ %>
+
+<% if breweries_count > 0 %>
+<p>
+    <span class='region-key'><%= country.key %></span>
+    <%= country.title %>
+    <span class='beer-count'>(<%= breweries_count %>)</span>
+</p>
+
+<tr>
+  <td>
+    <% country.breweries.order(:key).each_with_index do |brewery,i| %>
+       <% if i > 0 %>
+         &bull;
+       <% end %>
+       <%= link_to brewery.title, short_brewery_path( brewery ) %>
+    <% end %>
+  </td>
+</tr>
+<% end %><!-- if breweries_count > 0 -->
+

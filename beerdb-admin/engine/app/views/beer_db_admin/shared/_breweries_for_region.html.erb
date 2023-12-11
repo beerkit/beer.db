@@ -1,0 +1,30 @@
+
+<% breweries_count = region.breweries.count
+ %>
+
+<% if breweries_count > 0 %>
+<p>
+    <span class='region-key'><%= region.key %></span>
+    <%= link_to_region( region ) %>
+    <% if region.abbr.present? %>
+           <!-- fix: check if abbr is same as title
+                 or lowercase is same as key  e.g. NY == ny or similar ??
+                - if yes, do NOT print -->
+        , <%= region.abbr %>
+    <% end %>
+    <span class='beer-count'>(<%= breweries_count %>)</span>
+</p>
+
+<tr>
+  <td>
+    <% region.breweries.order(:key).each_with_index do |brewery,i| %>
+       <% if i > 0 %>
+         &bull;
+       <% end %>
+       <!-- todo: add a href title  -- use address for hover  if present -->
+       <%= link_to_brewery( brewery ) %>
+    <% end %>
+  </td>
+</tr>
+<% end %><!-- if breweries_count > 0 -->
+

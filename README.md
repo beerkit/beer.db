@@ -10,6 +10,8 @@ Gem Family:
 More:
 
 - [beerdb-service](beerdb-service) - beer.db HTTP JSON API (web service) scripts 
+- [beerdb-admin](beerdb-admin) - open beer database (beer.db) web admin tool in ruby on rails (version 3.2 and up)
+
 
 
 

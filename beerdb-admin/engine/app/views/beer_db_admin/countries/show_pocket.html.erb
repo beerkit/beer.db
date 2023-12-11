@@ -1,0 +1,111 @@
+
+<h3>
+<%= image_tag_for_country( @country, size: '64x64' ) %>
+
+<!-- fix: use full_title e.g. is title (code) -->
+<%= @country.title %> 
+(<%= @country.code %>), 
+
+ <%= @country.breweries.count %> Breweries,
+ <%= @country.beers.count %> Beers   (Pocket)
+</h3>
+
+
+<p>
+  Sort By: <%= link_to 'Key A-Z', short_country_path( @country, style: 'pocket', order: 'key' ) %>
+          &bull;
+        <%= link_to 'Title A-Z', short_country_path( @country, style: 'pocket', order: 'title' ) %>
+          &bull;
+        <%= link_to 'Address', short_country_path( @country, style: 'pocket', order: 'adr' ) %>
+          &bull;
+        <%= link_to 'Production/Capacity (in hl)', short_country_path( @country, style: 'pocket', order: 'hl' ) %>
+
+   | Style: <%= link_to 'Standard', short_country_path( @country ) %>
+
+</p>
+
+
+<table>
+
+
+<!-- for now add section for uncategorized breweries (e.g. w/o region; region missing)
+  -->
+
+   <% breweries_missing_regions = @country.breweries.where( 'region_id is null').order( @order_clause )
+      breweries_missing_regions_count = breweries_missing_regions.count
+      
+      if  breweries_missing_regions_count > 0
+    %>
+
+     <tr>
+      <td colspan='3' style='background-color: silver;'>
+          <b>Uncategorized</b>
+        <span class='city-count'>
+          (<%= @country.breweries.where( 'region_id is null').count %>)
+        </span>
+      </td>
+     </tr>
+     
+   <% breweries_missing_regions.each do |brewery| %>
+    <tr>
+      <td style='vertical-align: baseline;'>
+        <span class='city-count'>
+          <% if brewery.web.present? %>
+            <%= link_to brewery.web, "http://#{brewery.web}" %>
+          <% end %>
+        </span>
+      </td>
+      <td style='vertical-align: baseline;'>
+        <%= link_to_brewery( brewery ) %>
+          
+          | <%= brewery.founded %>
+          |
+          <span class='city-count'>
+          <%= brewery.address %>
+          </span>
+          | <%= render_brewery_tags( brewery ) %>
+      </td>
+    </tr>
+   <% end %><!-- each brewery -->
+   <% end %><!-- if breweries_missing_regions_count > 0 -->
+
+
+  <% @country.regions.each do |region| %>
+     <tr>
+      <td colspan='3' style='background-color: silver;'>
+        <!-- use class region-key -->
+        <span class='city-count'>
+          <%= region.key %>
+        </span>
+        
+        <%= region.title_w_synonyms %>
+        <span class='city-count'>
+          (<%= region.breweries.count %>)
+        </span>
+      </td>
+     </tr>
+
+   <% region.breweries.order( @order_clause ).each do |brewery| %>
+    <tr>
+      <td style='vertical-align: baseline;'>
+        <span class='city-count'>
+          <% if brewery.web.present? %>
+            <%= link_to brewery.web, "http://#{brewery.web}" %>
+          <% end %>
+        </span>
+      </td>
+      <td style='vertical-align: baseline;'>
+        <%= link_to_brewery( brewery) %>
+          
+          | <%= brewery.founded %>
+          |
+          <span class='city-count'>
+          <%= brewery.address %>
+          </span>
+          | <%= render_brewery_tags( brewery ) %>
+      </td>
+    </tr>
+   <% end %><!-- each brewery -->
+  <% end %> <!-- each region -->
+
+</table>

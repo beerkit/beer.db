@@ -1,0 +1,70 @@
+
+<% beer = @beer
+ %>
+
+
+<!-- fix: use beer-key  -- add to css -->
+<span class='brewery-key'><%= beer.key %></span>
+
+<h3 style='margin-top: 0;'>
+  <%= beer.title %>
+  ||
+  <%= link_to_country( beer.country, flag: true ) %>
+</h3>
+
+
+<p>
+    <!-- todo ? move synonyms up to header ???
+     -->
+<% if beer.synonyms.present? %>
+   <%= beer.synonyms %> /
+<% end %>
+     
+<% if beer.abv.present? %>
+  Alk. <%= beer.abv %>
+<% else %>
+  -
+<% end %>
+  %
+    
+<% if beer.plato.present? %>
+  &bull; <%= beer.plato %>° Plato
+<% end %>
+
+
+<% if beer.tags.count > 0 %>
+  /
+  <%= render_tags( beer.tags ) %>
+<% end %>
+
+</p>
+
+
+
+<% if beer.brewery.present? %>
+<p>
+ By  <%= link_to_brewery( beer.brewery ) %> |
+     <%= beer.brewery.founded %> ||
+     <%= beer.brewery.address %>
+</p>
+<% else %>
+  <!-- nothing -->
+<% end %>
+
+
+<hr>
+<% if beer.brewery.present? %>
+<p>
+  <% beer.brewery.beers.order(:key).each_with_index do |beer,i| %>
+       <% if i > 0 %>
+         &bull;
+       <% end %>
+       <%= link_to_beer( beer ) %>
+  <% end %>
+</p>
+<% end %>
+
+
+<hr>
+<%= render_world_tree( beer ) %>
+

@@ -1,0 +1,26 @@
+
+<% breweries_count = city.breweries.count
+ %>
+
+<% if breweries_count > 0 %>
+<p>
+    <span class='region-key'><%= city.key %></span>
+    <%= link_to_city( city ) %>
+    <span class='beer-count'>(<%= breweries_count %>)</span>
+</p>
+
+<!-- todo/fix:
+  reuse use new partial render_breweries
+  -->
+<tr>
+  <td>
+    <% city.breweries.order(:key).each_with_index do |brewery,i| %>
+       <% if i > 0 %>
+         &bull;
+       <% end %>
+       <!-- todo: add a href title  -- use address for hover  if present -->
+       <%= link_to_brewery( brewery ) %>
+    <% end %>
+  </td>
+</tr>
+<% end %><!-- if breweries_count > 0 -->

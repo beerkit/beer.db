@@ -1,0 +1,50 @@
+
+<% countries.each do |country| %>
+
+<% beers_count     = country.beers.count
+   breweries_count = country.breweries.count %>
+
+<% if beers_count > 0 || breweries_count > 0 %>
+<div>
+    <span class='country-key'><%= country.key %></span>
+    <%= link_to_country( country, flag: true ) %>
+    (<%= country.code %>)
+
+    <span class='country-key'>
+    -
+    <%= beers_count %> Beers,
+    <%= breweries_count %> Breweries
+    </span>
+</div>
+<% end %>
+
+
+<!-- fix: move to beer partial or similar;
+    not use now, thaus > 10000 -->
+<% if beers_count > 10000 %>
+<div>
+  <% country.beers.each_with_index do |beer,i| %>
+       <% if i > 0 %>
+         &bull; 
+       <% end %>
+       <%= link_to_beer( beer ) %>
+    <% end %>
+    <span class="beer-count">(<%= beers_count %>)</span>
+</div>
+<% end %><!-- if beers_count > 0 -->
+
+
+<% if breweries_count > 10000 %>
+<div>
+  <% country.breweries.each_with_index do |brewery,i| %>
+       <% if i > 0 %>
+         &bull; 
+       <% end %>
+       <%= brewery.title %>
+  <% end %>
+  <span class="beer-count">(<%= breweries_count %>)</span>
+</div>
+<% end %><!-- if breweries_count > 0 -->
+
+<% end %><!-- each country -->
+

@@ -1,0 +1,79 @@
+
+<% brewery = @brewery
+ %>
+
+
+<span class='brewery-key'><%= brewery.key %></span>
+
+<h3 style='margin-top: 0;'>
+  <%= brewery.title %>
+
+  <% if brewery.synonyms.present? %>
+    • <%= brewery.synonyms.gsub( '|', ' • ') %>
+  <% end %>
+
+  <% if brewery.founded.present? %>
+    | <%= brewery.founded %> 
+  <% end %>
+  
+  ||
+  <%= link_to_country( brewery.country, flag: true ) %>
+
+  - <%= brewery.beers.count %> Beers
+
+<% if brewery.tags.count > 0 %>
+  <span class='tags tag-list'>
+  <%= render_tags( brewery.tags ) %>
+  </span>
+<% end %>
+
+</h3>
+
+<!-- add some quick search services for convenience
+   fix: move to shared ?? use render_brewery_actions() ???
+-->
+<%= render partial: 'actions', locals: { brewery: brewery } %>
+
+
+<p>
+  <%= brewery.address %>
+</p>
+
+<% if brewery.web.present? %>
+  <p class='city-count'>
+    <%= link_to brewery.web, "http://#{brewery.web}" %>
+  </p>
+<% end %>
+
+
+<!-- add all beers -->
+<hr>
+<ul>
+  <% brewery.beers.each do |beer| %>
+    <li>
+      <%= render_beer( beer ) %>
+    </li>
+  <% end %>
+</ul>
+
+
+<hr>
+<% if brewery.city.present? %>
+  <!-- check number of breweries !!! only if more than one!!! -->
+  <%= render_breweries_for_city( brewery.city ) %>
+<% end %>
+
+
+<hr>
+
+<% if brewery.region.present? %>
+  <%= render_breweries_for_region( brewery.region ) %>
+<% else %>
+  <%= render_breweries_for_country( brewery.country ) %>
+<% end %><!-- if brewery.region.present? -->
+
+
+<hr>
+
+<%= render_world_tree( brewery ) %>
+

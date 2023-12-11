@@ -1,0 +1,26 @@
+
+<div>
+  <% if city.present? %>
+    <%= link_to_city( city ) %>
+  <% else %>
+    -
+  <% end %>
+    ›
+  <% if region.present? %>
+    <%= link_to_region( region ) %>
+    <% if region.abbr.present? %>
+           <!-- fix: check if abbr is same as title
+                 or lowercase is same as key  e.g. NY == ny or similar ??
+                - if yes, do NOT print
+                -->
+          <!-- fix move into link_to_region!!!  w/ option abbr: true
+            -->
+        • <%= region.abbr %>
+    <% end %>
+  <% else %>
+    -
+  <% end %>
+    ›  
+  <%= link_to_country( country, flag: show_flag ) %>
+</div>
+

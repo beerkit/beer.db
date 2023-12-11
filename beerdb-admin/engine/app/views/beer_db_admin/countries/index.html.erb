@@ -1,0 +1,24 @@
+
+<h3>Countries</h3>
+
+<p>
+<% Continent.all.each_with_index do |continent,i| %>
+   <% if i > 0 %>
+      &bull;
+   <% end %>
+    <%= link_to continent.title, "##{continent.key}" %>
+<% end %>
+</p>
+
+
+<% Continent.all.each do |continent| %>
+
+<a name="<%= continent.key %>"></a>
+<h4>
+  <%= continent.title %>
+</h4>
+
+<p>
+   <%= render_countries( continent.countries.order(:name) ) %>
+</p>
+<% end %><!-- each continent-->

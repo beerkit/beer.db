@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- check/fix: needs beer_db_admin reference ?? -->
+  <%= render partial: 'layouts/beer_db_admin/header' %>
+</head>
+<body>
+
+
+<div class='navbar'>
+<table width='100%' cellspacing=0>
+  <tr>
+    <!-- left -->
+    <td>
+      <span class='logo'>
+      
+       <%#= link_to '[Logo]', beers_path() %>
+       open public domain data | beer.db -
+         <%= Beer.count %> beers,
+         <%= Brand.count %> brands,
+         <%= Brewery.count %> breweries
+         in
+         ?? countries
+
+      </span> &nbsp;&nbsp;&nbsp;
+      
+      <% if content_for? :breadcrumb %>
+        <span class='breadcrumb-inline'>
+          <%= yield :breadcrumb %>
+        </span>
+      <% end %>
+    </td>
+    <!-- right -->
+    <td style='text-align: right;'>
+    </td>
+  </tr>
+</table>
+</div>
+
+<p>
+
+  <%= link_to 'Countries', countries_path() %>  &bull;
+ <!--
+ <%= link_to 'Regions', regions_path() %>  &bull;
+   -->
+  <%= link_to 'Beers', beers_path() %>  &bull;
+  <%= link_to 'Brands', brands_path() %>  &bull;
+  <%= link_to 'Breweries', breweries_path() %>  &bull;
+  <%= link_to 'Tags', tags_path() %>    &bull;
+  <%= link_to 'About', about_path() %>
+.::.
+
+  <!-- fix: use named url_helper for /api -->
+  <%= link_to "Web Service / HTTP JSON API", '/api' %>
+
+.::.
+
+   <%= link_to 'Update Data (Edit Me!)', 'https://github.com/openbeer/world' %>
+
+</p>
+
+
+
+
+<div class='content' style='padding: 0px 20px 0px 20px;'>
+
+  <%= render partial: 'layouts/beer_db_admin/flash', locals: { flash: flash } %>
+
+  <%= yield %>
+
+</div>
+
+
+<div class='version'>
+  <%= powered_by %>
+</div>
+
+</body>
+</html>

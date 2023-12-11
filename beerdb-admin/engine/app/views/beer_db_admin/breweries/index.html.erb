@@ -1,0 +1,48 @@
+<% breweries = @breweries
+ %>
+
+<h3><%= Brewery.count %> Breweries</h3>
+<!-- todo: add display/page count e.g. 25 -->
+
+<p>
+  Sort By: <%= link_to 'Key A-Z', breweries_path( order: 'key' ) %>
+          &bull;
+        <%= link_to 'Title A-Z', breweries_path( order: 'title' ) %>
+          &bull;
+        <%= link_to 'Production/Capacity (in hl)', breweries_path( order: 'hl' ) %>
+</p>
+
+
+<table>
+<% breweries.each do |brewery| %>
+<tr>
+  <td class='brewery-key'><%= brewery.key %></td>
+
+
+  <td>
+    <%= link_to_brewery( brewery ) %>
+    <% if brewery.synonyms.present? %>
+       | <%= brewery.synonyms %>
+    <% end %>
+
+    <%= render_brewery_tags( brewery ) %>
+
+  </td>
+  <td>
+    
+    <!-- fix: add option flag: true -->
+    <%= render_world_tree( brewery, flag: true ) %>
+    
+   </td>
+</tr>
+
+<tr>
+  <td></td>
+  <td colspan='2'>
+    <%= render_beers( brewery.beers ) %>
+  </td>
+</tr>
+
+<% end %>
+</table>
+

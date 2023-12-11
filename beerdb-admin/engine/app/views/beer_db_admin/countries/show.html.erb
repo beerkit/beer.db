@@ -1,0 +1,128 @@
+<% country = @country
+ %>
+
+<h3>
+<%= image_tag_for_country( @country, size: '64x64' ) %>
+
+<!-- fix: use full_title e.g. is title (code) -->
+<%= @country.title %> 
+(<%= @country.code %>)
+  - 
+ <%= @country.beers.count %> Beers,
+ <%= @country.breweries.count %> Breweries
+</h3>
+
+
+<!-- add intra-page links here -->
+<p>
+  <% country.regions.each_with_index do |region,i| %>
+    <% if i > 0 %>
+      &bull; 
+    <% end %>
+    <%= link_to region.title, "##{region.key}" %>
+    <span class='city-count'>
+      (<%= region.breweries.count %>)
+    </span>
+
+  <% end %>
+  
+  <!-- check for uncategorized breweries (no region) -->
+  <% uncategorized_breweries_count = country.breweries.where( 'region_id is null').count %>
+  <% if uncategorized_breweries_count > 0 %>
+    &bull;
+    <b> Uncategorized
+    <span class='city-count'>
+      (<%= uncategorized_breweries_count %>)
+    </span>
+    </b>
+  <% end %>
+
+</p>
+
+
+
+<p>
+  Sort By: <%= link_to 'Key A-Z', short_country_path( @country, order: 'key' ) %>
+          &bull;
+        <%= link_to 'Title A-Z', short_country_path( @country, order: 'title' ) %>
+          &bull;
+        <%= link_to 'Address', short_country_path( @country, order: 'adr' ) %>
+          &bull;
+        <%= link_to 'Production/Capacity (in hl)', short_country_path( @country, order: 'hl' ) %>
+
+   | Style: <%= link_to 'Pocket', short_country_path( @country, style: 'pocket' ) %>
+
+</p>
+
+<table>
+
+  <%
+      beers_missing_breweries = @country.beers.where( 'brewery_id is null' ).order( @order_clause )
+      beers_missing_breweries_count = beers_missing_breweries.count
+  
+      if beers_missing_breweries_count > 0
+   %>
+   <tr>
+     <td><b>Uncategorized</b></td>
+     <td></td>
+      <td style='vertical-align: baseline;'>
+        <%= render_beers( beers_missing_breweries ) %>
+      </td>
+   </tr>
+   <% end %>
+
+
+<!-- for now add section for uncategorized breweries (e.g. w/o region; region missing)
+  -->
+
+   <% breweries_missing_regions = @country.breweries.where( 'region_id is null').order( @order_clause )
+      breweries_missing_regions_count = breweries_missing_regions.count
+      
+      if  breweries_missing_regions_count > 0
+    %>
+
+     <tr>
+      <td colspan='3' style='background-color: silver;'>
+          <b>Uncategorized</b>
+        <span class='city-count'>
+          (<%= @country.breweries.where( 'region_id is null').count %>)
+        </span>
+      </td>
+     </tr>
+     
+     <%= render_breweries_table_rows( breweries_missing_regions ) %>
+   <% end %><!-- if breweries_missing_regions_count > 0 -->
+
+
+
+  <% @country.regions.each do |region| %>
+     <tr>
+      <td style='background-color: silver;'></td>
+      <td colspan='2' style='background-color: silver; font-size: 130%;'>
+        <!-- use class region-key -->
+        <span class='city-count'>
+          <%= region.key %>
+        </span>
+        
+        <a name='<%= region.key %>'></a>
+        <%= link_to region.title_w_synonyms, short_region_path(region) %>
+        
+        <% if region.abbr.present? %>
+           <!-- fix: check if abbr is same as title
+                 or lowercase is same as key  e.g. NY == ny or similar ??
+                - if yes, do NOT print -->
+           , <%= region.abbr %>
+        <% end %>
+
+        <span class='city-count'>
+          (<%= region.breweries.count %>)
+        </span>
+
+      </td>
+     </tr>
+
+   <%= render_breweries_table_rows_for_region( region ) %>
+  <% end %> <!-- each region -->
+
+
+</table>

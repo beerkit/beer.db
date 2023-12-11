@@ -1,0 +1,36 @@
+
+<!--
+   render beer in a single line
+   -- todo: add more formats: compact|full|???
+  -->
+
+<%= link_to_beer( beer ) %>
+
+<% if beer.synonyms.present? %>
+  &bull; <%= beer.synonyms %>
+<% end %>
+
+/
+
+<% if beer.abv.present? %>
+  <%= beer.abv %>
+<% else %>
+   -
+<% end %>
+%
+
+<% if beer.plato.present? %>
+  / <%= beer.plato %>°
+<% end %>
+
+<% if beer.tags.count > 0 %>
+  /
+  <span class='tags'>
+    <% beer.tags.each_with_index do |tag,i| %>
+      <% if i > 0 %>
+         &bull; 
+      <% end %>
+      <%= tag.key %>
+    <% end %>
+  </span>
+<% end %>

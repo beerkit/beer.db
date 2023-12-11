@@ -1,0 +1,51 @@
+<% beers = @beers
+ %>
+
+
+<h3><%= Beer.count %> Beers</h3>
+<!-- todo: add display/page count e.g. 25 -->
+
+<table>
+<% beers.each do |beer| %>
+<tr>
+  <td class='beer-key'><%= beer.key %></td>
+
+  <td>
+     <%= link_to_beer( beer ) %>
+     <% if beer.synonyms.present? %>
+       | <%= beer.synonyms %>
+     <% end %>
+     /
+     <% if beer.abv.present? %>
+       <%= beer.abv %>
+     <% else %>
+       -
+     <% end %>
+      %
+     <% if beer.plato.present? %>
+     &bull; <%= beer.plato %>°
+     <% end %>
+     
+     //
+     <% if beer.brewery.present? %>
+       <%= link_to_brewery( beer.brewery ) %>
+     <% else %>
+       -
+     <% end %>
+
+<% if beer.tags.count > 0 %>
+    <br>
+    <%= render_tags( beer.tags ) %>
+<% end %>
+
+  </td>
+  <td>
+    
+    <!-- fix: add option flag: true -->
+    <%= render_world_tree( beer, flag: true ) %>
+    
+   </td>
+</tr>
+
+<% end %>
+</table>

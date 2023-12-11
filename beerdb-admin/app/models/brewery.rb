@@ -1,0 +1,2 @@
+
+Brewery = BeerDb::Model::Brewery

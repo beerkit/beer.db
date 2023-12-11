@@ -1,0 +1,53 @@
+
+<div id='actions' style='float: right; border: 1pt solid grey; background-color: silver; padding: 6px; font-size: 80%;'>
+
+Browse Tagged Fotos
+<ul>
+  <li>Flickr:
+     <%= link_to_flickr_tags "#{brewery.key}",       target: 'beerdb' %>,
+     <%= link_to_flickr_tags "#{brewery.key}+beer",  target: 'beerdb' %>,
+     <%= link_to_flickr_tags "#{brewery.key}+bier",  target: 'beerdb' %>
+  </li>
+</ul>
+
+Search Fotos
+<ul>
+  <li>Flickr:
+     <%= link_to_flickr_search "#{brewery.key}",       target: 'beerdb' %>,
+     <%= link_to_flickr_search "#{brewery.key}+beer",  target: 'beerdb' %>,
+     <!-- check: can we select the language e.g. de w/ a query para ?? -->
+     <%= link_to_flickr_search "#{brewery.key}+bier",  target: 'beerdb' %>
+  </li>
+  <li>Google: 
+     <%= link_to_google_search_images "#{brewery.key}",      target: 'beerdb' %>,
+     <%= link_to_google_search_images "#{brewery.key}+beer", target: 'beerdb' %>,
+     <%= link_to_google_search_images "#{brewery.key}+bier", target: 'beerdb' %>
+     <!-- add search w/ title (e.g. Zwettler BRauerei) --> 
+  </li>
+  <li>Bing:
+     <%= link_to_bing_search_images "#{brewery.key}",      target: 'beerdb' %>,
+     <%= link_to_bing_search_images "#{brewery.key}+beer", target: 'beerdb' %>,
+     <!-- check: can we select the language e.g. de w/ a query para ?? -->
+     <%= link_to_bing_search_images "#{brewery.key}+bier", target: 'beerdb' %>
+  </li>
+</ul>
+
+Search
+<ul>
+   <li>Google:
+     <%= link_to_google_search "#{brewery.key}",      target: 'beerdb' %>,
+     <%= link_to_google_search "#{brewery.key}+beer", target: 'beerdb' %>,
+     <%= link_to_google_de_search "#{brewery.key}+bier", target: 'beerdb' %>
+   </li>
+   <li>Wikipedia:
+     <%= link_to_wikipedia_search "#{brewery.key}+beer",  target: 'beerdb' %>
+   </li>
+   <li>Wikipedia (de):
+     <%= link_to_wikipedia_de_search "#{brewery.key}+bier",  target: 'beerdb' %>
+   </li>
+   <li>Untappd:
+     <%= link_to_untappd_search "#{brewery.key}", target: 'beerdb' %>
+   </li>
+</ul>
+
+</div>

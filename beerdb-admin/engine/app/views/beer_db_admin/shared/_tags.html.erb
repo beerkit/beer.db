@@ -1,0 +1,13 @@
+
+<!-- requires para tags -->
+
+<span class='tags'>
+<% tags.each_with_index do |tag,index| %>
+   <% if index > 0 %>
+     &bull;
+   <% end %>
+   <!-- fix: use short_tag_path( tag ) instead; friendly url -->
+   <%#= link_to tag.key, tags_path( tag ) %>
+   <%= tag.key %>
+<% end %><!-- each tag -->
+</span>

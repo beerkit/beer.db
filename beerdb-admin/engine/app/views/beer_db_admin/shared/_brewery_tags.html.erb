@@ -1,0 +1,16 @@
+
+<!-- requires para brewery -->
+
+<span class='tags'>
+  <% if brewery.prod.present? %>
+     <%= brewery.prod %> hl
+  <% end %>
+  <% if brewery.tags.count > 0 %>
+    <% brewery.tags.each_with_index do |tag,i| %>
+      <% if i > 0 || brewery.prod.present? %>
+         &bull; 
+       <% end %>
+       <%= tag.key %>
+    <% end %>
+  <% end %>
+</span>

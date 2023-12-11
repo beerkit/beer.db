@@ -1,0 +1,26 @@
+require 'hoe'
+require './lib/beerdb/admin/version.rb'
+
+
+Hoe.spec 'beerdb-admin' do
+
+  self.version = BeerDbAdmin::VERSION
+
+  self.summary = 'beerdb admin addon - rails engine'
+  self.description = summary
+
+  self.urls    = ['https://github.com/beerkit/beer.db.admin']
+
+  self.author  = 'Gerald Bauer'
+  self.email   = 'beerdb@googlegroups.com'
+
+  self.readme_file  = 'README.md'
+  self.history_file = 'History.md'
+
+  self.licenses = ['Public Domain']
+
+  self.spec_extras = {
+   :required_ruby_version => '>= 1.9.2'
+  }
+
+end

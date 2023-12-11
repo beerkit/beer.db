@@ -1,0 +1,16 @@
+
+<title>
+  <% if content_for? :title %>
+    <%= yield :title %>
+  <% else %>
+    beer.db Web Admin
+  <% end %>
+</title>
+
+
+<%= stylesheet_link_tag    'beer_db_admin/application', :media => 'all' %>
+<%= javascript_include_tag 'beer_db_admin/application' %>
+<%= csrf_meta_tags %>
+
+<!-- fix: add favicon e.g. -->
+<%#= favicon_link_tag '16px-soccer-ball-icon.png', :type => 'image/png' %>

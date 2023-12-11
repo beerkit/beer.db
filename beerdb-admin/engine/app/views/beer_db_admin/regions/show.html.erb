@@ -1,0 +1,85 @@
+<% region  = @region
+   country = @region.country
+ %>
+
+<h3>
+<%= image_tag_for_country( country, size: '64x64' ) %>
+
+<!-- fix: use full_title e.g. is title (code) -->
+
+<span class='region-key'>
+ <%= region.key %>
+</span> 
+<%= region.title %>
+<% if region.abbr.present? %>
+    • <%= region.abbr %>
+<% end %>
+  ›
+  
+  <%= link_to_country(country ) %>
+  (<%= country.code %>)
+  -
+ <%= region.beers.count %> Beers,
+ <%= region.breweries.count %> Breweries
+</h3>
+
+
+
+<!-- note: add cities w/ breweries only -->
+<p>
+<% cities_count = 0
+   region.cities.order(:name).each do |city|
+     city_breweries_count = city.breweries.count
+ %>
+
+   <% if city_breweries_count > 0 %>
+       <% if cities_count > 0 %>
+         &bull;
+       <% end %>
+ 
+       <%= link_to city.title, "##{city.key}" %>
+       <% if city_breweries_count > 1 %>
+         <span class='region-key'>
+           (<%= city_breweries_count %>)
+         </span>
+       <% end %>
+   <% cities_count +=1
+      end %>
+<% end %>
+
+  <!-- check for uncategorized breweries (no region) -->
+  <% uncategorized_breweries_count = region.breweries.where( 'city_id is null').count %>
+  <% if uncategorized_breweries_count > 0 %>
+    &bull;
+    <b> Uncategorized
+    <span class='city-count'>
+      (<%= uncategorized_breweries_count %>)
+    </span>
+    </b>
+  <% end %>
+
+</p>
+
+
+<table>
+  <%= render_breweries_table_rows_for_region( region ) %>
+</table>
+
+
+<!-- add links to all regions here -->
+<hr>
+  
+<% country.regions.each_with_index do |region,i| %>
+  <% if i > 0 %>
+    &nbsp;
+  <% end %>
+  <span class='region-key'>
+    <%= region.key %>
+  </span>
+   <%= link_to_region( region ) %>
+  <span class='region-key'>
+  (<%= region.breweries.count %>)
+  </span>
+<% end %>
+
+

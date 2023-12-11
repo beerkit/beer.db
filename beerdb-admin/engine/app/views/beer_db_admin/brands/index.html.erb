@@ -1,0 +1,34 @@
+<% brands = @brands
+ %>
+ 
+<h3><%= Brand.count %> Brands</h3>
+
+
+<table>
+<% brands.each do |brand| %>
+<tr>
+  <td class='beer-key'><%= brand.key %></td>
+    
+  <td><%= brand.title %>
+     <% if brand.synonyms.present? %>
+       | <%= beer.synonyms %>
+     <% end %>
+     
+     //
+     <% if brand.brewery.present? %>
+       <%= link_to_brewery( brand.brewery ) %>
+     <% else %>
+       -
+     <% end %>
+
+  </td>
+  <td>
+    
+    <!-- fix: add option flag: true -->
+    <%= render_world_tree( brand, flag: true ) %>
+
+   </td>
+</tr>
+
+<% end %>
+</table>

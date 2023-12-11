@@ -1,0 +1,59 @@
+<% city    = @city
+   region  = @city.region
+   country = @city.country
+ %>
+
+<h3>
+<%= image_tag_for_country( country, size: '64x64' ) %>
+
+<!-- fix: use full_title e.g. is title (code) -->
+
+<%= city.title %>
+
+  ›
+
+  <%= link_to_region(region) %>
+
+  ›
+  
+  <%= link_to_country(country) %>
+  (<%= country.code %>)
+  -
+ <%= city.beers.count %> Beers,
+ <%= city.breweries.count %> Breweries
+</h3>
+
+
+<table>
+   <%= render_breweries_table_rows( city.breweries ) %>
+</table>
+
+
+<!-- add links to all cities here -->
+<hr>
+
+<!-- note: add cities w/ breweries only -->
+<p>
+<% cities_count = 0
+   region.cities.order(:name).each do |city|
+      city_breweries_count = city.breweries.count
+ %>
+ 
+   <% if city_breweries_count > 0 %>
+
+       <% if cities_count > 0 %>
+         &bull;
+       <% end %>
+ 
+       <%= link_to_city( city ) %>
+       <% if city_breweries_count > 1 %>
+         <span class='region-key'>
+           (<%= city_breweries_count %>)
+         </span>
+       <% end %>
+   <% cities_count +=1
+      end %>
+
+<% end %>
+</p>
+

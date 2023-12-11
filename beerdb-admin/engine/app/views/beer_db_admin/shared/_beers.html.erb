@@ -1,0 +1,16 @@
+<!-- requires para beers -->
+
+<span class='beers'>
+
+<% beers.each_with_index do |beer,i| %>
+  <% if i > 0 %>
+    &bull; 
+  <% end %>
+  <%= link_to beer.title, short_beer_path( beer ) %>
+<% end %><!-- each beer -->
+</span>
+
+<!-- todo: check - nested inside beers -why? why not? -->
+<span class='beer-count'>
+  (<%= beers.count %>)
+</span>

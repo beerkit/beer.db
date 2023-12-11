@@ -1,0 +1,32 @@
+
+<!-- todo: make padding-left an option
+   use level 1,2,3 etc.  - level 0 (top)? default ?? no indentation ??
+ -->
+
+
+<% breweries.each do |brewery| %>
+  <tr>
+    <td style='vertical-align: baseline;'>
+      <div style='padding-left: 8px;'>
+        <%= link_to_brewery( brewery ) %>
+          
+          | <%= brewery.founded %>
+          <%= render_brewery_tags( brewery ) %>
+          <br>
+          <span class='city-count'>
+            <%= brewery.address %>
+          </span>
+        </div>
+    </td>
+    <td style='vertical-align: baseline;'>
+        <span class='city-count'>
+          <% if brewery.web.present? %>
+            <%= link_to brewery.web, "http://#{brewery.web}" %>
+          <% end %>
+        </span>
+    </td>
+    <td style='vertical-align: baseline;'>
+        <%= render_beers( brewery.beers ) %>
+    </td>
+  </tr>
+<% end %><!-- each brewery -->
