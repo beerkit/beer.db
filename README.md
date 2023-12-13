@@ -11,6 +11,9 @@ More:
 
 - [beerdb-service](beerdb-service) - beer.db HTTP JSON API (web service) scripts 
 - [beerdb-admin](beerdb-admin) - open beer database (beer.db) web admin tool in ruby on rails (version 3.2 and up)
+- [beerdb-starter](beerdb-starter) -  beerdb web service starter sample lets you build your own HTTP JSON API using the beer.db
+
+
 
 
 

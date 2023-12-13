@@ -1,0 +1,13 @@
+###############
+# Ruby stuff
+#  -- for now ignore Gemfile.lock
+
+Gemfile.lock
+
+
+################
+# SQLite dbs
+
+*.db
+*.sqlite
+*.sqlite3
