@@ -1,0 +1,7 @@
+
+<% if signed_in? %>
+  <td>
+     <%= link_to 'Add', add_brewery_to_user_path( brewery.id, current_user_id ), class: 'btn' %>
+  </td>
+<% end %>
+

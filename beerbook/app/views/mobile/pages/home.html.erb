@@ -1,0 +1,17 @@
+<div data-role='page'>
+
+  <div data-role='header'>
+    <h1>Home</h1>
+  </div><!-- /header -->
+
+  <div data-role='content'>
+     <p>Welcome to Beer DB, Mobile Version.</p>
+     
+     <% if signed_in? %>
+         <%= link_to "Welcome back, #{current_user.name} - Weiter »", mobile_time_path(),  data: { role: 'button', theme: 'b' } %>
+     <% else %>
+         <%= link_to "Welcome - Sign In »", mobile_signin_path(),  data: { role: 'button', theme: 'b' } %>
+     <% end %>
+  </div><!-- /content -->
+
+</div><!-- /page -->

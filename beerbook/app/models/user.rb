@@ -1,0 +1,3 @@
+
+
+User = BeerDb::Model::User

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render :partial => 'layouts/header' %>
+</head>
+<body>
+
+<div class='navbar admin'>
+<table width='100%' cellspacing=0>
+  <tr>
+    <!-- left -->
+    <td>
+      <span class='logo'><%= link_to '[Logo]', beers_path() %></span>
+      <span> - Admin - </span>
+      &nbsp;&nbsp;&nbsp;
+      <% if content_for? :breadcrumb %>
+        <span class='breadcrumb-inline'>
+          <%= yield :breadcrumb %>
+        </span>
+      <% end %>
+    </td>
+    <!-- right -->
+    <td style='text-align: right;'>
+ <% if signed_in? %>
+    Willkommen, <%= current_user.name %>!
+
+    &nbsp;
+    <span class='signout'>
+      <%= link_to 'Abmelden', signout_path %>
+    </span>
+ <% else %>
+    <span class='signin'>
+    <%= link_to 'Anmelden', signin_path %>
+    </span>
+ <% end %>
+    </td>
+  </tr>
+</table>
+</div>
+
+
+ <p>
+  <%= link_to 'Users', admin_users_path() %>
+ </p>
+
+
+<div class='content' style='padding: 0px 20px 0px 20px;'>
+
+  <%= render :partial => 'layouts/flash', :locals => { :flash => flash } %>
+
+  <%= yield %>
+
+</div>
+
+
+<div class='version'>
+  <%= powered_by %>
+</div>
+
+</body>
+</html>

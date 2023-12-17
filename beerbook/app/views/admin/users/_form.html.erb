@@ -1,0 +1,36 @@
+<%= form_for(@user, :as => :user, :url => @user.new_record? ? admin_users_path() : admin_user_path(@user) ) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+  <table>
+    <tr>
+      <td><%= f.label :name, 'Name:' %></td>
+      <td><%= f.text_field :name, 'data-autofocus' => 'true' %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :email, 'Email:' %></td>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :active, 'Active Flag:' %></td>
+      <td>
+        <%= f.radio_button :active, 'true' %><%= f.label :active_true, 'Ja' %>
+        <%= f.radio_button :active, 'false' %><%= f.label :active_false, 'Nein' %>
+      </td>
+    </tr>
+  </table>
+
+  <div class="actions">
+    <%= f.submit 'Speichern', :class => 'btn-primary' %>
+    <%= link_to 'Zurück', admin_users_path(), :class => 'btn' %>
+  </div>
+<% end %>

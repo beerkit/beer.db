@@ -1,0 +1,40 @@
+
+
+<h3><%= @user.name %> - 
+  <%= @user.bookmarks.count %> Biere,
+  <%= @user.drinks.count %> Ratings
+</h3>
+
+
+<p style='background-color: silver;'>
+  Top (+1)
+</p>
+
+<%= render_bookmarks( @user.bookmarks.where( yes:true, wish:false), edit:true ) %>
+
+<p style='background-color: silver;'>
+  More
+</p>
+
+<%= render_bookmarks( @user.bookmarks.where( yes:false, no:false, wish:false ), edit:true ) %>
+
+<p style='background-color: silver;'>
+  Blacklist (-1)
+</p>
+
+<%= render_bookmarks( @user.bookmarks.where( yes:false, no:true, wish:false ), edit:true ) %>
+
+<hr>
+<p>Wishlist</p>
+
+<p style='background-color: silver;'>
+  Top (+1)
+</p>
+
+<%= render_bookmarks( @user.bookmarks.where( yes:true, wish:true), edit:true ) %>
+
+<p style='background-color: silver;'>
+  More
+</p>
+
+<%= render_bookmarks( @user.bookmarks.where( yes:false, wish:true), edit:true ) %>

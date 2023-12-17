@@ -1,0 +1,80 @@
+
+<!-- params
+       bookmarks   (array)
+       allow_edits (boolean)
+  -->
+
+<table>
+<% bookmarks.each do |bookmark| %>
+ <tr>
+
+  <td>
+<!--
+  
+    <% if bookmark.yes? %>
+       +1
+    <% end %>
+    <% if bookmark.no? %>
+       -1
+    <% end %>
+-->
+    <% if bookmark.wish? %>
+      ∅
+    <% else %>
+
+    <% end %>
+
+    <%= link_to bookmark.beer.title, beer_path( bookmark.beer.id ) %>
+  </td>
+
+ <% if allow_edits == true %>
+  <td>
+    <% if bookmark.yes? %>
+       <%= link_to raw(content_tag(:del,'+1')), update_bookmark_flag_path( bookmark.id, yes: false ), class: 'btn' %>
+    <% else %>
+       <%= link_to '+1', update_bookmark_flag_path( bookmark.id, yes: true ), class: 'btn' %>
+    <% end %>
+
+    <% if bookmark.no? %>
+       <%= link_to raw(content_tag(:del,'-1')), update_bookmark_flag_path( bookmark.id, no: false ), class: 'btn' %>
+    <% else %>
+       <%= link_to '-1', update_bookmark_flag_path( bookmark.id, no: true ), class: 'btn'  %>
+    <% end %>
+  </td>
+
+  <td>
+    <% if bookmark.wish? %>
+       <%= link_to 'Drink', update_bookmark_flag_path( bookmark.id, wish: false ), class: 'btn' %>
+    <% else %>
+       <%= link_to 'Wish ∅', update_bookmark_flag_path( bookmark.id, wish: true ), class: 'btn' %>
+    <% end %>
+  </td>
+  
+  <td>
+    <%= link_to 'Neues Rating', new_user_beer_drink_path( bookmark.user_id, bookmark.bookmarkable_id ), class: 'btn' %>
+  </td>
+  <% end %><!-- if allow_edits -->
+  
+ </tr>
+
+  <% bookmark.drinks.each do |drink| %>
+    <tr>
+       <td>
+         <span class='drink-rating'><%= drink.rating %></span>
+         <span class='drink-comments'>
+           <%= drink.comments %>
+         </span>
+         /
+         <span class='drink-place'>
+            <%= drink.place %>
+         </span>
+       </td>
+       <% if allow_edits == true %>
+        <td>
+          <%= link_to 'Bearbeiten', edit_drink_path( drink.id ), class: 'btn'  %>
+        </td>
+       <% end %>
+    </tr>
+  <% end %>
+<% end %><!-- each bookmark -->
+</table>

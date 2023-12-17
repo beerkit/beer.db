@@ -1,0 +1,3 @@
+
+Bookmark = BeerDb::Model::Bookmark
+

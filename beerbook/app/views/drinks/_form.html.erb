@@ -1,0 +1,29 @@
+
+<%= form_for @drink, :as => :drink do |f| %>
+
+<%= f.hidden_field :user_id %>
+<%= f.hidden_field :beer_id %>
+
+<table>
+  <tr>
+<td valgin='top'>
+  <%= f.label :rating, 'Note (1-10)' %><br/>
+  <%= f.text_field :rating, size: 1, data: { autofocus: true }, style: 'font-size: 1000%; max-width: 200px;' %>
+</td>
+<td valign='top'>
+
+  <%= f.label :comments, 'Notizen' %><br/>
+  <%= f.text_area :comments, rows: 8, cols: 80 %><br/>
+
+  <%= f.label :place, 'Wo?' %> (z.B. Dahoam, O'Connors, usw.)<br/>
+  <%= f.text_field :place %>
+</td>
+  </tr>
+</table>
+
+<div>
+  <%= f.submit 'Speichern', :class => 'btn-primary' %>
+  <%= link_to 'Zurück', :back, :class => 'btn' %>
+</div>
+
+<% end %>

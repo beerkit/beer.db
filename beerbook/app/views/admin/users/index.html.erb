@@ -1,0 +1,33 @@
+
+<h1><%= User.count %> Benutzer</h1>
+
+<%= link_to 'Neuer Benutzer', new_admin_user_path(), :class => 'btn-primary' %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Key</th>
+    <th>Flags</th>
+    <th><!-- Edit --></th>
+    <th><!-- Delete --></th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= link_to user.name, admin_user_path(user) %></td>
+    <td><%= user.email %></td>
+    <td><%= user.key %></td>
+    <td>
+      <%= user.active? ? '(Active Flag)' : '' %>
+      <%= user.admin? ? '(Admin Flag)' : '' %>
+    </td>
+    <td><%= link_to 'Bearbeiten', edit_admin_user_path(user), :class => 'btn' %></td>
+    <td><%= link_to 'Löschen', admin_user_path(user), :confirm => 'Sicher?', :method =>'delete', :class => 'btn' %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Neuer Benutzer', new_admin_user_path(), :class => 'btn-primary' %>

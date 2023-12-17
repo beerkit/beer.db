@@ -1,0 +1,29 @@
+
+<div data-role='page'>
+
+ <div data-role='header'>
+   <h1>Anmeldung</h1>
+   <%= link_to 'Anmelden', '#', onclick: raw( "$('form#signin').trigger('submit')"),
+        data: { icon: 'check',  theme: 'b', role: 'button' }, class: 'ui-btn-right' %>
+ </div><!-- /header -->
+
+
+ <div data-role='content'>
+
+<%= render partial: 'mobile/shared/flash', locals: { flash: flash } %>
+
+  <form id='signin' action='<%= mobile_session_path() %>' method='post'>
+        <h2>Welcome</h2>
+
+        <fieldset>
+            <div class="row">
+                <label>Name</label>
+                
+                <input type="text" id='user_email' name="user[email]" placeholder="Your Name Here (e.g. richard)" value="">
+            </div>
+        </fieldset>
+
+  </form>
+</div><!-- /content -->
+
+</div><!-- /page -->

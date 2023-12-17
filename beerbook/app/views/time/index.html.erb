@@ -1,0 +1,40 @@
+
+<h3><%= Drink.count %> Ratings</h3>
+
+
+<% Drink.order('created_at DESC').all.each do |drink| %>
+
+<p>
+ <%= link_to drink.user.name, user_path( drink.user.id ) %>
+   -
+   
+   <%= link_to drink.beer.title, beer_path( drink.beer.id ) %>
+   
+  <span class='drink-rating'>
+     <%= drink.rating %>
+   </span>
+
+   <span class='drink-comments'>
+     <%= drink.comments %>
+    </span>
+   /
+   <span class='drink-place'>
+     <%= drink.place %>
+   </span>
+</p>
+
+<% end %>
+
+
+<h3><%= Bookmark.where(yes:true).count %>  +1s</h3>
+
+<p>
+<% Bookmark.order('created_at DESC').where(yes:true).each_with_index do |bookmark,i| %>
+  <% if i > 0 %>
+    &bull;
+  <% end %>
+  <%= link_to bookmark.user.name, user_path( bookmark.user.id ) %>
+  - <%= link_to bookmark.beer.title, beer_path( bookmark.beer.id ) %>
+  +1 
+<% end %>
+</p>

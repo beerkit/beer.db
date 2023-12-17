@@ -1,0 +1,71 @@
+
+<div data-role='page'>
+
+<div data-role='header'>
+  <%= link_to 'Abmelden', mobile_signout_path(), data: { icon: 'delete' } %>
+    <h1><%= current_user.name %> / News</h1>
+  <%= link_to 'Beers', edit_mobile_user_path( current_user_id(), yes: true ), data: { icon: 'forward' } %>
+</div><!-- /header -->
+
+
+<div data-role='content'>
+
+<%= render partial: 'mobile/shared/flash', locals: { flash: flash } %>
+
+
+
+<!--
+<div data-role="navbar" data-theme="b">
+ <ul>
+  <li><a href="a.html" class="ui-btn-active ui-state-persist">All</a></li>
+  <li><a href="b.html">Arthur T</a></li>
+ </ul>
+</div>
+-->
+<!-- /navbar -->
+
+
+<h3><%= Drink.count %> Ratings</h3>
+
+
+<% Drink.order('created_at DESC').all.each do |drink| %>
+
+
+<p>
+  <%= drink.beer.title %>
+    -
+      <span class='drink-rating'>
+       <%= drink.rating %>
+      </span>
+    -
+  <%= drink.user.name %>:
+
+   <span class='drink-comments' style='font-size: 80%;'>
+     <%= drink.comments %>
+    </span>
+   /
+   <span class='drink-place' style='font-size: 80%;'>
+     <%= drink.place %>
+   </span>
+</p>
+
+<% end %>
+
+
+<h3><%= Bookmark.where(yes:true).count %>  +1s</h3>
+
+<p>
+<% Bookmark.order('created_at DESC').where(yes:true).each_with_index do |bookmark,i| %>
+  <% if i > 0 %>
+    &bull;
+  <% end %>
+   <%= bookmark.beer.title %>
+     +1
+   <%= bookmark.user.name %>
+<% end %>
+</p>
+
+
+</div><!-- /content -->
+
+</div><!-- /page -->

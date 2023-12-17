@@ -1,0 +1,52 @@
+
+<div data-role="page">
+
+<div data-role="header">
+    <%= link_to 'Back', mobile_bookmark_path( @bookmark.id ),  data: { icon: 'back' } %>
+
+    <h1><%= current_user.name %> / <%= @beer.title %> / Rating</h1>
+
+   <%= link_to 'Speichern', '#', onclick: raw( "$('form#rating').trigger('submit')"),
+          data: { icon: 'check',  theme: 'b' } %>
+</div><!-- /header -->
+
+
+<div data-role="content">
+
+<p><%= @beer.title %></p>
+
+<p>
+ ----
+</p>
+
+
+<!-- NB:
+  use form_tag -> will generate csfr protection required for keeping session alive!!
+-->
+
+<!--
+<form id='rating' action='<%= mobile_drinks_path() %>' method='post'>
+-->
+
+<!-- todo: check if method: put is working for routing to update ?? -->
+<%= form_tag mobile_drink_path( @drink.id ), id:'rating', method:'put' do %>
+
+<input type='hidden' name='drink[user_id]' id='drink_user_id' value='<%= @drink.user_id %>'>
+<input type='hidden' name='drink[beer_id]' id='drink_beer_id' value='<%= @drink.beer_id %>'>
+
+<label for='drink_rating'>Rating (1-10):</label>
+<input type='range' name='drink[rating]' id='drink_rating' data-highlight='true' value='<%= @drink.rating %>' min='1' max='10' style='font-size: 400%' />
+
+<label for='drink_comments'>Notizen:</label>
+<!-- cols='80' rows='8' -->
+<textarea name='drink[comments]' id='drink_comments'>
+<%= @drink.comments %>
+</textarea>
+
+<% end %>
+
+<%#= render 'form' %>
+
+  </div><!-- /content -->
+
+</div><!-- /page -->

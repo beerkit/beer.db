@@ -1,0 +1,95 @@
+
+<%
+  bookmark = @bookmark
+  beer     =  bookmark.beer
+ %>
+
+<div data-role='page'>
+
+<div data-role="header">
+  <%= link_to 'Back', edit_mobile_user_path( bookmark.user_id, yes: true ), data: { icon: 'back' } %>
+  <h1><%= bookmark.user.name %> / <%= beer.title %> </h1>
+  <%= link_to 'Neues Rating', new_mobile_drink_path( user_id: bookmark.user_id, beer_id: bookmark.bookmarkable_id ), data: { icon: 'plus',  theme: 'b' } %>
+</div><!-- /header -->
+
+
+
+<div data-role="content">
+
+  <%= render partial: 'mobile/shared/flash', locals: { flash: flash } %>  
+
+  <p>
+    <b><%= beer.title %></b>
+    (<%= beer.abv %> %)
+  </p> 
+    <% if beer.brewery.present? %>
+         <p style='font-size: 80%;'>
+         <%= beer.brewery.title %> |
+         <!-- use since !! -->
+         <%= beer.brewery.founded %> |
+         <%= beer.brewery.address %>
+         </p>
+    <% end %>
+  
+
+<ul data-role="listview" data-inset="true">
+  <% beer.drinks.where(user_id: bookmark.user_id).order('created_at DESC').each do |drink| %>
+    <li><%= link_to edit_mobile_drink_path(drink.id) do %>
+           <p>
+            <span class='drink-rating' style='font-size: 200%;'>
+                 <%= drink.rating %>
+                </span>
+                - 
+   <span class='drink-comments'>
+     <%= drink.comments %>
+    </span>
+   /
+   <span class='drink-place'>
+     <%= drink.place %>
+   </span>
+    </p>
+        <% end %><!-- link_to -->
+    </li>
+  <% end %><!-- each drink -->
+</ul>
+
+
+<h3><%= beer.drinks.count %> Ratings</h3>
+
+<% beer.drinks.order('rating DESC,created_at DESC').each do |drink| %>
+
+
+<p>
+      <span class='drink-rating'>
+       <%= drink.rating %>
+      </span>
+    -
+  <%= drink.user.name %>:
+
+   <span class='drink-comments' style='font-size: 80%;'>
+     <%= drink.comments %>
+    </span>
+   /
+   <span class='drink-place' style='font-size: 80%;'>
+     <%= drink.place %>
+   </span>
+</p>
+
+<% end %>
+
+
+<h3><%= beer.bookmarks.where(yes:true).count %>  +1s</h3>
+
+<p>
+<% beer.bookmarks.order('created_at DESC').where(yes:true).each_with_index do |bookmark,i| %>
+  <% if i > 0 %>
+    &bull;
+  <% end %>
+  <%= bookmark.user.name %>
+<% end %>
+</p>
+
+
+</div><!-- /content -->
+
+</div><!-- /page -->

@@ -1,0 +1,74 @@
+
+
+<%
+  bookmarks_yes = false
+  bookmarks_no  = false
+  bookmarks_std = false
+  
+  if params[:yes].present?
+    bookmarks_yes = true
+    bookmarks_title = '+1s'
+  elsif params[:no].present?
+    bookmarks_no = true
+    bookmarks_title = '-1s'
+  else
+    bookmarks_std = true
+    bookmarks_title = ''
+  end
+
+  bookmarks_count = @user.bookmarks.where( yes:bookmarks_yes, no:bookmarks_no ).count
+
+  bookmarks_yes_count = @user.bookmarks.where( yes:true ).count
+  bookmarks_std_count = @user.bookmarks.where( yes:false, no:false ).count
+  bookmarks_no_count  = @user.bookmarks.where( no:true ).count
+
+%>
+
+
+<div data-role='page'>
+ <div data-role="header">
+  <h1><%= @user.name %>  <!-- check: why do we loose session sometime - use current_user()??
+                                 w/o csfr token session gets reset! -->
+     <% if bookmarks_title.present? %> / <%= bookmarks_title %> <% end %>
+     / <%= bookmarks_count %> Beers
+     
+ </h1>
+    <%= link_to 'News', mobile_time_path(), data: { icon:'forward' }, class: 'ui-btn-right' %>
+  </div><!-- /header -->
+
+  <div data-role='content'>
+
+
+<div data-role='navbar' data-theme='b' data-iconpos='left'>
+<ul>
+  <li><%= link_to "+1   (#{bookmarks_yes_count})", edit_mobile_user_path( @user.id, yes: true  ),  class: bookmarks_yes ? 'ui-btn-active' : '' %></li>
+  <li><%= link_to "Favs (#{bookmarks_std_count})", edit_mobile_user_path( @user.id ),              class: bookmarks_std ? 'ui-btn-active' : '' %></li>
+  <li><%= link_to "-1   (#{bookmarks_no_count})",  edit_mobile_user_path( @user.id, no: true ),    class: bookmarks_no  ? 'ui-btn-active' : '' %></li>
+</ul>
+</div><!-- /navbar -->
+
+<% if bookmarks_count == 0 %>
+<p>
+   No Beers.
+</p>
+<% end %>
+
+<ul data-role='listview' data-inset='true'>
+  <% @user.bookmarks.where( yes: bookmarks_yes, no: bookmarks_no, wish: false ).each do |bookmark| %>
+   <li>
+     <%= link_to bookmark.beer.title, mobile_bookmark_path( bookmark.id ) %>
+   </li>
+  <% end %>
+</ul>
+
+<ul data-role='listview' data-inset='true'>
+  <% @user.bookmarks.where( yes: bookmarks_yes, no: bookmarks_no, wish: true ).each do |bookmark| %>
+   <li>
+     <%= link_to bookmark.beer.title, mobile_bookmark_path( bookmark.id ) %>
+   </li>
+  <% end %>
+</ul>
+
+</div><!-- /content -->
+
+</div><!-- /page -->

@@ -1,0 +1,3 @@
+
+Drink = BeerDb::Model::Drink
+

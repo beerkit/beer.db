@@ -1,0 +1,91 @@
+
+@import "bourbon"; // 3rd party css mixin library (see http://thoughtbot.com/bourbon)
+
+@import "settings"; // global color settings w/ scss variables
+
+@import "flash";
+@import "button";
+@import "navbar";
+
+
+// $base-font-size:   18px;  // was 20px
+
+$base-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+
+$dark-gray: #333333;
+$azure:     #F0FFFF;     // azure (see wikipedia web colors)
+
+
+body
+{
+  font-family: $base-font-family;
+  margin: 0;
+}
+
+
+
+a {
+  color: black;
+  text-decoration: none;
+
+  &:hover {
+   color: black;
+   background-color: aqua;
+   text-decoration: underline;
+  }
+
+  &:visited { color: black; }
+}
+
+
+.team-count,
+.city-count,
+.beer-count,
+.country-key,
+.brewery-key,
+.region-key,
+.tags {
+  color: $dark-gray;
+  font-size: 12px;   // ~80%
+}
+
+table {
+  td.beer-key,
+  td.city-key,
+  td.country-key,
+  td.region-key {
+    color: $dark-gray;
+    font-size: 12px;   // ~80%
+    * {
+      color: $dark-gray;
+      font-size: 12px;  // ~80%
+    }    
+  }
+}
+
+.drink-rating {
+    font-size: 40px;
+}
+
+.drink-comments,
+.drink-place {
+    color: $dark-gray;
+    font-size: 12px;   // ~80%
+}
+
+
+/////////////////////////
+// version / powered_by
+
+.version
+{
+   text-align: center;
+   margin-top: 10px;
+   color: grey;
+   
+   a, span {
+     font-size: 12px;
+     color: grey
+   }
+}

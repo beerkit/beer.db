@@ -1,0 +1,48 @@
+
+
+  ,
+  <%= beer.bookmarks.where(yes:true).count %>  +1s,
+  <%= beer.drinks.count %> Ratings
+
+
+<% if signed_in? %>
+<p>
+  <%= link_to "Add", add_beer_to_user_path( beer.id, current_user_id ), class: 'btn' %>
+</p>
+<% end %>
+
+
+
+<h3><%= beer.bookmarks.where(yes:true).count %>  +1s</h3>
+
+<p>
+<% beer.bookmarks.where(yes:true).each_with_index do |bookmark,i| %>
+  <% if i > 0 %>
+    &bull;
+  <% end %>
+  <%= link_to bookmark.user.name, user_path( bookmark.user.id ) %>
+<% end %>
+</p>
+
+<h3><%= beer.drinks.count %> Ratings</h3>
+
+<% beer.drinks.each do |drink| %>
+
+<p>
+ <%= link_to drink.user.name, user_path( drink.user.id ) %>
+   -
+  <span class='drink-rating'>
+     <%= drink.rating %>
+   </span>
+
+   <span class='drink-comments'>
+     <%= drink.comments %>
+    </span>
+   /
+   <span class='drink-place'>
+     <%= drink.place %>
+   </span>
+</p>
+
+<% end %>
+
