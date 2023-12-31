@@ -1,0 +1,65 @@
+
+<style>
+  .date-dayname,
+  .date-monthname,
+  .date-year {
+    text-align: center;
+    font-size: 30px;
+  }
+  .date-day {
+    text-align: center;
+    font-size: 180px;
+  }
+  .date-yday-n-week {
+    text-align: center;
+    margin-top: 20px;
+    /* font-size: 15px; */
+  }
+
+  .beer {
+    text-align: center;
+    font-size: 80px;
+  }  
+  .beer-info {
+    text-align: center;
+    font-size: 24px;
+  }
+
+ .brewery {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 48px;
+  }
+  
+  .brewery-info {
+    margin-top: 8px;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .brewery-world {
+    text-align: center;    
+  }  
+</style>
+
+
+<table width='100%'>
+  <tr>
+    <td width='25%' valign='center' style='background-color: silver; padding: 15px;'>
+      <!-- 1st column -->
+  <div class='date-dayname'><%= @date_dayname %></div>
+  <div class='date-day'><%= @date.day %></div>
+  <div class='date-monthname'><%= @date_monthname %></div>
+  <div class='date-year'><%= @date.year %></div>
+  
+  <div class='date-yday-n-week'>
+     Day <%= @date.yday %> / Week <%= @date_week %> 
+  </div>
+
+    </td>
+    <td width='75%' valign='top' style='padding: 10px;'>
+      <!-- 2nd column -->
+       <%= render partial: 'shared/beer', locals: { beer: @beer } %>
+    </td>
+  </tr>
+</table>

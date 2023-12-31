@@ -1,0 +1,30 @@
+
+<h1>Breweries A-Z</h1>
+
+<% ('A'..'Z').each_with_index do |letter,i| %>
+  <% if i > 0 then %>
+    •
+  <% end %>
+  <%= letter %>
+<% end %>
+
+<% ('A'..'Z').each do |letter| %>
+
+<h2><%= letter %></h2>
+
+<% Brewery.where( "key like '#{letter.downcase}%'").order(:key).each do |brewery| %>
+<div>
+ <!-- {{ render_brewery_idx( brewery, opts ) }} -->
+ <%= brewery.title %>,
+  <span style='font-size: 80%;'>
+    <%= brewery.address %> › <%= brewery.region.name %>
+    
+    <% if brewery.web %>
+      • 
+      <a href="http://<%= brewery.web %>"><%= brewery.web %></a>
+    <% end %>
+  </span>
+</div>
+<% end %>
+
+<% end %>

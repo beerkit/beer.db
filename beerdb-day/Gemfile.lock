@@ -1,0 +1,181 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    about (0.1.0)
+      logutils (>= 0.5)
+      textutils (>= 0.7)
+    actionmailer (3.2.14)
+      actionpack (= 3.2.14)
+      mail (~> 2.5.4)
+    actionpack (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
+      builder (~> 3.0.0)
+      erubis (~> 2.7.0)
+      journey (~> 1.0.4)
+      rack (~> 1.4.5)
+      rack-cache (~> 1.2)
+      rack-test (~> 0.6.1)
+      sprockets (~> 2.2.1)
+    activemodel (3.2.14)
+      activesupport (= 3.2.14)
+      builder (~> 3.0.0)
+    activerecord (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
+    activerecord-utils (0.2.0)
+      logutils
+    activeresource (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
+    activesupport (3.2.14)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
+    annotate (2.4.1.beta1)
+    arel (3.0.3)
+    beerdb (0.9.13)
+      activerecord
+      activerecord-utils
+      fetcher (>= 0.3)
+      gli (>= 2.5.6)
+      logutils
+      props
+      rubyzip
+      tagutils
+      textutils
+      worlddb (>= 2.0.2)
+    beerdb-admin (0.1.2)
+    bourbon (1.4.0)
+      sass (>= 3.1)
+    builder (3.0.4)
+    coffee-rails (3.2.2)
+      coffee-script (>= 2.2.0)
+      railties (~> 3.2.0)
+    coffee-script (2.3.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.8.0)
+    daemons (1.1.9)
+    dbbrowser (0.1.3)
+      logutils (>= 0.5)
+    erubis (2.7.0)
+    eventmachine (1.0.3)
+    execjs (2.2.2)
+    fetcher (0.4.4)
+      logutils (>= 0.6)
+    gli (2.12.2)
+    hike (1.2.3)
+    i18n (0.6.11)
+    journey (1.0.4)
+    jquery-rails (3.1.2)
+      railties (>= 3.0, < 5.0)
+      thor (>= 0.14, < 2.0)
+    json (1.8.1)
+    logutils (0.6.0)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
+    mime-types (1.25.1)
+    multi_json (1.10.1)
+    pg (0.17.1)
+    polyglot (0.3.5)
+    props (1.1.1)
+    rack (1.4.5)
+    rack-cache (1.2)
+      rack (>= 0.4)
+    rack-protection (1.5.3)
+      rack
+    rack-ssl (1.3.4)
+      rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
+    rails (3.2.14)
+      actionmailer (= 3.2.14)
+      actionpack (= 3.2.14)
+      activerecord (= 3.2.14)
+      activeresource (= 3.2.14)
+      activesupport (= 3.2.14)
+      bundler (~> 1.0)
+      railties (= 3.2.14)
+    railties (3.2.14)
+      actionpack (= 3.2.14)
+      activesupport (= 3.2.14)
+      rack-ssl (~> 1.3.2)
+      rake (>= 0.8.7)
+      rdoc (~> 3.4)
+      thor (>= 0.14.6, < 2.0)
+    rake (10.3.2)
+    rdoc (3.12.2)
+      json (~> 1.4)
+    rubyzip (1.1.6)
+    sass (3.4.7)
+    sass-rails (3.2.6)
+      railties (~> 3.2.0)
+      sass (>= 3.1.10)
+      tilt (~> 1.3)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    sprockets (2.2.3)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
+    sqlite3 (1.3.10)
+    tagutils (0.2.2)
+      activerecord
+      logutils (>= 0.6)
+    textutils (0.9.10)
+      activesupport
+      logutils
+      props
+      rubyzip
+    thin (1.6.3)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0)
+      rack (~> 1.0)
+    thor (0.19.1)
+    tilt (1.4.1)
+    treetop (1.4.15)
+      polyglot
+      polyglot (>= 0.3.1)
+    tzinfo (0.3.42)
+    uglifier (2.5.3)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
+    worlddb (2.0.5)
+      activerecord
+      gli (>= 2.9)
+      logutils
+      props
+      rubyzip
+      tagutils
+      textutils (>= 0.9.9)
+    worlddb-flags (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  about
+  annotate (~> 2.4.1.beta)
+  beerdb (= 0.9.13)
+  beerdb-admin
+  bourbon (= 1.4.0)
+  coffee-rails (~> 3.2.1)
+  dbbrowser
+  fetcher
+  jquery-rails
+  logutils
+  pg
+  rails (= 3.2.14)
+  sass-rails (~> 3.2.3)
+  sinatra
+  sqlite3
+  thin
+  uglifier (>= 1.0.3)
+  worlddb
+  worlddb-flags (= 0.1.0)

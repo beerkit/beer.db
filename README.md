@@ -13,7 +13,7 @@ More:
 - [beerdb-admin](beerdb-admin) - open beer database (beer.db) web admin tool in ruby on rails (version 3.2 and up)
 - [beerdb-starter](beerdb-starter) -  beerdb web service starter sample lets you build your own HTTP JSON API using the beer.db
 - [beerbook](beerbook) -  open beer database (beer.db) web app 
-
+- [beerdb-day](beerdb-day) -  beer.db web app -  beer of the day, brewery of the day, breweries a-z
 
 
 

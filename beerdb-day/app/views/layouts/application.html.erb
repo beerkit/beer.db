@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= app_title %> - Austria</title>
+  <!-- todo/fix: use country title helper ?? -->
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+
+  <%= auto_discovery_link_tag( :atom, feed_url()) %>
+</head>
+<body>
+
+
+<div class='header'>
+   <%= link_to app_title, '/' %>
+   - <%= app_subtitle %>
+   - <%= link_to 'Breweries A-Z', '/breweries' %>
+ <!--
+   - Breweries by Locality
+   -->
+</div>
+
+<%= yield %>
+
+
+<div class='footer'>
+  <a href="http://groups.google.com/group/beerdb">Questions? Comments? Updates?</a>  - 
+   <a href="https://github.com/openbeer">An Open Data Project by beer.db.</a> -
+   <%= Time.now %>
+</div>
+
+
+</body>
+</html>

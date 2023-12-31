@@ -1,0 +1,36 @@
+
+       <div class='beer'>
+          <%= beer.title %>
+       </div>
+       <div class='beer-info'>
+            <%= beer_facts( beer ) =%>
+       </div>
+<% if beer.brewery %>
+      <div class='brewery'>
+         <%= beer.brewery.title %>
+         <% if beer.brewery.founded %>
+           | <%= beer.brewery.founded %>
+         <% end %>
+      </div>
+      <div class='brewery-info'>
+         <%= beer.brewery.address %>
+         <% if beer.brewery.web %>
+           • 
+         <a href="http://<%= beer.brewery.web %>"><%= beer.brewery.web %></a>
+         <% end %>
+      </div>
+      <div class='brewery-world'>
+         <%= beer.brewery.city.name %> › 
+         <%= beer.brewery.region.name %> › 
+         <%= beer.brewery.country.name %>
+      </div>
+<% else %>
+ <!-- brewery info missing -->
+  <div class='brewery'>
+       ???
+  </div>
+<% end %>
+
+      <div class='beer-fotos'>
+        
+      </div>

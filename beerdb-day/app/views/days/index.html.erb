@@ -1,0 +1,13 @@
+
+<h1>Days#index</h1>
+
+<table>
+<% @days.each do |day| %>
+
+<tr>
+  <td><%= day.date %></td>
+  <td><%= day.beer.title %></td>
+</tr>
+
+<% end %>
+</table>
