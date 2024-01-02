@@ -16,6 +16,11 @@ More:
 - [beerdb-day](beerdb-day) -  beer.db web app -  beer of the day, brewery of the day, breweries a-z
 
 
+More Vol. II:
+
+- [beerdb-labels-world](beerdb-labels-world) -  beer labels by country
+
+
 
 
 
