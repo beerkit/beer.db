@@ -1,0 +1,36 @@
+
+# Note: lets you use {{ site.title}}
+title: football.db.logos
+
+
+markdown: kramdown
+
+# NOTE: lets use site sub folder for source; avoid ingnoring gem files in root etc.
+
+source: './site'
+
+
+# FIX: include not working w/ source config why??
+#  - for workaround copy assets ourself for now to site
+#
+# include:
+#- '../vendor/assets/images/logos'
+#- 'vendor/assets/images/logos'
+#- './vendor/assets/images/logos/24x24'
+# - '../vendor/assets/images/logos/24x24'
+
+
+
+# In Jekyll v1.0, we introduced absolute permalinks for pages in subdirectories.
+# Until v2.0, it is opt-in. Starting with v2.0, however, absolute permalinks will become opt-out,
+#  meaning Jekyll will default to using absolute permalinks instead of relative permalinks.
+
+relative_permalinks: false
+
+
+#################################################################
+# used by GitHub pages, thus, also use these setting locally
+
+safe: true
+lsi: false
+

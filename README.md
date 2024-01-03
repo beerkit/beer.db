@@ -19,6 +19,7 @@ More:
 More Vol. II:
 
 - [beerdb-labels-world](beerdb-labels-world) -  beer labels by country
+- [beerdb-labels](beerdb-labels) - beer labels (24x24, 32x32, 48x48, 64x64) bundled for reuse w/ asset pipeline
 
 
 
